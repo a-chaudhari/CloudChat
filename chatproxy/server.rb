@@ -14,6 +14,7 @@ class Server
   def initialize
     @ws = nil
     @active_clients = {}
+    @active_tokens={}
     Thread.new do
       createClientChannel
     end
@@ -34,7 +35,8 @@ class Server
       EM::WebSocket.run(:host => "0.0.0.0", :port => 8080) do |ws|
         @ws = ws
         ws.onopen { |handshake|
-          debugger
+          # debugger
+          # p handshake.headers["Cookies"]
           puts "WebSocket connection open"
 
           # Access properties on the EM::WebSocket::Handshake object, e.g.
@@ -42,6 +44,20 @@ class Server
 
           # Publish message to the client
           ws.send "Hello Client, you connected to #{handshake.path}"
+          token = handshake.path
+          token[0]=""
+
+          unless !!@active_tokens[token]
+            p "token not found, closing"
+            ws.send("cannot find your token. disconnecting :(")
+            ws.close
+          else
+            p "connected user: #{@active_tokens[token]}"
+            ws.send("token found! connecting stream")
+            @active_clients[@active_tokens[token].to_sym].socket = ws
+            @active_tokens.delete(token)
+          end
+          # ws.close
         }
 
         ws.onclose { puts "Connection closed" }

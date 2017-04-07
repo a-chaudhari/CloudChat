@@ -64,7 +64,8 @@ def kill(obj)
 end
 
 def update(obj)
-  return false if !@active_clients[:obj["username"]]
-
-  @active_clients[:obj["username"]].token = obj["token"]
+  return false if !@active_clients[obj["username"].to_sym]
+  # debugger
+  @active_tokens[obj["token"]] = obj["username"]
+  # @active_clients[obj["username"].to_sym].token = obj["token"]
 end
