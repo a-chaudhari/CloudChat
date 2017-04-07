@@ -1,0 +1,31 @@
+format of control json:
+
+{
+  command: start,
+  username: achaudhari,
+  settings:{
+    nickname: ac1115,
+    server: irc.freenode.net,
+    port: 6667
+    serverpass: abc1234,
+    username: ac1115,
+    full_name: amit chaudhari,
+    channels:[#foo, #bar, #newage]
+  }
+}
+
+{
+  command: kill,
+  username: achaudhari
+}
+
+{
+  command: update,
+  username: achaudhari,
+  token: asiueo3h4oi342
+}
+
+command can be:
+start - spin up a connection if not already running
+update - update the authorized session token
+kill - stop the client for specified username

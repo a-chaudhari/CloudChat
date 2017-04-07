@@ -1,0 +1,51 @@
+require 'socket'
+require 'json'
+
+class Test
+  def initialize
+
+  end
+
+
+  def run
+    socket = TCPSocket.new('127.0.0.1', 2000)
+    # socket.open
+    command = {
+      command: "start",
+      username: "achaudhari",
+      settings:{
+        nickname: "milo3893",
+        port: 6667,
+        serverpass: "",
+        username: "user",
+        full_name: "user name",
+        channels: ['#test1115']
+      }
+    }
+    socket.puts(command.to_json)
+
+    command = {
+      command: "start",
+      username: "someoneelse",
+      settings:{
+        nickname: "anoter2823",
+        port: 6667,
+        serverpass: "",
+        username: "user",
+        full_name: "user name",
+        channels: ['#test1115']
+      }
+    }
+    socket.puts(command.to_json)
+
+    p socket.gets
+  end
+
+
+
+end
+
+
+
+test = Test.new
+test.run
