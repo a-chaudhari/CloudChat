@@ -32,21 +32,29 @@ class Test
 
     socket.puts(command.to_json)
 
-    # command = {
-    #   command: "start",
-    #   username: "someoneelse",
-    #   settings:{
-    #     nickname: "anoter2823",
-    #     port: 6667,
-    #     serverpass: "",
-    #     username: "user",
-    #     full_name: "user name",
-    #     channels: ['#test1115']
-    #   }
-    # }
-    # socket.puts(command.to_json)
+    command = {
+      command: "start",
+      username: "someoneelse",
+      settings:{
+        nickname: "anoter2823",
+        port: 6667,
+        serverpass: "",
+        username: "user",
+        full_name: "user name",
+        channels: ['#test11152']
+      }
+    }
+    socket.puts(command.to_json)
 
-    # p socket.gets
+    command = {
+      command: "update",
+      username: "someoneelse",
+      token: "abcd12342"
+    }
+
+    socket.puts(command.to_json)
+
+    p socket.gets
   end
 
 

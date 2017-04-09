@@ -49,7 +49,7 @@ def start(obj)
     settings["channels"].each do |name|
       chan = user.connection.createChannel(name)
       chan.on(:chanmsg) do |data|
-        @ws.send(data.to_json)
+        user.socket.send(data.to_json) unless user.socket.nil?
       end
       chan.join
     end
