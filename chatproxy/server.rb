@@ -33,7 +33,7 @@ class Server
   def createClientChannel
     EM.run {
       EM::WebSocket.run(:host => "0.0.0.0", :port => 8080) do |ws|
-        @ws = ws
+        # @ws = ws
         ws.onopen { |handshake|
           # debugger
           # p handshake.headers["Cookies"]
@@ -52,9 +52,22 @@ class Server
             ws.send("cannot find your token. disconnecting :(")
             ws.close
           else
-            p "connected user: #{@active_tokens[token]}"
+            username = @active_tokens[token]
+            user = @active_clients[username.to_sym]
+            p "connected user: #{username}"
             ws.send("token found! connecting stream")
+
             @active_clients[@active_tokens[token].to_sym].socket = ws
+            ws.onmessage { |msg|
+              # debugger
+              puts "Recieved message: #{msg} from #{user.username}"
+              # debugger
+              # user.channels.first.last.speak(msg)
+              user.connection.joinedChannels.first.last.speak(msg)
+              # ws.send "Pong: #{msg}"
+
+
+            }
             @active_tokens.delete(token)
           end
           # ws.close
@@ -62,10 +75,6 @@ class Server
 
         ws.onclose { puts "Connection closed" }
 
-        ws.onmessage { |msg|
-          puts "Recieved message: #{msg}"
-          ws.send "Pong: #{msg}"
-        }
       end
     }
   end
