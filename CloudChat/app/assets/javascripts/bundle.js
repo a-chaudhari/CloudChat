@@ -10011,7 +10011,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 document.addEventListener('DOMContentLoaded', function () {
   var root = document.getElementById('root');
   var preload = {};
+  if (window.currentUser) {
+    preload = {
+      session: { errors: [], session: window.currentUser }
+    };
+  };
   var store = (0, _store2.default)(preload);
+  window.store = store;
 
   _reactDom2.default.render(_react2.default.createElement(_root2.default, { store: store }), root);
 });
@@ -26191,6 +26197,14 @@ var _channel2 = _interopRequireDefault(_channel);
 
 var _channel_actions = __webpack_require__(264);
 
+var _session = __webpack_require__(361);
+
+var _session2 = _interopRequireDefault(_session);
+
+var _user_box = __webpack_require__(364);
+
+var _user_box2 = _interopRequireDefault(_user_box);
+
 var _reactRedux = __webpack_require__(221);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -26214,17 +26228,20 @@ var App = function (_React$Component) {
   _createClass(App, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      this.ws_connect();
+      // this.ws_connect();
     }
   }, {
     key: 'ws_connect',
-    value: function ws_connect() {
-      this.ws = new WebSocket('ws://127.0.0.1:8080/abcd1234');
+    value: function ws_connect(key) {
+      console.log("connecting");
+      console.log(key);
+      this.ws = new WebSocket('ws://127.0.0.1:8080/' + key);
       this.ws.onmessage = this.ws_recv.bind(this);
     }
   }, {
     key: 'ws_send',
     value: function ws_send(msg) {
+      console.log("sending");
       this.ws.send(msg);
     }
   }, {
@@ -26241,10 +26258,24 @@ var App = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var logged_in = this.props.session.session === null ? false : true;
+      var container = null;
+      if (logged_in) {
+        container = _react2.default.createElement(_user_box2.default, null);
+      } else {
+        container = _react2.default.createElement(_session2.default, null);
+      }
+      // debugger
+      // <Channel send={this.ws_send.bind(this)} join={this.ws_connect.bind(this)}/>
       return _react2.default.createElement(
         'div',
         { className: 'wholeApp' },
-        _react2.default.createElement(_channel2.default, null)
+        _react2.default.createElement(
+          'h1',
+          null,
+          logged_in ? "logged in" : "not logged in"
+        ),
+        container
       );
     }
   }]);
@@ -26252,13 +26283,11 @@ var App = function (_React$Component) {
   return App;
 }(_react2.default.Component);
 
-// const mapStateToProps = (state, ownProps) =>{
-//   return(
-//     {
-//
-//     }
-//   );
-// };
+var mapStateToProps = function mapStateToProps(state, ownProps) {
+  return {
+    session: state.session
+  };
+};
 //
 // const mapDispatchToProps = (dispatch, ownProps) =>{
 //   return(
@@ -26269,7 +26298,7 @@ var App = function (_React$Component) {
 // };
 
 
-exports.default = (0, _reactRedux.connect)()(App);
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(App);
 
 /***/ }),
 /* 242 */
@@ -26318,10 +26347,15 @@ var _message_reducer = __webpack_require__(263);
 
 var _message_reducer2 = _interopRequireDefault(_message_reducer);
 
+var _session_reducer = __webpack_require__(360);
+
+var _session_reducer2 = _interopRequireDefault(_session_reducer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var rootReducer = (0, _redux.combineReducers)({
-  messages: _message_reducer2.default
+  messages: _message_reducer2.default,
+  session: _session_reducer2.default
 });
 
 exports.default = rootReducer;
@@ -27501,6 +27535,8 @@ var _reactRedux = __webpack_require__(221);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -27513,27 +27549,79 @@ var Channel = function (_React$Component) {
   function Channel(props) {
     _classCallCheck(this, Channel);
 
-    return _possibleConstructorReturn(this, (Channel.__proto__ || Object.getPrototypeOf(Channel)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (Channel.__proto__ || Object.getPrototypeOf(Channel)).call(this, props));
+
+    _this.state = {
+      input: "",
+      key: ""
+    };
+    return _this;
   }
 
   _createClass(Channel, [{
-    key: 'render',
+    key: "update",
+    value: function update(field) {
+      var _this2 = this;
+
+      return function (e) {
+        return _this2.setState(_defineProperty({}, field, e.target.value));
+      };
+    }
+
+    // send(){
+    //   this.props.sendIt(this.state.input)
+    // }
+
+  }, {
+    key: "joinserver",
+    value: function joinserver(e) {
+      // return (e)=>{
+      e.preventDefault();
+
+      console.log("joining");
+      console.log(this.state.key);
+      this.props.join(this.state.key);
+      // }
+    }
+  }, {
+    key: "sendMsg",
+    value: function sendMsg(e) {
+      // return (e)=>{
+      e.preventDefault();
+      console.log("sending msg");
+      this.props.sendIt(this.state.input);
+      // }
+    }
+  }, {
+    key: "render",
     value: function render() {
       // debugger
       var msgs = this.props.messages.messages.map(function (line, idx) {
         return _react2.default.createElement(
-          'li',
-          { key: 'msg' + idx },
+          "li",
+          { key: "msg" + idx },
           line
         );
       });
       return _react2.default.createElement(
-        'div',
-        { className: 'channel' },
+        "div",
+        { className: "channel" },
         _react2.default.createElement(
-          'ul',
+          "ul",
           null,
           msgs
+        ),
+        _react2.default.createElement("input", { value: this.state.key, onChange: this.update("key").bind(this) }),
+        _react2.default.createElement(
+          "button",
+          { onClick: this.joinserver.bind(this) },
+          "join"
+        ),
+        _react2.default.createElement("input", { value: this.state.input, onChange: this.update("input").bind(this) }),
+        _react2.default.createElement(
+          "button",
+          { onClick: this.sendMsg.bind(this) },
+          "send"
         )
       );
     }
@@ -27549,7 +27637,15 @@ var mapStateToProps = function mapStateToProps(state, ownProps) {
 };
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
-  return {};
+  // debugger
+  return {
+    sendIt: function sendIt(msg) {
+      return ownProps.send(msg);
+    },
+    join: function join(key) {
+      return ownProps.join(key);
+    }
+  };
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Channel);
@@ -30564,6 +30660,392 @@ function toPlainObject(value) {
 
 module.exports = toPlainObject;
 
+
+/***/ }),
+/* 360 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _merge = __webpack_require__(357);
+
+var _merge2 = _interopRequireDefault(_merge);
+
+var _session_actions = __webpack_require__(362);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var SessionReducer = function SessionReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { errors: [], session: null };
+  var action = arguments[1];
+
+  switch (action.type) {
+    case _session_actions.RECEIVE_SESSION:
+      return { errors: [], session: action.session };
+    case _session_actions.CLEAR_SESSION:
+      return { errors: [], session: null };
+    case _session_actions.ERROR_SESSION:
+      return { errors: [action.errors], session: null };
+    default:
+      return state;
+  }
+};
+
+exports.default = SessionReducer;
+
+/***/ }),
+/* 361 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(81);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(221);
+
+var _session_actions = __webpack_require__(362);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Session = function (_React$Component) {
+  _inherits(Session, _React$Component);
+
+  function Session(props) {
+    _classCallCheck(this, Session);
+
+    var _this = _possibleConstructorReturn(this, (Session.__proto__ || Object.getPrototypeOf(Session)).call(this, props));
+
+    _this.state = {
+      username: "",
+      password: "",
+      new_user: "",
+      new_pass: ""
+    };
+    return _this;
+  }
+
+  _createClass(Session, [{
+    key: "update",
+    value: function update(field) {
+      var _this2 = this;
+
+      return function (e) {
+        return _this2.setState(_defineProperty({}, field, e.target.value));
+      };
+    }
+  }, {
+    key: "handleSignup",
+    value: function handleSignup(e) {
+      e.preventDefault();
+      console.log("sign up!");
+      this.props.signUp({ username: this.state.new_user, password: this.state.new_pass });
+    }
+  }, {
+    key: "handleLogin",
+    value: function handleLogin(e) {
+      e.preventDefault();
+      console.log("log in!");
+      this.props.logIn({ username: this.state.username, password: this.state.password });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return _react2.default.createElement(
+        "div",
+        { className: "session-container" },
+        _react2.default.createElement(
+          "div",
+          { className: "session-login" },
+          _react2.default.createElement(
+            "h2",
+            null,
+            "session sign IN form"
+          ),
+          _react2.default.createElement(
+            "form",
+            { onSubmit: this.handleLogin.bind(this) },
+            _react2.default.createElement(
+              "label",
+              null,
+              "Username:",
+              _react2.default.createElement("input", { value: this.state.username, onChange: this.update("username").bind(this) })
+            ),
+            _react2.default.createElement(
+              "label",
+              null,
+              "Password:",
+              _react2.default.createElement("input", { type: "password", value: this.state.password, onChange: this.update("password").bind(this) })
+            ),
+            _react2.default.createElement(
+              "button",
+              { onClick: this.handleLogin.bind(this) },
+              "Log In"
+            )
+          )
+        ),
+        _react2.default.createElement(
+          "div",
+          { className: "session-signup" },
+          _react2.default.createElement(
+            "h2",
+            null,
+            "session sign UP form"
+          ),
+          _react2.default.createElement(
+            "form",
+            { onSubmit: this.handleSignup.bind(this) },
+            _react2.default.createElement(
+              "label",
+              null,
+              "Username:",
+              _react2.default.createElement("input", { value: this.state.new_user, onChange: this.update("new_user").bind(this) })
+            ),
+            _react2.default.createElement(
+              "label",
+              null,
+              "Password:",
+              _react2.default.createElement("input", { type: "password", value: this.state.new_pass, onChange: this.update("new_pass").bind(this) })
+            ),
+            _react2.default.createElement(
+              "button",
+              { onClick: this.handleSignup.bind(this) },
+              "Sign UP"
+            )
+          )
+        )
+      );
+    }
+  }]);
+
+  return Session;
+}(_react2.default.Component);
+
+var mapStateToProps = function mapStateToProps(state, ownProps) {
+  return {};
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
+  return {
+    logIn: function logIn(info) {
+      return dispatch((0, _session_actions.logIn)(info));
+    },
+    signUp: function signUp(info) {
+      return dispatch((0, _session_actions.signUp)(info));
+    }
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Session);
+
+/***/ }),
+/* 362 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.signUp = exports.logOut = exports.logIn = exports.errorSession = exports.clearSession = exports.receiveSession = exports.ERROR_SESSION = exports.CLEAR_SESSION = exports.RECEIVE_SESSION = undefined;
+
+var _session_utils = __webpack_require__(363);
+
+var SessionAPIUtil = _interopRequireWildcard(_session_utils);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var RECEIVE_SESSION = exports.RECEIVE_SESSION = "RECEIVE_SESSION";
+var CLEAR_SESSION = exports.CLEAR_SESSION = "CLEAR_SESSION";
+var ERROR_SESSION = exports.ERROR_SESSION = "ERROR_SESSION";
+
+var receiveSession = exports.receiveSession = function receiveSession(session) {
+  return {
+    type: RECEIVE_SESSION,
+    session: session
+  };
+};
+
+var clearSession = exports.clearSession = function clearSession() {
+  return {
+    type: CLEAR_SESSION
+  };
+};
+
+var errorSession = exports.errorSession = function errorSession(err) {
+  return {
+    type: ERROR_SESSION,
+    error: err
+  };
+};
+
+var logIn = exports.logIn = function logIn(info) {
+  return function (dispatch) {
+    return SessionAPIUtil.logIn(info).then(function (ret) {
+      return dispatch(receiveSession(ret));
+    }, function (err) {
+      return dispatch(errorSession(err));
+    });
+  };
+};
+
+var logOut = exports.logOut = function logOut() {
+  return function (dispatch) {
+    return SessionAPIUtil.logOut().then(function (ret) {
+      return dispatch(clearSession());
+    });
+  };
+};
+
+var signUp = exports.signUp = function signUp(info) {
+  return function (dispatch) {
+    return SessionAPIUtil.signUp(info).then(function (ret) {
+      return dispatch(receiveSession(ret));
+    }, function (err) {
+      return dispatch(errorSession(err));
+    });
+  };
+};
+
+/***/ }),
+/* 363 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var signUp = exports.signUp = function signUp(info) {
+  return $.ajax({
+    method: 'POST',
+    url: '/api/users',
+    data: { user: info }
+  });
+};
+
+var logIn = exports.logIn = function logIn(info) {
+  return $.ajax({
+    method: 'POST',
+    url: '/api/session',
+    data: info
+  });
+};
+
+var logOut = exports.logOut = function logOut() {
+  return $.ajax({
+    method: 'DELETE',
+    url: '/api/session'
+  });
+};
+
+/***/ }),
+/* 364 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(81);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(221);
+
+var _session_actions = __webpack_require__(362);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var UserBox = function (_React$Component) {
+  _inherits(UserBox, _React$Component);
+
+  function UserBox(props) {
+    _classCallCheck(this, UserBox);
+
+    return _possibleConstructorReturn(this, (UserBox.__proto__ || Object.getPrototypeOf(UserBox)).call(this, props));
+  }
+
+  _createClass(UserBox, [{
+    key: 'handleLogOut',
+    value: function handleLogOut(e) {
+      e.preventDefault();
+      this.props.logOut();
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      // debugger
+      return _react2.default.createElement(
+        'div',
+        { className: 'userbox-container' },
+        _react2.default.createElement(
+          'h2',
+          null,
+          'Logged in as: ',
+          this.props.session.session.username
+        ),
+        _react2.default.createElement(
+          'button',
+          { onClick: this.handleLogOut.bind(this) },
+          'Log Out'
+        )
+      );
+    }
+  }]);
+
+  return UserBox;
+}(_react2.default.Component);
+
+var mapStateToProps = function mapStateToProps(state, ownProps) {
+  return {
+    session: state.session
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
+  return {
+    logOut: function logOut() {
+      return dispatch((0, _session_actions.logOut)());
+    }
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(UserBox);
 
 /***/ })
 /******/ ]);

@@ -7,8 +7,8 @@ class User < ActiveRecord::Base
 
   attr_reader :password
 
-  def self.find_by_credentials(email,password)
-      user = User.find_by(email: email)
+  def self.find_by_credentials(username,password)
+      user = User.find_by(username: username)
       if(user)
         return user if user.is_password?(password)
       end

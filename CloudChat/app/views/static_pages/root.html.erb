@@ -5,6 +5,11 @@
     <title>CloudChat</title>
   </head>
   <body>
+    <script type="text/javascript">
+      <% if logged_in? %>
+        window.currentUser =  <%= render("api/session/user_session.json.jbuilder", user: current_user).html_safe %>
+      <% end %>
+    </script>
     <main id="root"></main>
   </body>
 </html>
