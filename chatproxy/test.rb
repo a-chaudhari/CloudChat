@@ -14,7 +14,22 @@ class Test
       command: "start",
       username: "achaudhari",
       settings:{
+        server: "irc.freenode.net",
         nickname: "milo3893",
+        port: 6667,
+        serverpass: "",
+        username: "user",
+        full_name: "user name",
+        channels: ['#test1115']
+      }
+    }
+    socket.puts(command.to_json)
+    command = {
+      command: "start",
+      username: "achaudhari",
+      settings:{
+        server: "card.freenode.net",
+        nickname: "milo3893v2",
         port: 6667,
         serverpass: "",
         username: "user",

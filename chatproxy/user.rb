@@ -5,12 +5,13 @@ class User
   def initialize(params)
     @init_params = params
     @token = ""
-    @connection = ""
+    # @connection = ""
+    @connections = {}
     @socket = nil
     @username = params["username"]
   end
 
-  attr_accessor :session, :connection, :init_params, :socket
+  attr_accessor :session, :connections, :init_params, :socket
   attr_reader :username
 
 

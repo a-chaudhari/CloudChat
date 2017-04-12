@@ -2,7 +2,8 @@ import React from 'react';
 import Channel from './chatbox/channel';
 import {newChannelMsg} from '../actions/channel_actions';
 import Session from './session';
-import UserBox from './user_box';
+// import UserBox from './user_box';
+import ChatBoxContainer from './chatbox/chatbox_container';
 
 class App extends React.Component{
   constructor(props){
@@ -40,7 +41,8 @@ class App extends React.Component{
     const logged_in = this.props.session.session === null ? false : true
     var container = null;
     if(logged_in){
-      container = <UserBox/>
+      // container = <UserBox/>
+      container = <ChatBoxContainer/>
     }
     else {
       container = <Session/>
@@ -48,9 +50,9 @@ class App extends React.Component{
     }
     // debugger
     // <Channel send={this.ws_send.bind(this)} join={this.ws_connect.bind(this)}/>
+    // <h1>{logged_in? "logged in" : "not logged in" }</h1>
     return(
-      <div className="wholeApp">
-        <h1>{logged_in? "logged in" : "not logged in" }</h1>
+      <div className="cloudchat-app">
         {container}
       </div>
     );

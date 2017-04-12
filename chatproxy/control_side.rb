@@ -30,33 +30,53 @@ def processControlChannel(msg)
 end
 
 def start(obj)
-  p "startin"
-  p @active_clients
-  return if !!@active_clients[obj["username"].to_sym]
-  p "past return check"
   settings = obj["settings"]
-  user = User.new(obj)
-  user.connection = IrcConnection.new({
+  username = obj["username"].to_sym
+  server_url = settings["server"]
+
+  unless !!@active_clients[username]
+    @active_clients[username] = User.new(obj)
+  end
+
+  user = @active_clients[username]
+
+  if !!user.connections[server_url]
+    #server already exists under this user.  cannot add twice
+    return
+  end
+
+  user.connections[server_url] = IrcConnection.new({
     server: settings["server"],
     port: settings["port"],
     password: settings["serverpass"],
     nickname: settings["nickname"],
     username: settings["username"],
     realname: settings["realname"]
-  })
+    })
 
-  user.connection.on(:registered) do
+  user.connections[server_url].on(:registered) do
     settings["channels"].each do |name|
-      chan = user.connection.createChannel(name)
+
+      chan = user.connections[server_url].createChannel(name)
       chan.on(:chanmsg) do |data|
+        data[:server]=server_url
+        data[:command]="chanmsg"
         user.socket.send(data.to_json) unless user.socket.nil?
       end
       chan.join
     end
   end
 
-  user.connection.connect
-  @active_clients[obj["username"].to_sym] = user
+  user.connections[server_url].connect
+
+  # p "startin"
+  # p @active_clients
+  # return if !!@active_clients[username] && !!@active_clients[username].connections[server_url]
+  # p "past return check"
+  # user = User.new(obj) if !@active_clients[username]
+
+
+  # @active_clients[obj["username"].to_sym] = user
 end
 
 def kill(obj)
