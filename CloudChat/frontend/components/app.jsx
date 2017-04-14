@@ -1,6 +1,7 @@
 import React from 'react';
 import Channel from './chatbox/channel';
 import {newChannelMsg} from '../actions/channel_actions';
+import {receiveWelcomePackage} from '../actions/configuration_actions';
 import Session from './session';
 // import UserBox from './user_box';
 import ChatBoxContainer from './chatbox/chatbox_container';
@@ -29,8 +30,23 @@ class App extends React.Component{
   }
 
   ws_recv(msg){
-    console.log(msg);
-    this.props.dispatch(newChannelMsg(msg))
+    // console.log(msg);
+    // debugger
+    const obj = JSON.parse(msg.data)
+    console.log(obj)
+    if(obj["command"]===undefined) return;
+
+    switch(obj["command"]){
+      case "welcome_package":
+        this.props.dispatch(receiveWelcomePackage(obj));
+        break;
+      case "chanmsg":
+        this.props.dispatch(newChannelMsg(obj));
+        break;
+      default:
+        console.error(`undefined command received: ${obj["command"]}`);
+        return;
+    }
   }
 
   ws_disconnect(){
@@ -42,9 +58,10 @@ class App extends React.Component{
     var container = null;
     if(logged_in){
       // container = <UserBox/>
-      container = <ChatBoxContainer/>
+      container = <ChatBoxContainer connect={this.ws_connect.bind(this)}/>
     }
     else {
+      // this.ws_connect("abcd1234")
       container = <Session/>
 
     }

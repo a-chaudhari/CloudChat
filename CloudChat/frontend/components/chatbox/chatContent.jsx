@@ -12,17 +12,18 @@ class ChatContent extends React.Component{
   render(){
     return(
       <div className="chatbox-content">
-        <ChannelHeader/>
+        <ChannelHeader selectedRoom={this.props.selectedRoom}/>
         <div className="chatbox-lower">
           <div className="chatbox-msgs-input">
-            <ChannelMessages/>
-            <ChannelInput/>
+            <ChannelMessages selectedRoom={this.props.selectedRoom}/>
+            <ChannelInput selectedRoom={this.props.selectedRoom}/>
           </div>
-          <ChannelMemberList/>
+          <ChannelMemberList selectedRoom={this.props.selectedRoom}/>
         </div>
       </div>
     );
   }
 }
+
 
 export default ChatContent;

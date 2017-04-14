@@ -20,7 +20,7 @@ class Test
         serverpass: "",
         username: "user",
         full_name: "user name",
-        channels: ['#test1115']
+        channels: ['#test1115','#test11152']
       }
     }
     socket.puts(command.to_json)

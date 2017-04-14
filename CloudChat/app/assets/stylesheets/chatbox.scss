@@ -28,12 +28,19 @@
       ul{
         list-style: none;
       }
-      .serverlist-entry{
+      .sl-server-entry, .serverlist-entry{
         cursor: pointer;
+      }
+      .serverlist-entry{
+        margin-left: 10px;
       }
 
       .sl-entry-selected{
         background-color: pink;
+      }
+
+      .sl-dropdown-hidden{
+        display: none;
       }
     }
   }
