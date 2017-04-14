@@ -1,10 +1,10 @@
-import {RECEIVED_WELCOME_PACKAGE} from '../actions/configuration_actions';
+import {RECEIVED_WELCOME_PACKAGE, RECEIVE_SOCKET} from '../actions/configuration_actions';
 import merge from 'lodash/merge';
 
-const ConfigurationReducer = (state={servers:{}}, action) =>{
+const ConfigurationReducer = (state={socket:null, servers:{}}, action) =>{
   switch(action.type){
     case RECEIVED_WELCOME_PACKAGE:
-      let newState = merge({},{servers:action.data.servers})
+      let newState = merge({},state,{servers:action.data.servers})
       // debugger
       Object.keys(newState.servers).forEach((key)=>{
         let server = newState.servers[key]
@@ -14,11 +14,12 @@ const ConfigurationReducer = (state={servers:{}}, action) =>{
           delete channel["users"]
         });
       });
-      // debugger
       return newState;
+    case RECEIVE_SOCKET:
+      return merge({},state,{socket:action.socket});
     default:
       return state;
   }
-}
+};
 
 export default ConfigurationReducer;

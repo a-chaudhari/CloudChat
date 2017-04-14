@@ -100,7 +100,7 @@ def speak(hash)
   #msg
   user = hash[:user]
   server = user.connections[hash["server"]]
-  channel = server.channels.channels[hash["channel"]]
+  channel = server.channels[hash["channel"]]
   channel.speak(hash["msg"])
 end
 

@@ -8370,10 +8370,18 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var NEW_CHANNEL_MSG = exports.NEW_CHANNEL_MSG = "NEW_CHANNEL_MSG";
+var NEW_CHANNEL_MSG_LOCAL = exports.NEW_CHANNEL_MSG_LOCAL = "NEW_CHANNEL_MSG_LOCAL";
 
 var newChannelMsg = exports.newChannelMsg = function newChannelMsg(msg) {
   return {
     type: NEW_CHANNEL_MSG,
+    msg: msg
+  };
+};
+
+var newChannelMsgLocal = exports.newChannelMsgLocal = function newChannelMsgLocal(msg) {
+  return {
+    type: NEW_CHANNEL_MSG_LOCAL,
     msg: msg
   };
 };
@@ -12971,6 +12979,7 @@ var App = function (_React$Component) {
       console.log(key);
       this.ws = new WebSocket('ws://127.0.0.1:8080/' + key);
       this.ws.onmessage = this.ws_recv.bind(this);
+      this.props.dispatch((0, _configuration_actions.receiveSocket)(this.ws));
     }
   }, {
     key: 'ws_send',
@@ -13254,6 +13263,10 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRedux = __webpack_require__(33);
+
+var _channel_actions = __webpack_require__(79);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -13292,6 +13305,24 @@ var ChannelInput = function (_React$Component) {
     value: function handleSend(e) {
       e.preventDefault();
       console.log("sending: " + this.state.input);
+      // this.props.newMsg({
+      //   user:this.
+      // })
+      // debugger
+      var packet = {
+        command: "speak",
+        server: this.props.server,
+        channel: this.props.channel,
+        msg: this.state.input
+      };
+
+      this.props.socket.send(JSON.stringify(packet));
+
+      this.props.newMsg({
+        user: this.props.servers[this.props.server].nickname,
+        msg: this.state.input,
+        target: this.props.selectedRoom
+      });
       this.setState({ input: "" });
     }
   }, {
@@ -13303,7 +13334,7 @@ var ChannelInput = function (_React$Component) {
         _react2.default.createElement(
           "form",
           { onSubmit: this.handleSend.bind(this) },
-          _react2.default.createElement("input", { onChange: this.update("input").bind(this) }),
+          _react2.default.createElement("input", { value: this.state.input, onChange: this.update("input").bind(this) }),
           _react2.default.createElement(
             "button",
             { onClick: this.handleSend.bind(this) },
@@ -13317,7 +13348,27 @@ var ChannelInput = function (_React$Component) {
   return ChannelInput;
 }(_react2.default.Component);
 
-exports.default = ChannelInput;
+var mapStateToProps = function mapStateToProps(state, ownProps) {
+  var target = ownProps.selectedRoom.split(' ');
+  // debugger
+  return {
+    socket: state.config.socket,
+    channel: target[1],
+    server: target[0],
+    servers: state.config.servers,
+    selectedRoom: ownProps.selectedRoom
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
+  return {
+    newMsg: function newMsg(obj) {
+      return dispatch((0, _channel_actions.newChannelMsgLocal)(obj));
+    }
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ChannelInput);
 
 /***/ }),
 /* 146 */
@@ -14037,9 +14088,17 @@ var MessageReducer = function MessageReducer() {
   switch (action.type) {
     case _channel_actions.NEW_CHANNEL_MSG:
       var newState = (0, _merge2.default)({}, state);
+      // debugger
       newState.messages[action.msg.server + ' ' + action.msg.channel].push(action.msg);
       // return merge({},{messages: state.messages.concat([action.msg.data])});
       return newState;
+
+    case _channel_actions.NEW_CHANNEL_MSG_LOCAL:
+      var newState2 = (0, _merge2.default)({}, state);
+      // debugger
+      newState2.messages[action.msg.target].push(action.msg);
+      // return merge({},{messages: state.messages.concat([action.msg.data])});
+      return newState2;
 
     case _configuration_actions.RECEIVED_WELCOME_PACKAGE:
       var messages = {};
@@ -31676,11 +31735,19 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var RECEIVED_WELCOME_PACKAGE = exports.RECEIVED_WELCOME_PACKAGE = "RECEIVED_WELCOME_PACKAGE";
+var RECEIVE_SOCKET = exports.RECEIVE_SOCKET = "RECEIVE_SOCKET";
 
 var receiveWelcomePackage = exports.receiveWelcomePackage = function receiveWelcomePackage(data) {
   return {
     type: RECEIVED_WELCOME_PACKAGE,
     data: data
+  };
+};
+
+var receiveSocket = exports.receiveSocket = function receiveSocket(socket) {
+  return {
+    type: RECEIVE_SOCKET,
+    socket: socket
   };
 };
 
@@ -31704,12 +31771,12 @@ var _merge2 = _interopRequireDefault(_merge);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var ConfigurationReducer = function ConfigurationReducer() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { servers: {} };
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { socket: null, servers: {} };
   var action = arguments[1];
 
   switch (action.type) {
     case _configuration_actions.RECEIVED_WELCOME_PACKAGE:
-      var newState = (0, _merge2.default)({}, { servers: action.data.servers });
+      var newState = (0, _merge2.default)({}, state, { servers: action.data.servers });
       // debugger
       Object.keys(newState.servers).forEach(function (key) {
         var server = newState.servers[key];
@@ -31719,8 +31786,9 @@ var ConfigurationReducer = function ConfigurationReducer() {
           delete channel["users"];
         });
       });
-      // debugger
       return newState;
+    case _configuration_actions.RECEIVE_SOCKET:
+      return (0, _merge2.default)({}, state, { socket: action.socket });
     default:
       return state;
   }

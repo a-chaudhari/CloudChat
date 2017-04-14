@@ -1,7 +1,7 @@
 import React from 'react';
 import Channel from './chatbox/channel';
 import {newChannelMsg} from '../actions/channel_actions';
-import {receiveWelcomePackage} from '../actions/configuration_actions';
+import {receiveWelcomePackage, receiveSocket} from '../actions/configuration_actions';
 import Session from './session';
 // import UserBox from './user_box';
 import ChatBoxContainer from './chatbox/chatbox_container';
@@ -22,6 +22,7 @@ class App extends React.Component{
     console.log(key)
     this.ws = new WebSocket(`ws://127.0.0.1:8080/${key}`);
     this.ws.onmessage = this.ws_recv.bind(this);
+    this.props.dispatch(receiveSocket(this.ws));
   }
 
   ws_send(msg){
