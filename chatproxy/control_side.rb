@@ -63,6 +63,19 @@ def start(obj)
         data[:command]="chanmsg"
         user.socket.send(data.to_json) unless user.socket.nil?
       end
+
+      chan.on(:chan_join) do |data|
+        data[:server]=server_url
+        data[:command]="chan_join"
+        user.socket.send(data.to_json) unless user.socket.nil?
+      end
+
+      chan.on(:chan_part) do |data|
+        data[:server]=server_url
+        data[:command]="chan_part"
+        user.socket.send(data.to_json) unless user.socket.nil?
+      end
+
       chan.join
     end
   end

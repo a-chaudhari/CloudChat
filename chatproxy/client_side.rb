@@ -85,7 +85,7 @@ def prepare_channels(chans)
   chans.each do |key,chan|
     temp = {
       name: chan.channel,
-      users: ["not_impli","not_impli","not_impli"],
+      users: chan.userlist,
       buffer: [{user:"system",msg:"server buffer not implemented... yet"}],
       topic: "topic not implemented"
     }
@@ -98,6 +98,7 @@ def speak(hash)
   #server
   #channel
   #msg
+  debugger
   user = hash[:user]
   server = user.connections[hash["server"]]
   channel = server.channels[hash["channel"]]

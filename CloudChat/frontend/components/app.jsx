@@ -1,6 +1,6 @@
 import React from 'react';
 import Channel from './chatbox/channel';
-import {newChannelMsg} from '../actions/channel_actions';
+import {newChannelMsg, userJoin, userPart} from '../actions/channel_actions';
 import {receiveWelcomePackage, receiveSocket} from '../actions/configuration_actions';
 import Session from './session';
 // import UserBox from './user_box';
@@ -41,9 +41,31 @@ class App extends React.Component{
       case "welcome_package":
         this.props.dispatch(receiveWelcomePackage(obj));
         break;
+
       case "chanmsg":
         this.props.dispatch(newChannelMsg(obj));
         break;
+
+      case "chan_join":
+        this.props.dispatch(newChannelMsg({
+          server: obj['server'],
+          channel: obj['channel'],
+          system: true,
+          msg: `${obj['user']} joined the channel`
+        }));
+        this.props.dispatch(userJoin(obj));
+        break;
+
+      case "chan_part":
+        this.props.dispatch(newChannelMsg({
+          server: obj['server'],
+          channel: obj['channel'],
+          system: true,
+          msg: `${obj['user']} left the channel`
+        }));
+        this.props.dispatch(userPart(obj));
+        break;
+
       default:
         console.error(`undefined command received: ${obj["command"]}`);
         return;

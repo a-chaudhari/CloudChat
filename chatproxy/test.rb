@@ -69,7 +69,7 @@ class Test
 
     socket.puts(command.to_json)
 
-    p socket.gets
+    # p socket.gets
   end
 
 

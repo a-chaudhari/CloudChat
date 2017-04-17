@@ -6,8 +6,12 @@ class ChannelMemberList extends React.Component{
   }
 
   render(){
-    const users = new Array(50);
-    users.fill("user")
+    let users = [];
+
+    if(this.props.userlist !== undefined){
+      users = this.props.userlist
+    }
+    users=users.sort()
     const user_els = users.map((el,idx)=>{
       return(
         <div className="chatbox-user-entry" key={`usrentry${idx}`}>{el}</div>
@@ -21,4 +25,30 @@ class ChannelMemberList extends React.Component{
   }
 }
 
-export default ChannelMemberList;
+
+
+
+import { connect  } from 'react-redux';
+
+
+const mapStateToProps = (state, ownProps) =>{
+  return(
+    {
+      userlist: state.messages.users[ownProps.selectedRoom]
+    }
+  );
+};
+
+const mapDispatchToProps = (dispatch, ownProps) =>{
+  return(
+    {
+
+    }
+  );
+};
+
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ChannelMemberList);

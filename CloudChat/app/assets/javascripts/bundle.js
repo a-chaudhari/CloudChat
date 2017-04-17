@@ -8371,6 +8371,22 @@ Object.defineProperty(exports, "__esModule", {
 });
 var NEW_CHANNEL_MSG = exports.NEW_CHANNEL_MSG = "NEW_CHANNEL_MSG";
 var NEW_CHANNEL_MSG_LOCAL = exports.NEW_CHANNEL_MSG_LOCAL = "NEW_CHANNEL_MSG_LOCAL";
+var USER_JOIN = exports.USER_JOIN = 'USER_JOIN';
+var USER_PART = exports.USER_PART = 'USER_PART';
+
+var userJoin = exports.userJoin = function userJoin(data) {
+  return {
+    type: USER_JOIN,
+    data: data
+  };
+};
+
+var userPart = exports.userPart = function userPart(data) {
+  return {
+    type: USER_PART,
+    data: data
+  };
+};
 
 var newChannelMsg = exports.newChannelMsg = function newChannelMsg(msg) {
   return {
@@ -13000,9 +13016,31 @@ var App = function (_React$Component) {
         case "welcome_package":
           this.props.dispatch((0, _configuration_actions.receiveWelcomePackage)(obj));
           break;
+
         case "chanmsg":
           this.props.dispatch((0, _channel_actions.newChannelMsg)(obj));
           break;
+
+        case "chan_join":
+          this.props.dispatch((0, _channel_actions.newChannelMsg)({
+            server: obj['server'],
+            channel: obj['channel'],
+            system: true,
+            msg: obj['user'] + ' joined the channel'
+          }));
+          this.props.dispatch((0, _channel_actions.userJoin)(obj));
+          break;
+
+        case "chan_part":
+          this.props.dispatch((0, _channel_actions.newChannelMsg)({
+            server: obj['server'],
+            channel: obj['channel'],
+            system: true,
+            msg: obj['user'] + ' left the channel'
+          }));
+          this.props.dispatch((0, _channel_actions.userPart)(obj));
+          break;
+
         default:
           console.error('undefined command received: ' + obj["command"]);
           return;
@@ -13387,6 +13425,8 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRedux = __webpack_require__(33);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -13407,8 +13447,12 @@ var ChannelMemberList = function (_React$Component) {
   _createClass(ChannelMemberList, [{
     key: "render",
     value: function render() {
-      var users = new Array(50);
-      users.fill("user");
+      var users = [];
+
+      if (this.props.userlist !== undefined) {
+        users = this.props.userlist;
+      }
+      users = users.sort();
       var user_els = users.map(function (el, idx) {
         return _react2.default.createElement(
           "div",
@@ -13427,7 +13471,17 @@ var ChannelMemberList = function (_React$Component) {
   return ChannelMemberList;
 }(_react2.default.Component);
 
-exports.default = ChannelMemberList;
+var mapStateToProps = function mapStateToProps(state, ownProps) {
+  return {
+    userlist: state.messages.users[ownProps.selectedRoom]
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
+  return {};
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ChannelMemberList);
 
 /***/ }),
 /* 147 */
@@ -13480,6 +13534,13 @@ var ChannelMessages = function (_React$Component) {
       if (this.props.selectedRoom !== "") {
         // debugger
         msg_els = this.props.messages[this.props.selectedRoom].map(function (line, idx) {
+          if (line.system === true) {
+            return _react2.default.createElement(
+              "div",
+              { className: "chatbox-msg-line chatbox-system", key: "chatmsg" + idx },
+              "" + line.msg
+            );
+          }
           return _react2.default.createElement(
             "div",
             { className: "chatbox-msg-line", key: "chatmsg" + idx },
@@ -14100,19 +14161,41 @@ var MessageReducer = function MessageReducer() {
       // return merge({},{messages: state.messages.concat([action.msg.data])});
       return newState2;
 
+    case _channel_actions.USER_PART:
+      var new_state = (0, _merge2.default)({}, state);
+      var chan_string = action.data.server + " " + action.data.channel;
+      // debugger
+      var _users = new_state.users[chan_string];
+      for (var i = 0; i < _users.length; i++) {
+        if (_users[i] === action.data.user) {
+          _users.splice(i, 1);
+          break;
+        }
+      }
+
+      new_state.users[chan_string] = _users;
+
+      return new_state;
+
+    case _channel_actions.USER_JOIN:
+      var new_state = (0, _merge2.default)({}, state);
+      var chan_string = action.data.server + " " + action.data.channel;
+      new_state.users[chan_string].push(action.data.user);
+      return new_state;
+
     case _configuration_actions.RECEIVED_WELCOME_PACKAGE:
       var messages = {};
-      var users = {};
+      var _users = {};
       Object.keys(action.data.servers).forEach(function (server_key) {
         var server = action.data.servers[server_key];
         Object.keys(server.channels).forEach(function (chan_key) {
           var channel = server.channels[chan_key];
           messages[server_key + ' ' + chan_key] = channel.buffer;
-          users[server_key + ' ' + chan_key] = channel.users;
+          _users[server_key + ' ' + chan_key] = channel.users;
         });
       });
-      console.log({ messages: messages, users: users });
-      return { messages: messages, users: users };
+      console.log({ messages: messages, users: _users });
+      return { messages: messages, users: _users };
     default:
       return state;
   }
