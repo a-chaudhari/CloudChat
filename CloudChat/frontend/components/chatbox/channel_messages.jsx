@@ -24,7 +24,7 @@ class ChannelMessages extends React.Component{
           )
         }
         return(
-          <div className="chatbox-msg-line" key={`chatmsg${idx}`}>{`${line.user}: ${line.msg}`}</div>
+          <div className="chatbox-msg-line" key={`chatmsg${idx}`}>{`${line.user}: ${atob(line.msg)}`}</div>
         );
       });
     }

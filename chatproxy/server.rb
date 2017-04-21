@@ -7,6 +7,7 @@ require_relative 'control_side'
 require_relative 'client_side'
 require 'byebug'
 require_relative 'user'
+require 'base64'
 Thread.abort_on_exception = true
 
 class Server

@@ -13351,14 +13351,14 @@ var ChannelInput = function (_React$Component) {
         command: "speak",
         server: this.props.server,
         channel: this.props.channel,
-        msg: this.state.input
+        msg: btoa(this.state.input)
       };
 
       this.props.socket.send(JSON.stringify(packet));
 
       this.props.newMsg({
         user: this.props.servers[this.props.server].nickname,
-        msg: this.state.input,
+        msg: btoa(this.state.input),
         target: this.props.selectedRoom
       });
       this.setState({ input: "" });
@@ -13544,7 +13544,7 @@ var ChannelMessages = function (_React$Component) {
           return _react2.default.createElement(
             "div",
             { className: "chatbox-msg-line", key: "chatmsg" + idx },
-            line.user + ": " + line.msg
+            line.user + ": " + atob(line.msg)
           );
         });
       }

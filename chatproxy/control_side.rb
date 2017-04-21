@@ -59,6 +59,7 @@ def start(obj)
 
       chan = user.connections[server_url].createChannel(name)
       chan.on(:chanmsg) do |data|
+        data[:msg]=Base64.encode64(data[:msg])
         data[:server]=server_url
         data[:command]="chanmsg"
         user.socket.send(data.to_json) unless user.socket.nil?

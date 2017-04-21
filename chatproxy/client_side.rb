@@ -86,7 +86,7 @@ def prepare_channels(chans)
     temp = {
       name: chan.channel,
       users: chan.userlist,
-      buffer: [{user:"system",msg:"server buffer not implemented... yet"}],
+      buffer: [{system:true,msg:"server buffer not implemented... yet"}],
       topic: "topic not implemented"
     }
     output[key] = temp
@@ -98,11 +98,11 @@ def speak(hash)
   #server
   #channel
   #msg
-  debugger
+  # debugger
   user = hash[:user]
   server = user.connections[hash["server"]]
   channel = server.channels[hash["channel"]]
-  channel.speak(hash["msg"])
+  channel.speak(Base64.decode64(hash["msg"]))
 end
 
 def join(hash)
