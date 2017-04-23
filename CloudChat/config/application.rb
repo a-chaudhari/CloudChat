@@ -9,6 +9,7 @@ require "action_controller/railtie"
 require "action_mailer/railtie"
 require "action_view/railtie"
 require "sprockets/railtie"
+# require 'daemons'
 # require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems
@@ -34,6 +35,8 @@ module CloudChat
 
 
     config.after_initialize do
+      system('ruby ./chatproxy/server.rb &')
+      sleep(0.5)
       User.start_connections
     end
   end
