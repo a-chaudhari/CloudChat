@@ -1,6 +1,6 @@
 def createControlChannel
-  # sock = UNIXServer.new('/tmp/chatproxy.sock')
-  server = TCPServer.new 2000
+  server = UNIXServer.new('/tmp/chatproxy.sock')
+  # server = TCPServer.new 2000
   # client = sock.accept
 
   p 'hi'

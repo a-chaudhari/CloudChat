@@ -23,7 +23,8 @@ class User < ActiveRecord::Base
   end
 
   def self.start_connections
-    socket = TCPSocket.new('127.0.0.1', 2000)
+    # socket = TCPSocket.new('127.0.0.1', 2000)
+    socket = UNIXSocket.new('/tmp/chatproxy.sock')
 
     User.all.each do |user|
       user.servers.each do |server|
@@ -61,7 +62,8 @@ class User < ActiveRecord::Base
   end
 
   def token
-    socket = TCPSocket.new('127.0.0.1', 2000)
+    # socket = TCPSocket.new('127.0.0.1', 2000)
+    socket = UNIXSocket.new('/tmp/chatproxy.sock')
     token = self.id.to_s+SecureRandom.urlsafe_base64
     command = {
       command: "update",
