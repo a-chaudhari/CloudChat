@@ -30,8 +30,6 @@ def processControlChannel(msg, client)
     kill(hash)
   when "update"
     update(hash)
-  when "ping"
-    ping(hash, client)
   end
 end
 
@@ -103,9 +101,9 @@ def kill(obj)
   #TODO need to add a disconnect funtion to library
 end
 
-def ping(hash, client)
-  client.puts("pong")
-end
+# def ping(hash, client)
+#   client.puts("pong")
+# end
 
 def update(obj)
   # p obj
