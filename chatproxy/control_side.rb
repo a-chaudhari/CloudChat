@@ -13,7 +13,7 @@ def createControlChannel
         break if msg.nil?
         msg = msg.chomp
         puts "control chan recv: #{msg}"
-        processControlChannel(msg)
+        processControlChannel(msg,client)
       end
   	end
   end
@@ -21,7 +21,7 @@ def createControlChannel
   server
 end
 
-def processControlChannel(msg)
+def processControlChannel(msg, client)
   hash = JSON.parse(msg)
   case hash["command"]
   when "start"
@@ -30,6 +30,8 @@ def processControlChannel(msg)
     kill(hash)
   when "update"
     update(hash)
+  when "ping"
+    ping(hash, client)
   end
 end
 
@@ -99,6 +101,10 @@ end
 
 def kill(obj)
   #TODO need to add a disconnect funtion to library
+end
+
+def ping(hash, client)
+  client.puts("pong")
 end
 
 def update(obj)
