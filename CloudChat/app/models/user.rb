@@ -1,3 +1,5 @@
+require 'json'
+require 'socket'
 class User < ActiveRecord::Base
   validates :username, :password_digest, :session_token, presence: true
   validates :username, uniqueness: true
@@ -20,10 +22,28 @@ class User < ActiveRecord::Base
     nil
   end
 
-  def push_to_proxy
-    self.servers.include(:channels).each do |server|
+  def self.start_connections
+    socket = TCPSocket.new('127.0.0.1', 2000)
 
-      
+    User.all.each do |user|
+      user.servers.each do |server|
+        command = {
+          command: "start",
+          username: user.username,
+          settings:{
+            server: server.server_url,
+            nickname: server.nickname,
+            port: server.port,
+            serverpass: server.server_pass,
+            username: server.username,
+            full_name: server.realname,
+            channels: server.channels.map {|c| c.channel_name}
+          }
+        }
+        socket.puts(command.to_json)
+
+      end
+
     end
 
   end
