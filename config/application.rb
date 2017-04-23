@@ -35,7 +35,7 @@ module CloudChat
 
 
     config.after_initialize do
-      system('ruby ./chatproxy/server.rb &')
+      # system('ruby ./chatproxy/server.rb &')
       sleep(0.5)
       # User.start_connections
     end
