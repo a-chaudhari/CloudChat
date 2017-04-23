@@ -81,7 +81,8 @@ class App extends React.Component{
     var container = null;
     if(logged_in){
       // container = <UserBox/>
-      container = <ChatBoxContainer connect={this.ws_connect.bind(this)}/>
+      // debugger
+      container = <ChatBoxContainer token={this.props.session.session.token} connect={this.ws_connect.bind(this)}/>
     }
     else {
       // this.ws_connect("abcd1234")

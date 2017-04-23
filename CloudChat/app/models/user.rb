@@ -41,10 +41,12 @@ class User < ActiveRecord::Base
           }
         }
         socket.puts(command.to_json)
-
+        # p command
+        # sleep(0.5)
       end
 
     end
+    # socket.close
 
   end
 
@@ -56,6 +58,20 @@ class User < ActiveRecord::Base
 
   def ensure_session_token
     self.session_token = SecureRandom.urlsafe_base64
+  end
+
+  def token
+    socket = TCPSocket.new('127.0.0.1', 2000)
+    token = self.id.to_s+SecureRandom.urlsafe_base64
+    command = {
+      command: "update",
+      username: self.username,
+      token: token
+    }
+    socket.puts(command.to_json)
+    socket.close
+    sleep(0.5)
+    token
   end
 
   def password=(password)

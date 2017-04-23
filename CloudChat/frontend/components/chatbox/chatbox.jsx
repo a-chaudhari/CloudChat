@@ -12,7 +12,8 @@ class ChatBox extends React.Component{
   }
 
   componentDidMount(){
-    this.props.connect("abcd1234");
+    // debugger
+    this.props.connect_websocket();
   }
 
   roomChangedCallBack(newChan){

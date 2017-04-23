@@ -13058,7 +13058,8 @@ var App = function (_React$Component) {
       var container = null;
       if (logged_in) {
         // container = <UserBox/>
-        container = _react2.default.createElement(_chatbox_container2.default, { connect: this.ws_connect.bind(this) });
+        // debugger
+        container = _react2.default.createElement(_chatbox_container2.default, { token: this.props.session.session.token, connect: this.ws_connect.bind(this) });
       } else {
         // this.ws_connect("abcd1234")
         container = _react2.default.createElement(_session2.default, null);
@@ -13700,7 +13701,8 @@ var ChatBox = function (_React$Component) {
   _createClass(ChatBox, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      this.props.connect("abcd1234");
+      // debugger
+      this.props.connect_websocket();
     }
   }, {
     key: 'roomChangedCallBack',
@@ -13755,8 +13757,8 @@ var mapStateToProps = function mapStateToProps(state, ownProps) {
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
   return {
-    connect_websocket: function connect_websocket(key) {
-      return ownProps.connect(key);
+    connect_websocket: function connect_websocket() {
+      return ownProps.connect(ownProps.token);
     }
   };
 };

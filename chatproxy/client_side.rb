@@ -39,7 +39,7 @@ def createClientChannel
             process_client_command(hash)
 
           }
-          # @active_tokens.delete(token)
+          @active_tokens.delete(token)
         end
         # ws.close
       }

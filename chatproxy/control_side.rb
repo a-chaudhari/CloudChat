@@ -1,20 +1,24 @@
 def createControlChannel
   # sock = UNIXServer.new('/tmp/chatproxy.sock')
-  sock = TCPServer.new 2000
-  client = sock.accept
-  Thread.new do
-    p 'hi'
-    # debugger
-    loop{
-      msg = client.gets
-      p msg
-      break if msg.nil?
-      msg = msg.chomp
-      puts "control chan recv: #{msg}"
-      processControlChannel(msg)
-    }
+  server = TCPServer.new 2000
+  # client = sock.accept
+
+  p 'hi'
+  # debugger
+  loop do
+    Thread.fork(server.accept) do |client|
+      loop do
+        msg = client.gets
+        p msg
+        break if msg.nil?
+        msg = msg.chomp
+        puts "control chan recv: #{msg}"
+        processControlChannel(msg)
+      end
+  	end
   end
-  sock
+
+  server
 end
 
 def processControlChannel(msg)
@@ -98,6 +102,9 @@ def kill(obj)
 end
 
 def update(obj)
+  # p obj
+  # p @active_clients
+  # debugger
   return false if !@active_clients[obj["username"].to_sym]
   # debugger
   @active_tokens[obj["token"]] = obj["username"]

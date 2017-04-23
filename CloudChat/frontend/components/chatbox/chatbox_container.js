@@ -12,7 +12,7 @@ const mapStateToProps = (state, ownProps) =>{
 const mapDispatchToProps = (dispatch, ownProps) =>{
   return(
     {
-      connect_websocket: (key)=>ownProps.connect(key)
+      connect_websocket: ()=>ownProps.connect(ownProps.token)
     }
   );
 };
