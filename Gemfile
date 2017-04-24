@@ -27,7 +27,10 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'daemons', '~> 1.2', '>= 1.2.4'
 gem 'em-websocket', '~> 0.5.1'
 gem 'events', '~> 0.9.8'
-gem 'rails_12factor'
+
+group :production do
+  gem 'rails_12factor'
+end
 
 # Use Unicorn as the app server
 # gem 'unicorn'
