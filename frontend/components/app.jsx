@@ -20,7 +20,9 @@ class App extends React.Component{
   ws_connect(key){
     console.log("connecting")
     console.log(key)
-    this.ws = new WebSocket(`ws://127.0.0.1:8080/${key}`);
+    // debugger
+    // this.ws = new WebSocket(`ws://127.0.0.1:8080/${key}`);
+    this.ws = new WebSocket(`ws://${window.location.hostname}:8080/${key}`);
     this.ws.onmessage = this.ws_recv.bind(this);
     this.props.dispatch(receiveSocket(this.ws));
   }
