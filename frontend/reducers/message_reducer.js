@@ -1,4 +1,4 @@
-import {NEW_CHANNEL_MSG, NEW_CHANNEL_MSG_LOCAL, USER_JOIN, USER_PART} from '../actions/channel_actions';
+import {NEW_CHANNEL_MSG, NEW_CHANNEL_MSG_LOCAL, USER_JOIN, USER_PART, USER_SELF_JOIN} from '../actions/channel_actions';
 import {RECEIVED_WELCOME_PACKAGE} from '../actions/configuration_actions';
 
 import merge from 'lodash/merge';
@@ -7,18 +7,25 @@ window.merge = merge;
 const MessageReducer = (state={messages:{},users:{}},action) => {
   switch (action.type) {
     case NEW_CHANNEL_MSG:
-      let newState = merge({},state);
+      var newState = merge({},state);
       // debugger
       newState.messages[`${action.msg.server} ${action.msg.channel}`].push(action.msg)
       // return merge({},{messages: state.messages.concat([action.msg.data])});
       return newState;
 
     case NEW_CHANNEL_MSG_LOCAL:
-      let newState2 = merge({},state);
+      var newState2 = merge({},state);
       // debugger
       newState2.messages[action.msg.target].push(action.msg)
       // return merge({},{messages: state.messages.concat([action.msg.data])});
       return newState2;
+
+    case USER_SELF_JOIN:
+      var newState = merge({},state);
+      var str = action.data.server + " " + action.data.channel;
+      newState.messages[str] = action.data.buffer;
+      newState.users[str] = action.data.users;
+      return newState;
 
     case USER_PART:
       var new_state = merge({},state);

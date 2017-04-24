@@ -10,10 +10,25 @@ class ServerList extends React.Component{
     }
   }
 
+  componentWillReceiveProps(newProps){
+    const newRoom = newProps.config.selectedRoom;
+    if(newRoom === null) return;
+
+    const chunks = newRoom.split(' ');
+    if(this.state.selected_server !== chunks[0] || this.state.selected_chan !== chunks[1]){
+      let newHidden = this.state.hidden_servers;
+      delete newHidden[chunks[0]];
+      this.setState({selected_chan: chunks[1],
+        selected_server: chunks[0],
+        hidden_servers: newHidden});
+    }
+  }
+
   changeSelected(server,chan){
     return (e)=>{
       this.setState({selected_server:server, selected_chan: chan});
       this.props.roomCallback(`${server} ${chan}`);
+      this.props.changeRoom(`${server} ${chan}`);
     };
   }
 
@@ -67,6 +82,7 @@ class ServerList extends React.Component{
 
 
 import { connect  } from 'react-redux';
+import {changeRoom} from '../../actions/configuration_actions';
 
 
 const mapStateToProps = (state, ownProps) =>{
@@ -80,7 +96,7 @@ const mapStateToProps = (state, ownProps) =>{
 const mapDispatchToProps = (dispatch, ownProps) =>{
   return(
     {
-
+      changeRoom: (room) => dispatch(changeRoom(room))
     }
   );
 };

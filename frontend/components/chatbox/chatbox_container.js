@@ -4,7 +4,7 @@ import ChatBox from './chatbox';
 const mapStateToProps = (state, ownProps) =>{
   return(
     {
-
+      selectedRoom: state.config.selectedRoom
     }
   );
 };

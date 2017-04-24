@@ -28,7 +28,7 @@ class ChatBox extends React.Component{
           <UserBox/>
           <ServerList roomCallback={this.roomChangedCallBack.bind(this)}/>
         </div>
-        <ChatContent selectedRoom={this.state.selectedRoom}/>
+        <ChatContent selectedRoom={this.props.selectedRoom}/>
       </div>
     );
   }

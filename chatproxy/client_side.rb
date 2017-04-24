@@ -106,6 +106,25 @@ def speak(hash)
 end
 
 def join(hash)
+  user = hash[:user]
+  server = user.connections[hash["server"]]
+  #don't try to join a channel twice
+  return if !!server.channels[hash['channel']]
+  channel = server.createChannel(hash['channel'])
+
+  if channel.join == :active
+
+    #inform the client if connected
+    user.socket.send({
+      command: 'chan_self_join',
+      server: server.server,
+      channel: channel.channel,
+      users: channel.userlist,
+      topic: 'topic not implemented',
+      buffer: [{system:true,msg:"server buffer not implemented... yet"}],
+    }.to_json) unless user.socket.nil?
+  end
+
 end
 
 def part(hash)

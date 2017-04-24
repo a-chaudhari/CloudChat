@@ -15,7 +15,7 @@ class ChannelMessages extends React.Component{
     //   );
     // });
     let msg_els = [];
-    if(this.props.selectedRoom !== ""){
+    if(this.props.selectedRoom !== null){
       // debugger
       msg_els = this.props.messages[this.props.selectedRoom].map((line,idx)=>{
         if(line.system === true){

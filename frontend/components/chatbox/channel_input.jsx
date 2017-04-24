@@ -12,13 +12,39 @@ class ChannelInput extends React.Component{
     return (e)=>(this.setState({[field]:e.target.value}));
   }
 
+  processCommand(msg){
+    const chunks = msg.split(' ');
+    const command = chunks.shift();
+    switch(command){
+      case 'join':
+        this.joinChannel(chunks[0]);
+        break;
+
+      default:
+        console.log("unknown command: " + command)
+    }
+  }
+
+  joinChannel(chan){
+    console.log("joining: " + chan)
+    const command = {
+      command: 'join',
+      channel: chan,
+      server: this.props.server
+    };
+    this.props.socket.send(JSON.stringify(command));
+  }
+
   handleSend(e){
     e.preventDefault();
-    console.log(`sending: ${this.state.input}`);
-    // this.props.newMsg({
-    //   user:this.
-    // })
-    // debugger
+
+    //intercept commands
+    if(this.state.input[0] === '/'){
+      this.processCommand(this.state.input.slice(1))
+      this.setState({input:""});
+      return;
+    }
+
     const packet = {
       command: "speak",
       server: this.props.server,
@@ -54,7 +80,8 @@ import { connect  } from 'react-redux';
 import {newChannelMsgLocal} from '../../actions/channel_actions';
 
 const mapStateToProps = (state, ownProps) =>{
-  const target = ownProps.selectedRoom.split(' ');
+
+  const target = (ownProps.selectedRoom===null? "" :  ownProps.selectedRoom.split(' '));
   // debugger
   return(
     {

@@ -1,6 +1,6 @@
 import React from 'react';
 import Channel from './chatbox/channel';
-import {newChannelMsg, userJoin, userPart} from '../actions/channel_actions';
+import {newChannelMsg, userJoin, userPart, userSelfJoin} from '../actions/channel_actions';
 import {receiveWelcomePackage, receiveSocket} from '../actions/configuration_actions';
 import Session from './session';
 // import UserBox from './user_box';
@@ -66,6 +66,16 @@ class App extends React.Component{
           msg: `${obj['user']} left the channel`
         }));
         this.props.dispatch(userPart(obj));
+        break;
+
+      case 'chan_self_join':
+        this.props.dispatch(userSelfJoin({
+          server: obj['server'],
+          channel: obj['channel'],
+          buffer: obj['buffer'],
+          users: obj['users'],
+          topic: obj['topic']
+        }));
         break;
 
       default:
