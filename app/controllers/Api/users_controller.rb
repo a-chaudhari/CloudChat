@@ -1,4 +1,4 @@
-class Api::UsersController < ApplicationController
+class api::UsersController < ApplicationController
 
   def update
   end
