@@ -32,7 +32,7 @@ module CloudChat
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
-    config.reload_controllers = Rails.env.development
+    # config.reload_controllers = Rails.env.development?
 
     config.after_initialize do
       # system('ruby ./chatproxy/server.rb &')
