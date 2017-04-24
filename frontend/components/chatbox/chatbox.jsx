@@ -6,19 +6,10 @@ import ChatContent from './chatContent';
 class ChatBox extends React.Component{
   constructor(props){
     super(props);
-    this.state={
-      selectedRoom: ""
-    }
   }
 
   componentDidMount(){
-    // debugger
     this.props.connect_websocket();
-  }
-
-  roomChangedCallBack(newChan){
-    console.log(newChan);
-    this.setState({selectedRoom: newChan})
   }
 
   render(){
@@ -26,7 +17,7 @@ class ChatBox extends React.Component{
       <div className="chatbox-container">
         <div className="chatbox-left">
           <UserBox/>
-          <ServerList roomCallback={this.roomChangedCallBack.bind(this)}/>
+          <ServerList/>
         </div>
         <ChatContent selectedRoom={this.props.selectedRoom}/>
       </div>

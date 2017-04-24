@@ -81,7 +81,7 @@ import {newChannelMsgLocal} from '../../actions/channel_actions';
 
 const mapStateToProps = (state, ownProps) =>{
 
-  const target = (ownProps.selectedRoom===null? "" :  ownProps.selectedRoom.split(' '));
+  const target = (state.config.selectedRoom===null? "" :  state.config.selectedRoom.split(' '));
   // debugger
   return(
     {
@@ -89,7 +89,7 @@ const mapStateToProps = (state, ownProps) =>{
       channel:target[1],
       server:target[0],
       servers: state.config.servers,
-      selectedRoom: ownProps.selectedRoom
+      selectedRoom: state.config.selectedRoom
     }
   );
 };

@@ -15,10 +15,10 @@ class ChatContent extends React.Component{
         <ChannelHeader selectedRoom={this.props.selectedRoom}/>
         <div className="chatbox-lower">
           <div className="chatbox-msgs-input">
-            <ChannelMessages selectedRoom={this.props.selectedRoom}/>
-            <ChannelInput selectedRoom={this.props.selectedRoom}/>
+            <ChannelMessages/>
+            <ChannelInput/>
           </div>
-          <ChannelMemberList selectedRoom={this.props.selectedRoom}/>
+          <ChannelMemberList/>
         </div>
       </div>
     );

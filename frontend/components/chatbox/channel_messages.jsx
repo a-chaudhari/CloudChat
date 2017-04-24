@@ -46,7 +46,7 @@ const mapStateToProps = (state, ownProps) =>{
   return(
     {
       messages: state.messages.messages,
-      selectedRoom: ownProps.selectedRoom
+      selectedRoom: state.config.selectedRoom
     }
   );
 };

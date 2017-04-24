@@ -16,8 +16,11 @@ class ServerList extends React.Component{
 
     const chunks = newRoom.split(' ');
     if(this.state.selected_server !== chunks[0] || this.state.selected_chan !== chunks[1]){
+
+      //uncolapse the server if collapsed
       let newHidden = this.state.hidden_servers;
       delete newHidden[chunks[0]];
+
       this.setState({selected_chan: chunks[1],
         selected_server: chunks[0],
         hidden_servers: newHidden});
@@ -27,7 +30,8 @@ class ServerList extends React.Component{
   changeSelected(server,chan){
     return (e)=>{
       this.setState({selected_server:server, selected_chan: chan});
-      this.props.roomCallback(`${server} ${chan}`);
+      // this.props.roomCallback(`${server} ${chan}`);
+      console.log(`${server} ${chan}`)
       this.props.changeRoom(`${server} ${chan}`);
     };
   }
@@ -51,7 +55,6 @@ class ServerList extends React.Component{
     const that = this;
     const content = Object.keys(this.props.config.servers).map((server_key)=>{
       const server = that.props.config.servers[server_key];
-      // debugger
       const channels = Object.keys(server.channels).map((chan)=>{
         const selected = (that.state.selected_chan === chan &&
                           that.state.selected_server === server_key)

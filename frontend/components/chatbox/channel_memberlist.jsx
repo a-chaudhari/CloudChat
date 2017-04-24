@@ -34,7 +34,8 @@ import { connect  } from 'react-redux';
 const mapStateToProps = (state, ownProps) =>{
   return(
     {
-      userlist: state.messages.users[ownProps.selectedRoom]
+      userlist: state.messages.users[state.config.selectedRoom],
+      selectedRoom: state.config.selectedRoom
     }
   );
 };
