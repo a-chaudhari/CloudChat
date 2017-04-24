@@ -35,10 +35,12 @@ module CloudChat
     # config.reload_controllers = Rails.env.development?
 
     config.after_initialize do
-      do_not_join = !!ENV['CC_SKIP']
-      system('ruby ./chatproxy/server.rb &') unless do_not_join
+      do_not_spinup = !!ENV['CC_SKIP']
+      do_not_start = !!ENV['CC_NO_LAUNCH']
+      
+      system('ruby ./chatproxy/server.rb &') unless do_not_spinup || do_not_start
       sleep(0.5)
-      User.start_connections unless do_not_join
+      User.start_connections unless do_not_spinup
     end
   end
 end

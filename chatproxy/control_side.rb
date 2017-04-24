@@ -110,6 +110,7 @@ def update(obj)
   # p @active_clients
   # debugger
   return false if !@active_clients[obj["username"].to_sym]
+  p "adding to activetokens"
   # debugger
   @active_tokens[obj["token"]] = obj["username"]
   # @active_clients[obj["username"].to_sym].token = obj["token"]
