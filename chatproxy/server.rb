@@ -5,7 +5,7 @@ require_relative 'ruby1459/irc_connection'
 require_relative 'ruby1459/irc_channel'
 require_relative 'control_side'
 require_relative 'client_side'
-# require 'byebug'
+require 'byebug'
 require_relative 'user'
 require 'base64'
 Thread.abort_on_exception = true

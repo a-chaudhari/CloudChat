@@ -31,8 +31,29 @@
       .sl-server-entry, .serverlist-entry{
         cursor: pointer;
       }
+      .sl-server-entry{
+        position: relative;
+        .server-plus{
+          position: absolute;
+          right: 5px;
+          top: 0;
+        }
+        .server-plus:hover{
+          background-color: purple;
+        }
+      }
       .serverlist-entry{
         margin-left: 10px;
+        position: relative;
+        .chan-minus{
+          position: absolute;
+          color: red;
+          right:5px;
+          top:0;
+        }
+        .chan-minus:hover{
+          background-color: purple;
+        }
       }
 
       .sl-entry-selected{

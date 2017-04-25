@@ -111,6 +111,7 @@ def join(hash)
   #don't try to join a channel twice
   return if !!server.channels[hash['channel']]
   channel = server.createChannel(hash['channel'])
+  bind_events_to_channel(user, server.server, channel)
 
   if channel.join == :active
 

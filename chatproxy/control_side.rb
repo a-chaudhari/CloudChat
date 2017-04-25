@@ -33,6 +33,27 @@ def processControlChannel(msg, client)
   end
 end
 
+def bind_events_to_channel(user, server_url, chan)
+  chan.on(:chanmsg) do |data|
+    data[:msg]=Base64.encode64(data[:msg])
+    data[:server]=server_url
+    data[:command]="chanmsg"
+    user.socket.send(data.to_json) unless user.socket.nil?
+  end
+
+  chan.on(:chan_join) do |data|
+    data[:server]=server_url
+    data[:command]="chan_join"
+    user.socket.send(data.to_json) unless user.socket.nil?
+  end
+
+  chan.on(:chan_part) do |data|
+    data[:server]=server_url
+    data[:command]="chan_part"
+    user.socket.send(data.to_json) unless user.socket.nil?
+  end
+end
+
 def start(obj)
   settings = obj["settings"]
   username = obj["username"].to_sym
@@ -60,30 +81,13 @@ def start(obj)
 
   user.connections[server_url].on(:registered) do
     settings["channels"].each do |name|
-
       chan = user.connections[server_url].createChannel(name)
-      chan.on(:chanmsg) do |data|
-        data[:msg]=Base64.encode64(data[:msg])
-        data[:server]=server_url
-        data[:command]="chanmsg"
-        user.socket.send(data.to_json) unless user.socket.nil?
-      end
-
-      chan.on(:chan_join) do |data|
-        data[:server]=server_url
-        data[:command]="chan_join"
-        user.socket.send(data.to_json) unless user.socket.nil?
-      end
-
-      chan.on(:chan_part) do |data|
-        data[:server]=server_url
-        data[:command]="chan_part"
-        user.socket.send(data.to_json) unless user.socket.nil?
-      end
-
+      bind_events_to_channel(user, server_url, chan)
       chan.join
     end
   end
+
+
 
   user.connections[server_url].connect
 

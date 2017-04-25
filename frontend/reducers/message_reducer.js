@@ -8,7 +8,7 @@ const MessageReducer = (state={messages:{},users:{}},action) => {
   switch (action.type) {
     case NEW_CHANNEL_MSG:
       var newState = merge({},state);
-      // debugger
+      debugger
       newState.messages[`${action.msg.server} ${action.msg.channel}`].push(action.msg)
       // return merge({},{messages: state.messages.concat([action.msg.data])});
       return newState;
