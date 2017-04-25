@@ -27,7 +27,8 @@ class Session extends React.Component{
     this.props.logIn({username: this.state.username, password: this.state.password})
   }
 
-  guestLogin(){
+  guestLogin(e){
+    e.preventDefault();
     this.props.logIn({username: "guest", password:"password"});
   }
 
@@ -44,8 +45,8 @@ class Session extends React.Component{
               <input type="password" value={this.state.password} onChange={this.update("password").bind(this)}/>
             </label>
             <button onClick={this.handleLogin.bind(this)}>Log In</button>
-            <button onClick={this.guestLogin.bind(this)}>Demo Auto Log In</button>
           </form>
+          <button onClick={this.guestLogin.bind(this)}>Demo Auto Log In</button>
         </div>
         <div className="session-signup">
           <h2>session sign UP form</h2>
