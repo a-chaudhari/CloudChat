@@ -20,9 +20,25 @@ class ChannelInput extends React.Component{
         this.joinChannel(chunks[0]);
         break;
 
+      case 'part':
+      case 'leave':
+        this.partChannel();
+      break;
+
+
       default:
         console.log("unknown command: " + command)
     }
+  }
+
+  partChannel(){
+    console.log("leaving chan");
+    const command = {
+      command: 'part',
+      channel: this.props.channel,
+      server: this.props.server
+    }
+    this.props.socket.send(JSON.stringify(command));
   }
 
   joinChannel(chan){
@@ -38,6 +54,12 @@ class ChannelInput extends React.Component{
   handleSend(e){
     e.preventDefault();
 
+    //return if no channel is active
+    if(this.props.selectedRoom === null){
+      this.setState({input:""});
+      return;
+    }
+
     //intercept commands
     if(this.state.input[0] === '/'){
       this.processCommand(this.state.input.slice(1))
@@ -45,6 +67,7 @@ class ChannelInput extends React.Component{
       return;
     }
 
+    //anything past here will send a msg to the channel
     const packet = {
       command: "speak",
       server: this.props.server,

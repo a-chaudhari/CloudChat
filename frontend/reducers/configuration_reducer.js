@@ -1,5 +1,5 @@
 import {RECEIVED_WELCOME_PACKAGE, RECEIVE_SOCKET, CHANGE_ROOM} from '../actions/configuration_actions';
-import {USER_SELF_JOIN} from '../actions/channel_actions';
+import {USER_SELF_JOIN, USER_SELF_PART} from '../actions/channel_actions';
 import merge from 'lodash/merge';
 
 const ConfigurationReducer = (state={socket:null, servers:{}, selectedRoom:null}, action) =>{
@@ -35,6 +35,24 @@ const ConfigurationReducer = (state={socket:null, servers:{}, selectedRoom:null}
         topic: action.data.topic
       }
       newState.selectedRoom = action.data.server + " " + action.data.channel;
+      return newState;
+
+    case USER_SELF_PART:
+      var newState = merge({},state);
+      delete newState.servers[action.data.server].channels[action.data.channel];
+
+      //need to update the currently selected room if we left the currently selected room
+      var newSelectedRoom = null;
+      var server_keys = Object.keys(newState.servers);
+      if(server_keys.length > 0){
+        var chan_keys = Object.keys(newState.servers[server_keys[0]].channels)
+        if(chan_keys.length > 0){
+          newSelectedRoom=server_keys[0] + " " + chan_keys[0];
+          console.log("setting to : " + newSelectedRoom)
+        }
+      }
+      newState.selectedRoom = newSelectedRoom;
+
       return newState;
 
     case RECEIVE_SOCKET:

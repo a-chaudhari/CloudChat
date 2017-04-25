@@ -3,6 +3,12 @@ export const NEW_CHANNEL_MSG_LOCAL = "NEW_CHANNEL_MSG_LOCAL";
 export const USER_JOIN = 'USER_JOIN';
 export const USER_PART = 'USER_PART';
 export const USER_SELF_JOIN = 'USER_SELF_JOIN';
+export const USER_SELF_PART = 'USER_SELF_PART';
+
+export const userSelfPart = (data)=>({
+  type: USER_SELF_PART,
+  data
+});
 
 export const userSelfJoin = (data)=>({
   type: USER_SELF_JOIN,

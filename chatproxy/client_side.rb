@@ -128,6 +128,17 @@ def join(hash)
 end
 
 def part(hash)
+  user = hash[:user]
+  server = user.connections[hash["server"]]
+  channel = server.channels[hash["channel"]]
+  channel.part
+  server.deleteChannel(hash["channel"])
+
+  user.socket.send({
+    command: 'chan_self_part',
+    server: server.server,
+    channel: channel.channel
+  }.to_json);
 end
 
 def connect(hash)
