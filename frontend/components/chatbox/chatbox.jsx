@@ -16,7 +16,7 @@ class ChatBox extends React.Component{
     return(
       <div className="chatbox-container">
         <div className="chatbox-left">
-          <UserBox/>
+          <UserBox logOut={this.props.logOut}/>
           <ServerList/>
         </div>
         <ChatContent selectedRoom={this.props.selectedRoom}/>

@@ -1,4 +1,5 @@
 import { connect  } from 'react-redux';
+import {logOut} from '../../actions/session_actions';
 import ChatBox from './chatbox';
 
 const mapStateToProps = (state, ownProps) =>{
@@ -12,7 +13,8 @@ const mapStateToProps = (state, ownProps) =>{
 const mapDispatchToProps = (dispatch, ownProps) =>{
   return(
     {
-      connect_websocket: ()=>ownProps.connect(ownProps.token)
+      connect_websocket: ()=>ownProps.connect(ownProps.token),
+      logOut: ()=>dispatch(logOut())
     }
   );
 };

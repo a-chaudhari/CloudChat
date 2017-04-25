@@ -9,11 +9,11 @@
 User.destroy_all
 
 u1= User.create!({
-  username: "achaudhari",
+  username: "guest",
   password: "password"
   })
 u2 = User.create!({
-  username: "someoneelse",
+  username: "test",
   password: "password"
   })
 

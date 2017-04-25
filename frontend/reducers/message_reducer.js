@@ -8,7 +8,7 @@ const MessageReducer = (state={messages:{},users:{}},action) => {
   switch (action.type) {
     case NEW_CHANNEL_MSG:
       var newState = merge({},state);
-      debugger
+      // debugger
       newState.messages[`${action.msg.server} ${action.msg.channel}`].push(action.msg)
       // return merge({},{messages: state.messages.concat([action.msg.data])});
       return newState;
@@ -45,9 +45,7 @@ const MessageReducer = (state={messages:{},users:{}},action) => {
           break;
         }
       }
-
       new_state.users[chan_string]=users;
-
       return new_state;
 
     case USER_JOIN:
@@ -69,6 +67,7 @@ const MessageReducer = (state={messages:{},users:{}},action) => {
       });
       console.log({messages,users});
       return {messages,users};
+      
     default:
       return state;
   }

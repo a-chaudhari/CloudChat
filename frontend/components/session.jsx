@@ -27,6 +27,10 @@ class Session extends React.Component{
     this.props.logIn({username: this.state.username, password: this.state.password})
   }
 
+  guestLogin(){
+    this.props.logIn({username: "guest", password:"password"});
+  }
+
   render(){
     return(
       <div className="session-container">
@@ -40,6 +44,7 @@ class Session extends React.Component{
               <input type="password" value={this.state.password} onChange={this.update("password").bind(this)}/>
             </label>
             <button onClick={this.handleLogin.bind(this)}>Log In</button>
+            <button onClick={this.guestLogin.bind(this)}>Demo Auto Log In</button>
           </form>
         </div>
         <div className="session-signup">
@@ -61,7 +66,7 @@ class Session extends React.Component{
 
 
 import { connect  } from 'react-redux';
-import {signUp, logIn} from '../actions/session_actions';
+import {signUp, logIn, logOut} from '../actions/session_actions';
 
 const mapStateToProps = (state, ownProps) =>{
   return(
