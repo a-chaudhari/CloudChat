@@ -59,7 +59,7 @@ def send_welcome_package(user)
   # debugger
   package = {
     command: 'welcome_package',
-    servers: prepare_servers(user.connections)
+    servers: prepare_servers(user, user.connections)
   }
 
   p package
@@ -67,26 +67,27 @@ def send_welcome_package(user)
 
 end
 
-def prepare_servers(servers)
+def prepare_servers(user, servers)
   output = {}
   servers.each do |key,conn|
     temp = {
       server: conn.server,
       nickname: conn.nickname,
-      channels: prepare_channels(conn.channels)
+      channels: prepare_channels(user, conn.server, conn.channels)
     }
     output[key] = temp
   end
   output
 end
 
-def prepare_channels(chans)
+def prepare_channels(user, server, chans)
   output = {}
   chans.each do |key,chan|
     temp = {
       name: chan.channel,
       users: chan.userlist,
-      buffer: [{system:true,msg:"server buffer not implemented... yet"}],
+      buffer: user.buffers[server + ' ' + key],
+      # buffer: [{system:true,msg:"server buffer not implemented... yet"}],
       topic: "topic not implemented"
     }
     output[key] = temp
@@ -102,6 +103,7 @@ def speak(hash)
   user = hash[:user]
   server = user.connections[hash["server"]]
   channel = server.channels[hash["channel"]]
+  user.appendBuffer(hash)
   channel.speak(Base64.decode64(hash["msg"]))
 end
 

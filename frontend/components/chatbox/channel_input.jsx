@@ -53,6 +53,7 @@ class ChannelInput extends React.Component{
 
   handleSend(e){
     e.preventDefault();
+    document.activeElement.blur();
 
     //return if no channel is active
     if(this.props.selectedRoom === null){

@@ -38,6 +38,7 @@ def bind_events_to_channel(user, server_url, chan)
     data[:msg]=Base64.encode64(data[:msg])
     data[:server]=server_url
     data[:command]="chanmsg"
+    user.appendBuffer(data)
     user.socket.send(data.to_json) unless user.socket.nil?
   end
 
@@ -83,6 +84,7 @@ def start(obj)
     settings["channels"].each do |name|
       chan = user.connections[server_url].createChannel(name)
       bind_events_to_channel(user, server_url, chan)
+      user.addBuffer(server_url + " " + name)
       chan.join
     end
   end
