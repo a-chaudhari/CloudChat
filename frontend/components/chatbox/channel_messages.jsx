@@ -1,4 +1,5 @@
 import React from 'react';
+import Linkify from 'linkifyjs/react';
 
 class ChannelMessages extends React.Component{
   constructor(props){
@@ -16,8 +17,11 @@ class ChannelMessages extends React.Component{
             <div className="chatbox-msg-line chatbox-system" key={`chatmsg${idx}`}>{`${line.msg}`}</div>
           )
         }
+        const formatted_line = (<Linkify tagName="p">{atob(line.msg)}</Linkify>)
         return(
-          <div className="chatbox-msg-line" key={`chatmsg${idx}`}>{`${line.user}: ${atob(line.msg)}`}</div>
+          <div className="chatbox-msg-line" key={`chatmsg${idx}`}>
+            <span className="chatmsg-name">{line.user}:</span> {formatted_line}
+          </div>
         );
       });
     }

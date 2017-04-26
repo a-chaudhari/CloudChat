@@ -7,6 +7,7 @@
 body{
   margin: 0;
   font-family: sans-serif;
+  background-color: linen;
 }
 .hidden{
   display: none;
@@ -68,6 +69,7 @@ body{
 .chatbox-header{
   max-height: 2.5em;
   overflow: hidden;
+  background-color: linen;
   display: flex;
   border-bottom: 1px solid black;
   flex-direction: row;
@@ -127,7 +129,7 @@ body{
   display: flex;
   height: 100%;
   width: 100%;
-  background-color: pink;
+  background-color: white;
   flex-direction: column;
 }
 
@@ -135,19 +137,32 @@ body{
   flex-grow: 1;
   overflow-y: scroll;
   overflow-x: auto;
+  .chatbox-msg-line{
+    margin-bottom: 2px;
+    p{
+      margin: 0;
+      display: inline;
+    }
+
+  }
+  .chatmsg-name{
+    font-weight: bold;
+    color: darkgreen;
+  }
 }
 
 .chatbox-input{
   border-top: 1px solid black;
   display: flex;
   height: 2.5em;
+  background-color: lightgray;
   width: 100%;
   flex-direction: row;
   form{
     flex-grow: 1;
     height: 100%;
     display: flex;
-    background-color: green;
+    // background-color: green;
     input{
       font-size: 14px;
       display: inline-block;
@@ -158,6 +173,10 @@ body{
       padding: 0;
     }
     button{
+      background-color: lightgreen;
+      font-size: 16px;
+      text-transform: uppercase;
+      font-weight: bold;
       width: 75px;
     }
   }
