@@ -12,7 +12,7 @@ body{
   display: none;
 }
 .chatbox-container{
-  height: 100vh;
+  height: calc(100vh-44px);
   border: 1px solid black;
   box-sizing: border-box;
 }
