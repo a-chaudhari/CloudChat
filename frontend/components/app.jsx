@@ -111,11 +111,7 @@ class App extends React.Component{
     // debugger
     // <Channel send={this.ws_send.bind(this)} join={this.ws_connect.bind(this)}/>
     // <h1>{logged_in? "logged in" : "not logged in" }</h1>
-    return(
-      <div className="cloudchat-app">
-        {container}
-      </div>
-    );
+    return container;
   }
 }
 

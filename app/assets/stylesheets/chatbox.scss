@@ -4,13 +4,9 @@
   display: flex;
   flex-direction: row;
   .chatbox-left{
-    // vertical-align: top;
     flex-basis: 18%;
     display: flex;
     flex-direction: column;
-    // height: 100%;
-    // width: 18%;
-    // display: inline-block;
     .chatbox-userbox{
       nav{
         .userbox-element{
@@ -72,15 +68,12 @@
   }
 
   .chatbox-content{
-    // display: inline-block;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     height: 100%;
-    // width: 70%;
     flex-grow: 1;
     .chatbox-header{
-      // border: 1px solid black;
       border-left: 1px solid black;
       height: 10%;
       flex-basis: 100%;
@@ -99,25 +92,17 @@
         display: flex;
         flex-direction: column;
         box-sizing: border-box;
-        // height: 90%;
         height: 100%;
         flex-grow: 1;
-        // border: 1px solid black;
         border-top: 1px solid black;
         border-left: 1px solid black;
-        // width: 70%;
-        // vertical-align: top;
-        // display: inline-block;
         .chatbox-messages{
-          // width: 100%;
-          // flex-basis: 1;
           flex-grow: 1;
           height: 90%;
           overflow-y: scroll;
           overflow-x: auto;
         }
         .chatbox-input{
-          // border: 1px solid black;
           border-top: 1px solid black;
           display: flex;
           height: 10%;
@@ -125,7 +110,6 @@
           flex-direction: row;
           form{
             flex-grow: 1;
-            // height: 35px;
             height: 100%;
             display: flex;
             background-color: green;
@@ -137,28 +121,18 @@
               border: 0;
               margin: 0;
               padding: 0;
-              // width: 300px;
-              // width: 100%;
             }
             button{
               width: 75px;
-              // display: inline-block;
-              // flex-basis: 20px;
             }
           }
         }
       }
       .chatbox-userlist{
-        // vertical-align: top;
-        // display: inline-block;
-        // width: 15%;
-        // border: 1px solid black;
         border-top: 1px solid black;
         border-left: 1px solid black;
         border-right: 1px solid black;
         flex-basis: 15%;
-        // flex-grow: 1;
-        // height: 70vh;
         overflow-y: scroll;
         overflow-x: auto;
       }

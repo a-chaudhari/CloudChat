@@ -18,7 +18,7 @@ class ChannelMemberList extends React.Component{
       );
     })
     return(
-      <div className="chatbox-userlist">
+      <div className={"chatbox-userlist" + (this.props.show ? "": " hidden")}>
         {user_els}
       </div>
     );
