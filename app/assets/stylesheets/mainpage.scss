@@ -27,6 +27,30 @@ body{
   border:1px solid black;
 }
 
+.chatbox-userbox{
+  border-bottom: 1px solid black;
+  nav{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+
+    div{
+      cursor: pointer;
+      border: 1px solid black;
+      display: inline-block;
+      padding: 5px;
+      border-radius: 3px;
+      margin: 5px;
+      text-transform: capitalize;
+    }
+    div:first-of-type{
+      border: 0;
+      cursor: default;
+    }
+  }
+
+}
+
 .chatbox-userlist{
   position: absolute;
   background-color: white;
@@ -54,6 +78,49 @@ body{
     margin: 0 10px;
     align-self: center;
     flex-grow: 0;
+  }
+}
+
+.chatbox-serverlist{
+  font-size: 20px;
+  i{
+    // margin: 0 10px;
+  }
+  .server-arrow{
+    // float:left;
+    position: absolute;
+    left:-15px;
+    top:2px;
+  }
+  .sl-server-entry{
+    position: relative;
+    margin-left: 17px;
+    .server-plus{
+      position: absolute;
+      right:10px;
+      top:2px;
+    }
+  }
+
+  .serverlist-entry{
+    position: relative;
+    margin-left: 25px;
+    .chan-minus{
+      position: absolute;
+      right: 10px;
+      top: 2px;
+      color: red;
+      background-color: white;
+      display: none;
+      clip-path: circle(9.5px at 50% 50%);
+      -webkit-clip-path: circle(9.5px at 50% 50%);
+    }
+  }
+  .sl-entry-selected{
+    background-color: lightgreen;
+    .chan-minus{
+      display: block;
+    }
   }
 }
 

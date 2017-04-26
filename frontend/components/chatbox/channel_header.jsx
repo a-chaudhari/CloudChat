@@ -18,14 +18,49 @@ class ChannelHeader extends React.Component{
 
 
   render(){
+    var value = "";
+    if(this.props.selectedRoom === null) { }
+    else if(this.props.mobile){
+      const chunks = this.props.selectedRoom.split(' ');
+      value = chunks[1];
+    }else{
+      value = this.props.selectedRoom;
+    }
     return(
       <div className="chatbox-header">
         <i onClick={this.handleLeft.bind(this)} className="fa fa-bars fa-2x header-button" aria-hidden="true"></i>
-        <h1>Header and stuff here</h1>
+        <h1>{value}</h1>
         <i onClick={this.handleRight.bind(this)} className="fa fa-user fa-2x header-button" aria-hidden="true"></i>
       </div>
     );
   }
 }
 
-export default ChannelHeader;
+
+
+import { connect  } from 'react-redux';
+
+
+const mapStateToProps = (state, ownProps) =>{
+  return(
+    {
+      selectedRoom: state.config.selectedRoom,
+      toggleDrawers: ownProps.toggleDrawers,
+      mobile: state.config.mobile
+    }
+  );
+};
+
+const mapDispatchToProps = (dispatch, ownProps) =>{
+  return(
+    {
+
+    }
+  );
+};
+
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ChannelHeader);

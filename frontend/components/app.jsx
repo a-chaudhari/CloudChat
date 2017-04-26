@@ -1,7 +1,5 @@
 import React from 'react';
 import Channel from './chatbox/channel';
-import {newChannelMsg, userJoin, userPart, userSelfJoin, userSelfPart} from '../actions/channel_actions';
-import {receiveWelcomePackage, receiveSocket} from '../actions/configuration_actions';
 import Session from './session';
 // import UserBox from './user_box';
 import ChatBoxContainer from './chatbox/chatbox_container';
@@ -9,80 +7,80 @@ import ChatBoxContainer from './chatbox/chatbox_container';
 class App extends React.Component{
   constructor(props){
     super(props);
-    // debugger
+  }
+
+  updateWindowSize(){
+    if(window.innerWidth > 786){
+      this.props.changeUI(false);
+    }else{
+      this.props.changeUI(true);
+    }
   }
 
   componentDidMount(){
-    // this.ws_connect();
+    this.updateWindowSize();
+    window.addEventListener('resize', this.updateWindowSize.bind(this));
   }
 
-
   ws_connect(key){
-    console.log("connecting")
-    console.log(key)
-    // debugger
-    // this.ws = new WebSocket(`ws://127.0.0.1:8080/${key}`);
     this.ws = new WebSocket(`ws://${window.location.hostname}:8080/${key}`);
     this.ws.onmessage = this.ws_recv.bind(this);
-    this.props.dispatch(receiveSocket(this.ws));
+    this.props.receiveSocket(this.ws);
   }
 
   ws_send(msg){
-    console.log("sending")
     this.ws.send(msg);
   }
 
   ws_recv(msg){
-    // console.log(msg);
-    // debugger
     const obj = JSON.parse(msg.data)
     console.log(obj)
     if(obj["command"]===undefined) return;
 
     switch(obj["command"]){
       case "welcome_package":
-        this.props.dispatch(receiveWelcomePackage(obj));
+        this.props.receiveWelcomePackage(obj);
         break;
 
       case "chanmsg":
-        this.props.dispatch(newChannelMsg(obj));
+        this.props.newChannelMsg(obj);
         break;
 
       case "chan_join":
-        this.props.dispatch(newChannelMsg({
+        this.props.newChannelMsg({
           server: obj['server'],
           channel: obj['channel'],
           system: true,
           msg: `${obj['user']} joined the channel`
-        }));
-        this.props.dispatch(userJoin(obj));
+        });
+        this.props.userJoin(obj);
         break;
 
       case "chan_part":
-        this.props.dispatch(newChannelMsg({
+        this.props.newChannelMsg({
           server: obj['server'],
           channel: obj['channel'],
           system: true,
           msg: `${obj['user']} left the channel`
-        }));
-        this.props.dispatch(userPart(obj));
+        });
+        this.props.userPart(obj);
         break;
 
       case 'chan_self_part':
-        this.props.dispatch(userSelfPart({
+        this.props.userSelfPart({
           server: obj['server'],
           channel: obj['channel']
-        }));
+        });
         break;
 
       case 'chan_self_join':
-        this.props.dispatch(userSelfJoin({
+        this.props.userSelfJoin({
           server: obj['server'],
           channel: obj['channel'],
           buffer: obj['buffer'],
           users: obj['users'],
           topic: obj['topic']
-        }));
+        });
         break;
 
       default:
@@ -99,18 +97,11 @@ class App extends React.Component{
     const logged_in = this.props.session.session === null ? false : true
     var container = null;
     if(logged_in){
-      // container = <UserBox/>
-      // debugger
       container = <ChatBoxContainer token={this.props.session.session.token} connect={this.ws_connect.bind(this)}/>
     }
     else {
-      // this.ws_connect("abcd1234")
       container = <Session/>
-
     }
-    // debugger
-    // <Channel send={this.ws_send.bind(this)} join={this.ws_connect.bind(this)}/>
-    // <h1>{logged_in? "logged in" : "not logged in" }</h1>
     return container;
   }
 }
@@ -118,7 +109,8 @@ class App extends React.Component{
 
 
 import { connect  } from 'react-redux';
-
+import {newChannelMsg, userJoin, userPart, userSelfJoin, userSelfPart} from '../actions/channel_actions';
+import {receiveWelcomePackage, receiveSocket, changeUI} from '../actions/configuration_actions';
 
 const mapStateToProps = (state, ownProps) =>{
   return(
@@ -127,14 +119,21 @@ const mapStateToProps = (state, ownProps) =>{
     }
   );
 };
-//
-// const mapDispatchToProps = (dispatch, ownProps) =>{
-//   return(
-//     {
-//
-//     }
-//   );
-// };
+
+const mapDispatchToProps = (dispatch, ownProps) =>{
+  return(
+    {
+      changeUI: (mobile)=>dispatch(changeUI(mobile)),
+      userJoin: (obj)=>dispatch(userJoin(obj)),
+      userPart: (obj)=>dispatch(userPart(obj)),
+      userSelfJoin: (obj)=>dispatch(userSelfJoin(obj)),
+      userSelfPart: (obj)=>dispatch(userSelfPart(obj)),
+      receiveWelcomePackage: (obj)=>dispatch(receiveWelcomePackage(obj)),
+      newChannelMsg: (obj)=>dispatch(newChannelMsg(obj)),
+      receiveSocket: (obj)=>dispatch(receiveSocket(obj))
+    }
+  );
+};
 
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

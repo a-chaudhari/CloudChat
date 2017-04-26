@@ -8,8 +8,8 @@ class ChatBox extends React.Component{
   constructor(props){
     super(props);
     this.state={
-      showLeft:false,
-      showRight:false
+      showLeft: !this.props.mobile,
+      showRight: !this.props.mobile
     }
   }
 
@@ -17,7 +17,22 @@ class ChatBox extends React.Component{
     this.props.connect_websocket();
   }
 
+  componentWillReceiveProps(newProps){
+
+    //handle resizing window
+    if(this.props.mobile !== newProps.mobile){
+      this.setState({showLeft: !newProps.mobile, showRight: !newProps.mobile});
+    }
+
+    //handle clicking on a channel
+    if(this.props.selectedRoom !== newProps.selectedRoom && this.props.mobile){
+      this.setState({showLeft: false, showRight: false})
+    }
+  }
+
   toggleDrawers(val){
+    if(!this.props.mobile) return;
+
     if(val === 0){
       this.setState({showLeft: !this.state.showLeft, showRight: false});
     }

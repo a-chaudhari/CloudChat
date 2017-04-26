@@ -124,12 +124,12 @@ class ServerList extends React.Component{
 
       const hidden = (!!that.state.hidden_servers[server_key])
       const plusButton = (<div onClick={this.serverPlus(server_key).bind(this)} className="server-plus"><i className="fa fa-plus-circle" aria-hidden="true"></i></div>);
-
+      const serverArrow = (<i className={"fa server-arrow" + (hidden ? " fa-caret-right" : " fa-caret-down")} aria-hidden="true"></i>)
 
       return(
         <div  key={server_key} className="sl-servergroup">
-          <div className="sl-server-entry" onClick={that.toggleHidden(server_key).bind(that)}>{server_key}{plusButton}</div>
-          <div className={"sl-server-dropdown" + (hidden ? " sl-dropdown-hidden" : "")}>{channels}</div>
+          <div className="sl-server-entry" onClick={that.toggleHidden(server_key).bind(that)}>{serverArrow}{server_key}{plusButton}</div>
+          <div className={"sl-server-dropdown" + (hidden ? " hidden" : "")}>{channels}</div>
         </div>
       );
     });

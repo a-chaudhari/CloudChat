@@ -11,8 +11,7 @@ class ChatContent extends React.Component{
   render(){
     return(
       <div className="chatbox-content">
-        <ChannelHeader toggleDrawers={this.props.toggleDrawers}
-                        selectedRoom={this.props.selectedRoom}/>
+        <ChannelHeader toggleDrawers={this.props.toggleDrawers}/>
         <ChannelMessages/>
         <ChannelInput/>
       </div>

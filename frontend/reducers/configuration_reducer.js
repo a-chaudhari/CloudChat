@@ -1,8 +1,8 @@
-import {RECEIVED_WELCOME_PACKAGE, RECEIVE_SOCKET, CHANGE_ROOM} from '../actions/configuration_actions';
+import {RECEIVED_WELCOME_PACKAGE, RECEIVE_SOCKET, CHANGE_ROOM, CHANGE_UI} from '../actions/configuration_actions';
 import {USER_SELF_JOIN, USER_SELF_PART} from '../actions/channel_actions';
 import merge from 'lodash/merge';
 
-const ConfigurationReducer = (state={socket:null, servers:{}, selectedRoom:null}, action) =>{
+const ConfigurationReducer = (state={socket:null, servers:{}, selectedRoom:null, mobile: true}, action) =>{
   switch(action.type){
 
     case RECEIVED_WELCOME_PACKAGE:
@@ -26,6 +26,9 @@ const ConfigurationReducer = (state={socket:null, servers:{}, selectedRoom:null}
 
     case CHANGE_ROOM:
       return merge({},state,{selectedRoom:action.room});
+
+    case CHANGE_UI:
+      return merge({},state,{mobile: action.mobile});
 
     case USER_SELF_JOIN:
       var newState = merge({},state);
