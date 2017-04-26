@@ -18,21 +18,37 @@ class ChannelHeader extends React.Component{
 
 
   render(){
-    var value = "";
-    if(this.props.selectedRoom === null) { }
-    else if(this.props.mobile){
-      const chunks = this.props.selectedRoom.split(' ');
-      value = chunks[1];
-    }else{
-      value = this.props.selectedRoom;
+    if(this.props.selectedRoom === null){
+      return(
+        <div className="chatbox-header"></div>
+      )
     }
-    return(
-      <div className="chatbox-header">
-        <i onClick={this.handleLeft.bind(this)} className="fa fa-bars fa-2x header-button" aria-hidden="true"></i>
-        <h1>{value}</h1>
-        <i onClick={this.handleRight.bind(this)} className="fa fa-user fa-2x header-button" aria-hidden="true"></i>
-      </div>
-    );
+
+    const room = this.props.selectedRoom;
+    let header = null;
+    const chunks = room.split(' ');
+    const server = chunks[0];
+    const channel = chunks[1];
+    let topic = this.props.servers[server].channels[channel].topic;
+    if(topic === "") topic = "(none)";
+
+    if(this.props.mobile){
+      header = (
+        <div className="chatbox-header">
+          <i onClick={this.handleLeft.bind(this)} className="fa fa-bars fa-2x header-button" aria-hidden="true"></i>
+          <h1>{channel}</h1>
+          <i onClick={this.handleRight.bind(this)} className="fa fa-user fa-2x header-button" aria-hidden="true"></i>
+        </div>)
+    }else{
+      header = (
+        <div className="chatbox-header">
+          <h1><span>Topic:</span> {topic}</h1>
+        </div>
+      )
+    }
+
+
+    return header;
   }
 }
 
@@ -46,7 +62,8 @@ const mapStateToProps = (state, ownProps) =>{
     {
       selectedRoom: state.config.selectedRoom,
       toggleDrawers: ownProps.toggleDrawers,
-      mobile: state.config.mobile
+      mobile: state.config.mobile,
+      servers: state.config.servers
     }
   );
 };

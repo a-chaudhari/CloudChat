@@ -53,6 +53,12 @@ def bind_events_to_channel(user, server_url, chan)
     data[:command]="chan_part"
     user.socket.send(data.to_json) unless user.socket.nil?
   end
+
+  chan.on(:new_topic) do |data|
+    data[:server]=server_url
+    data[:command]='new_topic'
+    user.socket.send(data.to_json) unless user.socket.nil?
+  end
 end
 
 def start(obj)

@@ -88,7 +88,7 @@ def prepare_channels(user, server, chans)
       users: chan.userlist,
       buffer: user.buffers[server + ' ' + key],
       # buffer: [{system:true,msg:"server buffer not implemented... yet"}],
-      topic: "topic not implemented"
+      topic: chan.topic
     }
     output[key] = temp
   end
@@ -110,21 +110,23 @@ end
 def join(hash)
   user = hash[:user]
   server = user.connections[hash["server"]]
+
   #don't try to join a channel twice
   return if !!server.channels[hash['channel']]
+
   channel = server.createChannel(hash['channel'])
   bind_events_to_channel(user, server.server, channel)
 
+  user.addBuffer(server.server + " " + channel.channel)
   if channel.join == :active
-
     #inform the client if connected
     user.socket.send({
       command: 'chan_self_join',
       server: server.server,
       channel: channel.channel,
       users: channel.userlist,
-      topic: 'topic not implemented',
-      buffer: [{system:true,msg:"server buffer not implemented... yet"}],
+      topic: channel.topic,
+      buffer: [],
     }.to_json) unless user.socket.nil?
   end
 

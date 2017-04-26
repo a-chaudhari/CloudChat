@@ -83,6 +83,14 @@ class App extends React.Component{
         });
         break;
 
+      case 'new_topic':
+        this.props.newTopic({
+          server: obj['server'],
+          channel: obj['channel'],
+          topic: obj['topic']
+        });
+        break;
+
       default:
         console.error(`undefined command received: ${obj["command"]}`);
         return;
@@ -110,7 +118,7 @@ class App extends React.Component{
 
 import { connect  } from 'react-redux';
 import {newChannelMsg, userJoin, userPart, userSelfJoin, userSelfPart} from '../actions/channel_actions';
-import {receiveWelcomePackage, receiveSocket, changeUI} from '../actions/configuration_actions';
+import {receiveWelcomePackage, receiveSocket, changeUI, newTopic} from '../actions/configuration_actions';
 
 const mapStateToProps = (state, ownProps) =>{
   return(
@@ -130,7 +138,8 @@ const mapDispatchToProps = (dispatch, ownProps) =>{
       userSelfPart: (obj)=>dispatch(userSelfPart(obj)),
       receiveWelcomePackage: (obj)=>dispatch(receiveWelcomePackage(obj)),
       newChannelMsg: (obj)=>dispatch(newChannelMsg(obj)),
-      receiveSocket: (obj)=>dispatch(receiveSocket(obj))
+      receiveSocket: (obj)=>dispatch(receiveSocket(obj)),
+      newTopic: (obj)=>dispatch(newTopic(obj))
     }
   );
 };

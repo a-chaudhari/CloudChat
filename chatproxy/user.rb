@@ -2,7 +2,6 @@ class User
   def initialize(params)
     @init_params = params
     @token = ""
-    # @connection = ""
     @connections = {}
     @buffers = {}
     @socket = nil
@@ -25,6 +24,7 @@ class User
     #need to only save the relevent info.  otherwise we'd have massive buffers!
 
     #client data has a string as key instead of symbol
+    system = false
     if hash[:server].nil?
       #this is from the  browser, so it's the user sending a message
       channel = hash['channel']
@@ -45,8 +45,12 @@ class User
     buffer = @buffers[str]
     buffer.shift if buffer.length >= 50
 
-    buffer.push(channel: channel, server: server,
-                timestamp: timestamp, msg: msg, user: user)
+    buffer.push(channel: channel,
+                server: server,
+                timestamp: timestamp,
+                msg: msg,
+                user: user,
+                system: system)
   end
 
 end

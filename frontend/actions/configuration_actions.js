@@ -2,6 +2,12 @@ export const RECEIVED_WELCOME_PACKAGE = "RECEIVED_WELCOME_PACKAGE";
 export const RECEIVE_SOCKET = "RECEIVE_SOCKET";
 export const CHANGE_ROOM = 'CHANGE_ROOM';
 export const CHANGE_UI = 'CHANGE_UI';
+export const NEW_TOPIC = 'NEW_TOPIC';
+
+export const newTopic = (data) =>({
+  type: NEW_TOPIC,
+  data
+});
 
 export const changeUI = (mobile) =>({
   type: CHANGE_UI,

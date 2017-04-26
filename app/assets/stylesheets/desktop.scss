@@ -24,6 +24,20 @@
       // display: inline-block;
     }
   }
+
+  .chatbox-header{
+    padding: 0 10px;
+    overflow: auto;
+    h1{
+      font-weight: normal;
+      span{
+        color: darkgray;
+      }
+      font-size: 16px;
+      text-align: left;
+    }
+
+  }
   .chatbox-userlist{
     position: static;
     display: inline-block;
