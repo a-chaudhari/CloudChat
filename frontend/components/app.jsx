@@ -10,7 +10,7 @@ class App extends React.Component{
   }
 
   updateWindowSize(){
-    if(window.innerWidth > 786){
+    if(window.innerWidth > 768){
       this.props.changeUI(false);
     }else{
       this.props.changeUI(true);

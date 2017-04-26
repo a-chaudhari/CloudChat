@@ -6,6 +6,7 @@
 // }
 body{
   margin: 0;
+  font-family: sans-serif;
 }
 .hidden{
   display: none;
@@ -83,11 +84,7 @@ body{
 
 .chatbox-serverlist{
   font-size: 20px;
-  i{
-    // margin: 0 10px;
-  }
   .server-arrow{
-    // float:left;
     position: absolute;
     left:-15px;
     top:2px;
@@ -105,10 +102,11 @@ body{
   .serverlist-entry{
     position: relative;
     margin-left: 25px;
+    cursor: pointer;
     .chan-minus{
       position: absolute;
       right: 10px;
-      top: 2px;
+      top: 1px;
       color: red;
       background-color: white;
       display: none;
