@@ -33,8 +33,8 @@ class App extends React.Component{
   }
 
   ws_recv(msg){
-    const obj = JSON.parse(msg.data)
-    console.log(obj)
+    const obj = JSON.parse(msg.data);
+    console.log(obj);
     if(obj["command"]===undefined) return;
 
     switch(obj["command"]){

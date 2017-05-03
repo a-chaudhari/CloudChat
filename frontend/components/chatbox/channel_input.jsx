@@ -5,7 +5,7 @@ class ChannelInput extends React.Component{
     super(props);
     this.state={
       input:""
-    }
+    };
   }
 
   update(field){
@@ -25,9 +25,8 @@ class ChannelInput extends React.Component{
         this.partChannel();
       break;
 
-
       default:
-        console.log("unknown command: " + command)
+        console.log("unknown command: " + command);
     }
   }
 
@@ -37,12 +36,12 @@ class ChannelInput extends React.Component{
       command: 'part',
       channel: this.props.channel,
       server: this.props.server
-    }
+    };
     this.props.socket.send(JSON.stringify(command));
   }
 
   joinChannel(chan){
-    console.log("joining: " + chan)
+    console.log("joining: " + chan);
     const command = {
       command: 'join',
       channel: chan,
@@ -53,7 +52,10 @@ class ChannelInput extends React.Component{
 
   handleSend(e){
     e.preventDefault();
-    document.activeElement.blur();
+    if(this.props.mobile){
+      // only unfocus keyboard on mobile
+      document.activeElement.blur();
+    }
 
     //return if no channel is active
     if(this.props.selectedRoom === null){
@@ -63,7 +65,7 @@ class ChannelInput extends React.Component{
 
     //intercept commands
     if(this.state.input[0] === '/'){
-      this.processCommand(this.state.input.slice(1))
+      this.processCommand(this.state.input.slice(1));
       this.setState({input:""});
       return;
     }
@@ -74,15 +76,15 @@ class ChannelInput extends React.Component{
       server: this.props.server,
       channel: this.props.channel,
       msg: btoa(this.state.input)
-    }
+    };
 
     this.props.socket.send(JSON.stringify(packet));
 
-    this.props.newMsg({
-      user: this.props.servers[this.props.server].nickname,
-      msg: btoa(this.state.input),
-      target: this.props.selectedRoom
-    });
+    // this.props.newMsg({
+    //   user: this.props.servers[this.props.server].nickname,
+    //   msg: btoa(this.state.input),
+    //   target: this.props.selectedRoom
+    // });
     this.setState({input:""});
   }
 
@@ -90,7 +92,8 @@ class ChannelInput extends React.Component{
     return(
       <div className="chatbox-input">
         <form onSubmit={this.handleSend.bind(this)}>
-          <input value={this.state.input} onChange={this.update("input").bind(this)}/>
+          <input value={this.state.input}
+                onChange={this.update("input").bind(this)}/>
           <button onClick={this.handleSend.bind(this)}>Send</button>
         </form>
       </div>
@@ -105,7 +108,8 @@ import {newChannelMsgLocal} from '../../actions/channel_actions';
 
 const mapStateToProps = (state, ownProps) =>{
 
-  const target = (state.config.selectedRoom===null? "" :  state.config.selectedRoom.split(' '));
+  const target = (state.config.selectedRoom===null? "" :
+                    state.config.selectedRoom.split(' '));
   // debugger
   return(
     {
@@ -113,7 +117,8 @@ const mapStateToProps = (state, ownProps) =>{
       channel:target[1],
       server:target[0],
       servers: state.config.servers,
-      selectedRoom: state.config.selectedRoom
+      selectedRoom: state.config.selectedRoom,
+      mobile: state.config.mobile
     }
   );
 };

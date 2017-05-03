@@ -3,19 +3,18 @@ def createControlChannel
   # server = TCPServer.new 2000
   # client = sock.accept
 
-  p 'hi'
-  # debugger
+  p 'started chat proxy'
+
   loop do
     Thread.fork(server.accept) do |client|
       loop do
         msg = client.gets
-        p msg
         break if msg.nil?
+
         msg = msg.chomp
-        puts "control chan recv: #{msg}"
-        processControlChannel(msg,client)
+        processControlChannel(msg, client)
       end
-  	end
+    end
   end
 
   server
@@ -35,28 +34,28 @@ end
 
 def bind_events_to_channel(user, server_url, chan)
   chan.on(:chanmsg) do |data|
-    data[:msg]=Base64.encode64(data[:msg])
-    data[:server]=server_url
-    data[:command]="chanmsg"
+    data[:msg] = Base64.encode64(data[:msg])
+    data[:server] = server_url
+    data[:command] = "chanmsg"
     user.appendBuffer(data)
     user.socket.send(data.to_json) unless user.socket.nil?
   end
 
   chan.on(:chan_join) do |data|
-    data[:server]=server_url
-    data[:command]="chan_join"
+    data[:server] = server_url
+    data[:command] = "chan_join"
     user.socket.send(data.to_json) unless user.socket.nil?
   end
 
   chan.on(:chan_part) do |data|
-    data[:server]=server_url
-    data[:command]="chan_part"
+    data[:server] = server_url
+    data[:command] = "chan_part"
     user.socket.send(data.to_json) unless user.socket.nil?
   end
 
   chan.on(:new_topic) do |data|
-    data[:server]=server_url
-    data[:command]='new_topic'
+    data[:server] = server_url
+    data[:command] = 'new_topic'
     user.socket.send(data.to_json) unless user.socket.nil?
   end
 end
@@ -77,14 +76,15 @@ def start(obj)
     return
   end
 
-  user.connections[server_url] = IrcConnection.new({
+  user.connections[server_url] = IrcConnection.new(
+  {
     server: settings["server"],
     port: settings["port"],
     password: settings["serverpass"],
     nickname: settings["nickname"],
     username: settings["username"],
     realname: settings["realname"]
-    })
+  })
 
   user.connections[server_url].on(:registered) do
     settings["channels"].each do |name|
@@ -95,35 +95,17 @@ def start(obj)
     end
   end
 
-
-
   user.connections[server_url].connect
-
-  # p "startin"
-  # p @active_clients
-  # return if !!@active_clients[username] && !!@active_clients[username].connections[server_url]
-  # p "past return check"
-  # user = User.new(obj) if !@active_clients[username]
-
-
-  # @active_clients[obj["username"].to_sym] = user
 end
 
 def kill(obj)
   #TODO need to add a disconnect funtion to library
 end
 
-# def ping(hash, client)
-#   client.puts("pong")
-# end
-
 def update(obj)
-  # p obj
-  # p @active_clients
-  # debugger
+  #the user isn't known to this server
   return false if !@active_clients[obj["username"].to_sym]
-  p "adding to activetokens"
-  # debugger
+
+  #add the new token to the whitelist
   @active_tokens[obj["token"]] = obj["username"]
-  # @active_clients[obj["username"].to_sym].token = obj["token"]
 end
