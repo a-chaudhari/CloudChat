@@ -4,7 +4,7 @@
     //  debugger
      var exampleSocket = new WebSocket("ws://localhost:8080/"+$("#token").val());
      exampleSocket.onopen = function (event) {
-       // exampleSocket.send("Can you hear me?");
+       // examplesend_all("Can you hear me?");
        $(".status").text("Connected!");
      };
      exampleSocket.onmessage = function (event) {
@@ -20,7 +20,7 @@
 // function connect() {
 //   var exampleSocket = new WebSocket("ws://localhost:8080/abcd1234");
 //   exampleSocket.onopen = function (event) {
-//     // exampleSocket.send("Can you hear me?");
+//     // examplesend_all("Can you hear me?");
 //     $(".status").text("Connected!");
 //   };
 //   exampleSocket.onmessage = function (event) {

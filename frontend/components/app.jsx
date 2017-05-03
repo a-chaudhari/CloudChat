@@ -1,7 +1,6 @@
 import React from 'react';
 import Channel from './chatbox/channel';
 import Session from './session';
-// import UserBox from './user_box';
 import ChatBoxContainer from './chatbox/chatbox_container';
 
 class App extends React.Component{

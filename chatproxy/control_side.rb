@@ -38,25 +38,25 @@ def bind_events_to_channel(user, server_url, chan)
     data[:server] = server_url
     data[:command] = "chanmsg"
     user.appendBuffer(data)
-    user.socket.send(data.to_json) unless user.socket.nil?
+    user.send_all(data.to_json)
   end
 
   chan.on(:chan_join) do |data|
     data[:server] = server_url
     data[:command] = "chan_join"
-    user.socket.send(data.to_json) unless user.socket.nil?
+    user.send_all(data.to_json)
   end
 
   chan.on(:chan_part) do |data|
     data[:server] = server_url
     data[:command] = "chan_part"
-    user.socket.send(data.to_json) unless user.socket.nil?
+    user.send_all(data.to_json)
   end
 
   chan.on(:new_topic) do |data|
     data[:server] = server_url
     data[:command] = 'new_topic'
-    user.socket.send(data.to_json) unless user.socket.nil?
+    user.send_all(data.to_json)
   end
 end
 

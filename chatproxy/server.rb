@@ -15,17 +15,18 @@ class Server
   def initialize
     @ws = nil
     @active_clients = {}
-    @active_tokens={}
+    @active_tokens = {}
+    system('rm /tmp/chatproxy.sock')
     Thread.new do
       createClientChannel
     end
     @control_socket = createControlChannel
-    loop{
-      sleep(1000)
-    }
+    # loop do
+    #   sleep(1000)
+    # end
   end
 
 end
 
 
-s = Server.new
+Server.new

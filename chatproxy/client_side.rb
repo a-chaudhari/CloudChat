@@ -13,7 +13,7 @@ def createClientChannel
           user = @active_clients[username.to_sym]
 
           ws.send("token found! connecting stream".to_json)
-          user.socket = ws
+          user.add_socket(ws)
           send_welcome_package(user)
 
           ws.onmessage do |msg|
@@ -21,11 +21,14 @@ def createClientChannel
             hash[:user] = user
             process_client_command(hash)
           end
+
+          ws.onclose { user.clear_disconnected_sockets }
+
           @active_tokens.delete(token)
         end
       end
 
-      ws.onclose { puts "Connection closed" }
+
 
     end
   end
@@ -44,7 +47,7 @@ def send_welcome_package(user)
   }
 
   p package
-  user.socket.send(package.to_json)
+  user.send_all(package.to_json)
 
 end
 
@@ -91,7 +94,7 @@ def speak(hash)
     timestamp: Time.now,
     user: server.nickname
   }
-  user.socket.send(command.to_json)
+  user.send_all(command.to_json)
 end
 
 def join(hash)
@@ -107,14 +110,14 @@ def join(hash)
   user.addBuffer(server.server + " " + channel.channel)
   if channel.join == :active
     #inform the client if connected
-    user.socket.send({
+    user.send_all({
       command: 'chan_self_join',
       server: server.server,
       channel: channel.channel,
       users: channel.userlist,
       topic: channel.topic,
       buffer: [],
-    }.to_json) unless user.socket.nil?
+    }.to_json)
   end
 
 end
@@ -127,7 +130,7 @@ def part(hash)
   channel.part
   server.deleteChannel(hash["channel"])
 
-  user.socket.send({
+  user.send_all({
     command: 'chan_self_part',
     server: server.server,
     channel: channel.channel
