@@ -35,6 +35,7 @@ def createClientChannel
 end
 
 def process_client_command(hash)
+  return if hash['command'].nil?
   send(hash["command"].to_sym, hash)
 end
 
@@ -138,6 +139,21 @@ def part(hash)
 end
 
 def connect(hash)
+  user = hash[:user]
+  server_url = hash['server']
+
+  connection = create_irc_connection(hash, user)
+  user.connections[server_url] = connection
+  connection.connect
+
+  #now inform the client
+  command = {
+    command: 'add_server',
+    server: server_url,
+    channels: connection.channels.keys,
+    nickname: hash['nickname']
+  }
+  user.send_all(command.to_json)
 end
 
 def disconnect(hash)

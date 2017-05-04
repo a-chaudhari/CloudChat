@@ -76,7 +76,14 @@ def start(obj)
     return
   end
 
-  user.connections[server_url] = IrcConnection.new(
+  user.connections[server_url] = create_irc_connection(settings, user)
+  user.connections[server_url].connect
+end
+
+def create_irc_connection(settings, user)
+  # debugger
+
+  connection = IrcConnection.new(
   {
     server: settings["server"],
     port: settings["port"],
@@ -85,17 +92,28 @@ def start(obj)
     username: settings["username"],
     realname: settings["realname"]
   })
+  server_url = connection.server
 
-  user.connections[server_url].on(:registered) do
+  connection.on(:registered) do
     settings["channels"].each do |name|
-      chan = user.connections[server_url].createChannel(name)
+      # debugger
+      chan = connection.createChannel(name)
       bind_events_to_channel(user, server_url, chan)
+      # debugger
       user.addBuffer(server_url + " " + name)
-      chan.join
+      if chan.join == :active
+        user.send_all({
+          command: 'chan_self_join',
+          server: connection.server,
+          channel: chan.channel,
+          users: chan.userlist,
+          topic: chan.topic,
+          buffer: [],
+        }.to_json)
+      end
     end
   end
-
-  user.connections[server_url].connect
+  connection
 end
 
 def kill(obj)

@@ -8,7 +8,8 @@ class Test
 
 
   def run
-    socket = TCPSocket.new('127.0.0.1', 2000)
+    # socket = TCPSocket.new('127.0.0.1', 2000)
+    socket = UNIXSocket.new('/tmp/chatproxy.sock')
     # socket.open
     command = {
       command: "start",

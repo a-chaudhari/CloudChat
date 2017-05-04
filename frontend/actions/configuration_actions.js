@@ -3,6 +3,12 @@ export const RECEIVE_SOCKET = "RECEIVE_SOCKET";
 export const CHANGE_ROOM = 'CHANGE_ROOM';
 export const CHANGE_UI = 'CHANGE_UI';
 export const NEW_TOPIC = 'NEW_TOPIC';
+export const ADD_SERVER = 'ADD_SERVER';
+
+export const addServer = (data) =>({
+  type: ADD_SERVER,
+  data
+});
 
 export const newTopic = (data) =>({
   type: NEW_TOPIC,

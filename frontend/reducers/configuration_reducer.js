@@ -1,4 +1,4 @@
-import {RECEIVED_WELCOME_PACKAGE, RECEIVE_SOCKET, CHANGE_ROOM, CHANGE_UI, NEW_TOPIC} from '../actions/configuration_actions';
+import {RECEIVED_WELCOME_PACKAGE, RECEIVE_SOCKET, CHANGE_ROOM, CHANGE_UI, NEW_TOPIC, ADD_SERVER} from '../actions/configuration_actions';
 import {USER_SELF_JOIN, USER_SELF_PART} from '../actions/channel_actions';
 import merge from 'lodash/merge';
 
@@ -22,6 +22,16 @@ const ConfigurationReducer = (state={socket:null, servers:{}, selectedRoom:null,
         });
       });
       newState.selectedRoom = newSelectedRoom;
+      return newState;
+
+    case ADD_SERVER:
+      var newState = merge({},state);
+      var obj = {
+        server: action.data.server,
+        channels: action.data.channels,
+        nickname: action.data.nickname
+      };
+      newState.servers[action.data.server] = obj;
       return newState;
 
     case CHANGE_ROOM:
