@@ -117,7 +117,14 @@ def create_irc_connection(settings, user)
 end
 
 def kill(obj)
-  #TODO need to add a disconnect funtion to library
+  username = obj['username'].to_sym
+  user = @active_clients[username]
+  return if user.nil?
+
+  user.connections.each(&:disconnect)
+  user.socket.each(&:close)
+  @active_clients.delete(username)
+
 end
 
 def update(obj)

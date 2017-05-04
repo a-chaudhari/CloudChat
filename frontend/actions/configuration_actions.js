@@ -4,6 +4,12 @@ export const CHANGE_ROOM = 'CHANGE_ROOM';
 export const CHANGE_UI = 'CHANGE_UI';
 export const NEW_TOPIC = 'NEW_TOPIC';
 export const ADD_SERVER = 'ADD_SERVER';
+export const DEL_SERVER = 'DEL_SERVER';
+
+export const delServer = (data) =>({
+  type: DEL_SERVER,
+  data
+});
 
 export const addServer = (data) =>({
   type: ADD_SERVER,

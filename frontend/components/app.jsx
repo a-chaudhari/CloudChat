@@ -76,6 +76,10 @@ class App extends React.Component{
         this.props.addServer(obj);
         break;
 
+      case 'del_server':
+        this.props.delServer(obj);
+        break;
+
       case 'chan_self_join':
         this.props.userSelfJoin({
           server: obj['server'],
@@ -121,7 +125,7 @@ class App extends React.Component{
 
 import { connect  } from 'react-redux';
 import {newChannelMsg, userJoin, userPart, userSelfJoin, userSelfPart} from '../actions/channel_actions';
-import {receiveWelcomePackage, receiveSocket, changeUI, newTopic, addServer} from '../actions/configuration_actions';
+import {receiveWelcomePackage, receiveSocket, changeUI, newTopic, addServer, delServer} from '../actions/configuration_actions';
 
 const mapStateToProps = (state, ownProps) =>{
   return(
@@ -143,7 +147,8 @@ const mapDispatchToProps = (dispatch, ownProps) =>{
       newChannelMsg: (obj)=>dispatch(newChannelMsg(obj)),
       receiveSocket: (obj)=>dispatch(receiveSocket(obj)),
       newTopic: (obj)=>dispatch(newTopic(obj)),
-      addServer: (obj)=>dispatch(addServer(obj))
+      addServer: (obj)=>dispatch(addServer(obj)),
+      delServer: (obj)=> dispatch(delServer(obj))
     }
   );
 };

@@ -157,6 +157,28 @@ def connect(hash)
 end
 
 def disconnect(hash)
+  user = hash[:user]
+  server_url = hash['server']
+  connection = user.connections[server_url]
+
+  connection.disconnect
+
+  user.buffers.each do |k, _|
+    chunks = k.split(' ')
+    if chunks[0] == server_url
+      user.delBuffer(k)
+    end
+  end
+
+  #TODO remove query buffers
+
+  command = {
+    command: 'del_server',
+    server: server_url
+  }
+
+  user.send_all(command.to_json)
+
 end
 
 def query(hash)

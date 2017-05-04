@@ -1,6 +1,6 @@
-import {NEW_CHANNEL_MSG, NEW_CHANNEL_MSG_LOCAL, USER_JOIN, USER_PART, USER_SELF_JOIN, USER_SELF_PART} from '../actions/channel_actions';
-import {RECEIVED_WELCOME_PACKAGE} from '../actions/configuration_actions';
-
+import {NEW_CHANNEL_MSG, NEW_CHANNEL_MSG_LOCAL, USER_JOIN,
+        USER_PART, USER_SELF_JOIN, USER_SELF_PART} from '../actions/channel_actions';
+import {RECEIVED_WELCOME_PACKAGE, DEL_SERVER} from '../actions/configuration_actions';
 import merge from 'lodash/merge';
 window.merge = merge;
 
@@ -19,6 +19,16 @@ const MessageReducer = (state={messages:{},users:{}},action) => {
       newState2.messages[action.msg.target].push(action.msg)
       // return merge({},{messages: state.messages.concat([action.msg.data])});
       return newState2;
+
+    case DEL_SERVER:
+      var newState = merge({}, state);
+      Object.keys(newState.messages).forEach(key=>{
+        if(key.startsWith(action.data.server)){
+          delete newState.messages[key];
+          delete newState.users[key];
+        }
+      });
+      return newState;
 
     case USER_SELF_JOIN:
       var newState = merge({},state);
@@ -67,7 +77,7 @@ const MessageReducer = (state={messages:{},users:{}},action) => {
       });
       console.log({messages,users});
       return {messages,users};
-      
+
     default:
       return state;
   }

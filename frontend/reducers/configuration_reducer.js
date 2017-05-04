@@ -1,8 +1,29 @@
-import {RECEIVED_WELCOME_PACKAGE, RECEIVE_SOCKET, CHANGE_ROOM, CHANGE_UI, NEW_TOPIC, ADD_SERVER} from '../actions/configuration_actions';
+import {RECEIVED_WELCOME_PACKAGE, RECEIVE_SOCKET,
+        CHANGE_ROOM, CHANGE_UI, NEW_TOPIC,
+        DEL_SERVER, ADD_SERVER} from '../actions/configuration_actions';
 import {USER_SELF_JOIN, USER_SELF_PART} from '../actions/channel_actions';
 import merge from 'lodash/merge';
 
-const ConfigurationReducer = (state={socket:null, servers:{}, selectedRoom:null, mobile: true}, action) =>{
+const defaultState = {
+  socket: null,
+  servers: {},
+  selectedRoom: null,
+  mobile: true
+};
+
+const findFirstAvailableChannel = (servers) => {
+  var newSelectedRoom = null;
+  var server_keys = Object.keys(servers);
+  if(server_keys.length > 0){
+    var chan_keys = Object.keys(servers[server_keys[0]].channels)
+    if(chan_keys.length > 0){
+      newSelectedRoom=server_keys[0] + " " + chan_keys[0];
+    }
+  }
+  return newSelectedRoom;
+}
+
+const ConfigurationReducer = (state=defaultState, action) =>{
   switch(action.type){
 
     case RECEIVED_WELCOME_PACKAGE:
@@ -34,6 +55,12 @@ const ConfigurationReducer = (state={socket:null, servers:{}, selectedRoom:null,
       newState.servers[action.data.server] = obj;
       return newState;
 
+    case DEL_SERVER:
+      var newState = merge({}, state);
+      delete newState.servers[action.data.server];
+      newState.selectedRoom = findFirstAvailableChannel(newState.servers);
+      return newState;
+
     case CHANGE_ROOM:
       return merge({},state,{selectedRoom:action.room});
 
@@ -61,16 +88,7 @@ const ConfigurationReducer = (state={socket:null, servers:{}, selectedRoom:null,
       delete newState.servers[action.data.server].channels[action.data.channel];
 
       //need to update the currently selected room if we left the currently selected room
-      var newSelectedRoom = null;
-      var server_keys = Object.keys(newState.servers);
-      if(server_keys.length > 0){
-        var chan_keys = Object.keys(newState.servers[server_keys[0]].channels)
-        if(chan_keys.length > 0){
-          newSelectedRoom=server_keys[0] + " " + chan_keys[0];
-          console.log("setting to : " + newSelectedRoom)
-        }
-      }
-      newState.selectedRoom = newSelectedRoom;
+      newState.selectedRoom = findFirstAvailableChannel(newState.servers);
 
       return newState;
 
