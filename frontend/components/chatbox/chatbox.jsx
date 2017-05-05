@@ -3,6 +3,7 @@ import UserBox from './userbox';
 import ServerList from './serverList';
 import ChatContent from './chatContent';
 import ChannelMemberList from './channel_memberlist';
+import AddServer from './add_server';
 
 class ChatBox extends React.Component{
   constructor(props){
@@ -47,6 +48,7 @@ class ChatBox extends React.Component{
         <div className={"chatbox-left" + (this.state.showLeft ? "" : " hidden")}>
           <UserBox logOut={this.props.logOut}/>
           <ServerList/>
+          <AddServer/>
         </div>
         <ChatContent toggleDrawers={this.toggleDrawers.bind(this)} selectedRoom={this.props.selectedRoom}/>
         <ChannelMemberList show={this.state.showRight}/>

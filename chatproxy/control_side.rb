@@ -75,6 +75,7 @@ def start(obj)
     #server already exists under this user.  cannot add twice
     return
   end
+  # debugger
 
   user.connections[server_url] = create_irc_connection(settings, user)
   user.connections[server_url].connect
@@ -101,6 +102,7 @@ def create_irc_connection(settings, user)
       bind_events_to_channel(user, server_url, chan)
       # debugger
       user.addBuffer(server_url + " " + name)
+      # debugger
       if chan.join == :active
         user.send_all({
           command: 'chan_self_join',

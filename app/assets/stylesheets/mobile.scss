@@ -9,9 +9,7 @@ body{
   font-family: sans-serif;
   background-color: linen;
 }
-.hidden{
-  display: none;
-}
+
 .chatbox-container{
   height: calc(100vh - 68px);
   // height: 100vh;
@@ -28,6 +26,38 @@ body{
   height: calc(100% - 3.5em);
   width: 90%;
   border:1px solid black;
+  display: flex;
+  flex-direction: column;
+}
+
+.add-server-button{
+  border: 1px solid black;
+  box-sizing: border-box;
+  height: 2.5em;
+  display: inherit;
+  justify-content: center;
+  background-color: pink;
+  cursor: pointer;
+  span{
+    align-self: center;
+    font-size: 20px;
+  }
+
+}
+
+.add-server-modal{
+  border: 1px solid black;
+  width: 95%;
+  height: 70%;
+  background-color: white;
+  margin: 2em auto;
+  label{
+    display: block
+  }
+}
+
+.hidden{
+  display: none;
 }
 
 .chatbox-userbox{
@@ -87,6 +117,7 @@ body{
 
 .chatbox-serverlist{
   font-size: 20px;
+  flex-grow: 1;
   .server-arrow{
     position: absolute;
     left:-15px;
