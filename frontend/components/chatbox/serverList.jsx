@@ -12,7 +12,7 @@ class ServerList extends React.Component{
       joinChanModalOpen: false,
       joinChanModalServer: "",
       joinChanModalChannel: ""
-    }
+    };
   }
 
   componentWillReceiveProps(newProps){
@@ -36,29 +36,29 @@ class ServerList extends React.Component{
     return (e)=>{
       this.setState({selected_server:server, selected_chan: chan});
       // this.props.roomCallback(`${server} ${chan}`);
-      console.log(`${server} ${chan}`)
+      console.log(`${server} ${chan}`);
       this.props.changeRoom(`${server} ${chan}`);
     };
   }
 
   toggleHidden(server){
     return (e)=>{
-      const hidden = (!!this.state.hidden_servers[server])
-      const state = this.state.hidden_servers
+      const hidden = (!!this.state.hidden_servers[server]);
+      const state = this.state.hidden_servers;
       if(hidden){
         delete state[server];
       }
       else{
         state[server]=true;
       }
-      this.setState({hidden_servers: state})
+      this.setState({hidden_servers: state});
     };
   }
 
   update(field){
     return (e)=>{
       this.setState({[field]: e.target.value});
-    }
+    };
   }
 
   serverPlus(server){
@@ -67,7 +67,16 @@ class ServerList extends React.Component{
       e.stopPropagation();
       console.log("adding to: " + server);
       this.setState({joinChanModalOpen: true, joinChanModalServer: server});
-    }
+    };
+  }
+
+  delServer(){
+    const command = {
+      command: 'disconnect',
+      server: this.state.selected_server
+    };
+    this.props.socket.send(JSON.stringify(command));
+    this.setState({joinChanModalOpen: false});
   }
 
   closeModal(e){
@@ -87,22 +96,22 @@ class ServerList extends React.Component{
         channel: chan
       };
 
-      this.props.config.socket.send(JSON.stringify(command));
-    }
+      this.props.socket.send(JSON.stringify(command));
+    };
   }
 
   joinChan(e){
     e.preventDefault();
     // this.closeModal();
     const chan = this.state.joinChanModalChannel;
-    this.setState({joinChanModalOpen: false, joinChanModalChannel: ""})
+    this.setState({joinChanModalOpen: false, joinChanModalChannel: ""});
 
     const command = {
       command: 'join',
       channel: chan,
       server: this.state.joinChanModalServer
     };
-    this.props.config.socket.send(JSON.stringify(command));
+    this.props.socket.send(JSON.stringify(command));
 
   }
 
@@ -113,7 +122,7 @@ class ServerList extends React.Component{
       const server = that.props.config.servers[server_key];
       const channels = Object.keys(server.channels).map((chan)=>{
         const selected = (that.state.selected_chan === chan &&
-                          that.state.selected_server === server_key)
+                          that.state.selected_server === server_key);
         const minusButton = (<div onClick={this.chanMinus(chan).bind(this)} className="chan-minus"><i className="fa fa-times-circle" aria-hidden="true"></i></div>)
         return(
           <div key={`${server_key}${chan}`}
@@ -128,8 +137,13 @@ class ServerList extends React.Component{
 
       return(
         <div  key={server_key} className="sl-servergroup">
-          <div className="sl-server-entry" onClick={that.toggleHidden(server_key).bind(that)}>{serverArrow}{server_key}{plusButton}</div>
-          <div className={"sl-server-dropdown" + (hidden ? " hidden" : "")}>{channels}</div>
+          <div className="sl-server-entry"
+              onClick={that.toggleHidden(server_key).bind(that)}>
+                {serverArrow}{server_key}{plusButton}
+            </div>
+          <div className={"sl-server-dropdown" + (hidden ? " hidden" : "")}>
+            {channels}
+          </div>
         </div>
       );
     });
@@ -140,7 +154,7 @@ class ServerList extends React.Component{
         maxHeight: '100px',
         backgroundColor: 'LemonChiffon'
       }
-    }
+    };
 
     return(
       <div className="chatbox-serverlist">
@@ -151,14 +165,20 @@ class ServerList extends React.Component{
           onRequestClose={this.closeModal.bind(this)}
           style={modalStyle}
           >
+          <div>
             <form onSubmit={this.joinChan.bind(this)}>
               <label>
                 Channel Name:
-                <input onChange={this.update('joinChanModalChannel').bind(this)} value={this.state.joinChanModalChannel}/>
+                <input onChange={this.update('joinChanModalChannel').bind(this)}
+                        value={this.state.joinChanModalChannel}/>
               </label>
               <button onClick={this.joinChan.bind(this)}>Join</button>
               <button onClick={this.closeModal.bind(this)}>Cancel</button>
+              <br/>
             </form>
+            <button className="del-server-button"
+              onClick={this.delServer.bind(this)}>DELETE SERVER</button>
+            </div>
           </Modal>
       </div>
     );
@@ -174,7 +194,8 @@ import {changeRoom} from '../../actions/configuration_actions';
 const mapStateToProps = (state, ownProps) =>{
   return(
     {
-      config: state.config
+      config: state.config,
+      socket: state.config.socket
     }
   );
 };

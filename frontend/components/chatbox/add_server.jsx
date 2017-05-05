@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
+import {newServer} from '../../utils/irc_utils';
 
 class AddServer extends React.Component{
   constructor(props){
@@ -39,11 +40,24 @@ class AddServer extends React.Component{
                 onChange={this.update(field).bind(this)}
                 className="server-modal-input"/>
       </label>
-    )
+    );
   }
 
-  newServer(){
-    //TODO create submit code and validation
+  newServer(e){
+    //TODO validation
+    e.preventDefault();
+    const command = {
+      command: 'connect',
+      server: this.state.server,
+      nickname: this.state.nickname,
+      username: this.state.username,
+      realname: this.state.realname,
+      port: this.state.port,
+      serverpass: this.state.serverpass,
+      channels: []
+    };
+    newServer(this.props.socket, command);
+    this.setState(this.defaultState);
   }
 
   render(){
@@ -64,6 +78,7 @@ class AddServer extends React.Component{
             {this.inputGen('Real Name: ', 'realname')}
             {this.inputGen('Server Password:', 'serverpass')}
             {this.inputGen('Port # ', 'port')}
+            <button onClick={this.newServer.bind(this)}>Submit</button>
           </form>
         </Modal>
       </div>

@@ -10,7 +10,7 @@ def createControlChannel
       loop do
         msg = client.gets
         break if msg.nil?
-
+        p msg
         msg = msg.chomp
         processControlChannel(msg, client)
       end
@@ -113,7 +113,7 @@ def create_irc_connection(settings, user)
           buffer: [],
         }.to_json)
       end
-    end
+    end unless settings['channels'].nil?
   end
   connection
 end

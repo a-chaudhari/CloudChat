@@ -17,6 +17,7 @@ def createClientChannel
           send_welcome_package(user)
 
           ws.onmessage do |msg|
+            p msg
             hash = JSON.parse(msg)
             hash[:user] = user
             process_client_command(hash)
@@ -178,6 +179,7 @@ def disconnect(hash)
   }
 
   user.send_all(command.to_json)
+  # debugger
 
 end
 

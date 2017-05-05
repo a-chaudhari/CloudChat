@@ -6,7 +6,8 @@ const mapStateToProps = (state, ownProps) =>{
   return(
     {
       selectedRoom: state.config.selectedRoom,
-      mobile: state.config.mobile
+      mobile: state.config.mobile,
+      socket: state.config.socket
     }
   );
 };

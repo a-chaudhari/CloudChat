@@ -48,7 +48,7 @@ class ChatBox extends React.Component{
         <div className={"chatbox-left" + (this.state.showLeft ? "" : " hidden")}>
           <UserBox logOut={this.props.logOut}/>
           <ServerList/>
-          <AddServer/>
+          <AddServer socket={this.props.socket}/>
         </div>
         <ChatContent toggleDrawers={this.toggleDrawers.bind(this)} selectedRoom={this.props.selectedRoom}/>
         <ChannelMemberList show={this.state.showRight}/>

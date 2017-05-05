@@ -18,19 +18,20 @@ class ChannelHeader extends React.Component{
 
 
   render(){
-    if(this.props.selectedRoom === null){
-      return(
-        <div className="chatbox-header"></div>
-      )
+    let server = "(none)";
+    let channel = "(none)";
+    let topic = "(none)";
+    let header = null;
+    if(this.props.selectedRoom !== null){
+      const room = this.props.selectedRoom;
+      const chunks = room.split(' ');
+      server = chunks[0];
+      channel = chunks[1];
+      topic = this.props.servers[server].channels[channel].topic;
+      if(topic === "") topic = "(none)";
     }
 
-    const room = this.props.selectedRoom;
-    let header = null;
-    const chunks = room.split(' ');
-    const server = chunks[0];
-    const channel = chunks[1];
-    let topic = this.props.servers[server].channels[channel].topic;
-    if(topic === "") topic = "(none)";
+
 
     if(this.props.mobile){
       header = (
@@ -38,13 +39,13 @@ class ChannelHeader extends React.Component{
           <i onClick={this.handleLeft.bind(this)} className="fa fa-bars fa-2x header-button" aria-hidden="true"></i>
           <h1>{channel}</h1>
           <i onClick={this.handleRight.bind(this)} className="fa fa-user fa-2x header-button" aria-hidden="true"></i>
-        </div>)
+        </div>);
     }else{
       header = (
         <div className="chatbox-header">
           <h1><span>Topic:</span> {topic}</h1>
         </div>
-      )
+      );
     }
 
 
