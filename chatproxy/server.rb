@@ -10,6 +10,16 @@ require_relative 'user'
 require 'base64'
 Thread.abort_on_exception = true
 
+#inserts queries support into the ircconnection object
+class IrcConn < IrcConnection
+  def initialize(*args)
+    @queries = Set.new
+    super(*args)
+  end
+
+  attr_accessor :queries
+end
+
 class Server
 
   def initialize
@@ -17,6 +27,9 @@ class Server
     @active_clients = {}
     @active_tokens = {}
     system('rm /tmp/chatproxy.sock')
+
+
+
     Thread.new do
       createClientChannel
     end
@@ -24,6 +37,10 @@ class Server
     # loop do
     #   sleep(1000)
     # end
+  end
+
+  def is_query?(str)
+    str[0] =~ /\w/
   end
 
 end

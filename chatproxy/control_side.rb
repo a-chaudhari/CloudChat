@@ -84,7 +84,7 @@ end
 def create_irc_connection(settings, user)
   # debugger
 
-  connection = IrcConnection.new(
+  connection = IrcConn.new(
   {
     server: settings["server"],
     port: settings["port"],
@@ -95,25 +95,62 @@ def create_irc_connection(settings, user)
   })
   server_url = connection.server
 
+  # connection.instance_variable_set(:@queries, {})
+  # connection.attr_accessor :queries
+  # debugger
+
   connection.on(:registered) do
-    settings["channels"].each do |name|
-      # debugger
-      chan = connection.createChannel(name)
-      bind_events_to_channel(user, server_url, chan)
-      # debugger
-      user.addBuffer(server_url + " " + name)
-      # debugger
-      if chan.join == :active
-        user.send_all({
-          command: 'chan_self_join',
-          server: connection.server,
-          channel: chan.channel,
-          users: chan.userlist,
-          topic: chan.topic,
-          buffer: [],
-        }.to_json)
+    unless settings['channels'].nil?
+      settings["channels"].each do |name|
+        # debugger
+        chan = connection.createChannel(name)
+        bind_events_to_channel(user, server_url, chan)
+        # debugger
+        user.addBuffer(server_url + " " + name)
+        # debugger
+        if chan.join == :active
+          user.send_all({
+            command: 'chan_self_join',
+            server: connection.server,
+            channel: chan.channel,
+            users: chan.userlist,
+            query: false,
+            topic: chan.topic,
+            buffer: [],
+          }.to_json)
+        end
       end
-    end unless settings['channels'].nil?
+    end
+  end
+
+  connection.on(:query) do |data|
+    # data[:user] = user
+    # data[:server] = connection
+
+    #first open the view if it doesn't exist yet
+    unless connection.queries.include?(data[:user])
+      user.send_all({
+        command: 'chan_self_join',
+        server: connection.server,
+        channel: data[:user],
+        query: true,
+        users: [],
+        topic: "",
+        buffer: []
+      }.to_json)
+
+      user.addBuffer(connection.server + " " + data[:user])
+      connection.queries.add(data[:user])
+    end
+
+    #now send the new message
+    data[:msg] = Base64.encode64(data[:msg])
+    data[:server] = connection.server
+    data[:command] = "chanmsg"
+    data[:channel] = data[:user]
+    # debugger
+    user.appendBuffer(data)
+    user.send_all(data.to_json)
   end
   connection
 end

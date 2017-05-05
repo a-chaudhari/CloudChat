@@ -56,12 +56,30 @@ end
 def prepare_servers(user, servers)
   output = {}
   servers.each do |key, conn|
+    channels = prepare_channels(user, conn.server, conn.channels)
+    queries = prepare_queries(user, conn)
     temp = {
       server: conn.server,
       nickname: conn.nickname,
-      channels: prepare_channels(user, conn.server, conn.channels)
+      channels: channels.merge(queries)
     }
     output[key] = temp
+  end
+  output
+end
+
+def prepare_queries(user, server)
+  output = {}
+  server.queries.each do |name|
+    str = server.server + " " + name
+    temp = {
+      name: name,
+      users: [],
+      query: true,
+      buffer: user.buffers[str],
+      topic: ""
+    }
+    output[name] = temp
   end
   output
 end
@@ -73,7 +91,8 @@ def prepare_channels(user, server, chans)
       name: chan.channel,
       users: chan.userlist,
       buffer: user.buffers[server + ' ' + key],
-      topic: chan.topic
+      topic: chan.topic,
+      query: false
     }
     output[key] = temp
   end
@@ -83,15 +102,19 @@ end
 def speak(hash)
   user = hash[:user]
   server = user.connections[hash["server"]]
-  channel = server.channels[hash["channel"]]
+  if is_query?(hash['channel'])
+    server.query(hash['channel'], Base64.decode64(hash["msg"]))
+  else
+    channel = server.channels[hash["channel"]]
+    channel.speak(Base64.decode64(hash["msg"]))
+  end
 
   user.appendBuffer(hash)
-  channel.speak(Base64.decode64(hash["msg"]))
 
   command = {
     command: 'chanmsg',
     server: server.server,
-    channel: channel.channel,
+    channel: hash['channel'],
     msg: hash["msg"],
     timestamp: Time.now,
     user: server.nickname
@@ -102,6 +125,12 @@ end
 def join(hash)
   user = hash[:user]
   server = user.connections[hash["server"]]
+
+  #first see if it a query or chan join
+  if is_query?(hash['channel'])
+    query(hash)
+    return
+  end
 
   #don't try to join a channel twice
   return if !!server.channels[hash['channel']]
@@ -116,9 +145,10 @@ def join(hash)
       command: 'chan_self_join',
       server: server.server,
       channel: channel.channel,
+      query: false,
       users: channel.userlist,
       topic: channel.topic,
-      buffer: [],
+      buffer: []
     }.to_json)
   end
 
@@ -127,15 +157,21 @@ end
 def part(hash)
   user = hash[:user]
   server = user.connections[hash["server"]]
-  channel = server.channels[hash["channel"]]
+  channel = hash['channel']
 
-  channel.part
-  server.deleteChannel(hash["channel"])
+  if is_query?(hash['channel'])
+    server.queries.delete(channel)
+  else
+    server.deleteChannel(channel)
+  end
+
+  str = server.server + " " + channel
+  user.buffers.delete(str)
 
   user.send_all({
     command: 'chan_self_part',
     server: server.server,
-    channel: channel.channel
+    channel: channel
   }.to_json)
 end
 
@@ -171,8 +207,6 @@ def disconnect(hash)
     end
   end
 
-  #TODO remove query buffers
-
   command = {
     command: 'del_server',
     server: server_url
@@ -184,4 +218,25 @@ def disconnect(hash)
 end
 
 def query(hash)
+  user = hash[:user]
+  server = user.connections[hash["server"]]
+  target = hash['channel']
+
+  #don't try to join a channel twice
+  return if server.queries.include?(target)
+
+  user.addBuffer(server.server + " " + target)
+  server.queries.add(target)
+
+  #inform the client if connected
+  user.send_all({
+    command: 'chan_self_join',
+    server: server.server,
+    channel: target,
+    query: true,
+    users: [],
+    topic: "",
+    buffer: [],
+  }.to_json)
+
 end
