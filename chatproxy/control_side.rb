@@ -152,6 +152,27 @@ def create_irc_connection(settings, user)
     user.appendBuffer(data)
     user.send_all(data.to_json)
   end
+
+  connection.on(:ERR_NOSUCHNICK) do |raw|
+    #tried to query a username that isn't online
+    # ":kornbluth.freenode.net 401 zelos82 tet823302 :No such nick/channel"
+    chunks = raw.split(' ')
+    target = chunks[3]
+    server_url = connection.server
+
+    command = {
+        command: 'chanmsg',
+        server: server_url,
+        channel: target,
+        msg: target + " is not online",
+        system: true,
+        timestamp: Time.now
+    }
+
+    user.appendBuffer(command)
+    user.send_all(command.to_json)
+  end
+
   connection
 end
 
