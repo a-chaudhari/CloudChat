@@ -115,31 +115,77 @@ class ServerList extends React.Component{
 
   }
 
+  renderCloseChannelButton(chan){
+    return(
+      <div onClick={this.chanMinus(chan).bind(this)}
+           className="chan-minus">
+        <i className="fa fa-times-circle" aria-hidden="true"></i>
+      </div>
+    );
+  }
 
-  render(){
+  renderServerDotButton(serverKey){
+    return (
+      <div onClick={this.serverPlus(serverKey).bind(this)}
+           className="server-plus">
+        <i className="fa fa-plus-circle" aria-hidden="true"></i>
+      </div>
+    );
+  }
+
+  renderServerArrowIcon(hidden){
+    const className = (hidden ? " fa-caret-right" : " fa-caret-down");
+    return (
+      <i className={"fa server-arrow" + className } aria-hidden="true"></i>
+    );
+  }
+
+  renderChannelList(server){
     const that = this;
-    const content = Object.keys(this.props.config.servers).map((server_key)=>{
-      const server = that.props.config.servers[server_key];
-      const channels = Object.keys(server.channels).map((chan)=>{
-        const selected = (that.state.selected_chan === chan &&
-                          that.state.selected_server === server_key);
-        const minusButton = (<div onClick={this.chanMinus(chan).bind(this)} className="chan-minus"><i className="fa fa-times-circle" aria-hidden="true"></i></div>)
-        return(
-          <div key={`${server_key}${chan}`}
-               className={"serverlist-entry" + (selected ? " sl-entry-selected" : "")}
-               onClick={that.changeSelected(server_key,chan).bind(that)}>{chan}{minusButton}</div>
-        );
-      });
+    return Object.keys(server.channels).map((chan)=>{
+      const serverKey = server.server;
 
-      const hidden = (!!that.state.hidden_servers[server_key])
-      const plusButton = (<div onClick={this.serverPlus(server_key).bind(this)} className="server-plus"><i className="fa fa-plus-circle" aria-hidden="true"></i></div>);
-      const serverArrow = (<i className={"fa server-arrow" + (hidden ? " fa-caret-right" : " fa-caret-down")} aria-hidden="true"></i>)
+      //whether or not the channel should be highlighted
+      const selected = (that.state.selected_chan === chan &&
+                        that.state.selected_server === serverKey);
+
+      //the close-channel button
+      const minusButton = this.renderCloseChannelButton(chan);
+
+      const className = (selected ? " sl-entry-selected" : "");
 
       return(
-        <div  key={server_key} className="sl-servergroup">
+        <div key={`${serverKey}${chan}`}
+             className={"serverlist-entry" + className}
+             onClick={that.changeSelected(serverKey,chan).bind(that)}>
+          {chan}{minusButton}
+        </div>
+      );
+    });
+  }
+
+  renderServerList(){
+    const that = this;
+    return Object.keys(this.props.config.servers).map((serverKey)=>{
+      const server = that.props.config.servers[serverKey];
+
+      //builds the list of channels for each server
+      const channels = this.renderChannelList(server);
+
+      //is this server entry folded closed?
+      const hidden = (Boolean(that.state.hidden_servers[serverKey]));
+
+      //the '...' button for each server entry
+      const dotButton = this.renderServerDotButton(serverKey);
+
+      //the arrow icon for each entry
+      const serverArrow = this.renderServerArrowIcon(hidden);
+
+      return(
+        <div  key={serverKey} className="sl-servergroup">
           <div className="sl-server-entry"
-              onClick={that.toggleHidden(server_key).bind(that)}>
-                {serverArrow}{server_key}{plusButton}
+              onClick={that.toggleHidden(serverKey).bind(that)}>
+                {serverArrow}{serverKey}{dotButton}
             </div>
           <div className={"sl-server-dropdown" + (hidden ? " hidden" : "")}>
             {channels}
@@ -147,6 +193,13 @@ class ServerList extends React.Component{
         </div>
       );
     });
+  }
+
+
+  render(){
+
+    //builds the list of servers and respective channels
+    const content = this.renderServerList();
 
     const modalStyle={
       content: {
