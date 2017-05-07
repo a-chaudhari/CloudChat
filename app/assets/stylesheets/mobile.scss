@@ -7,7 +7,7 @@
 body{
   margin: 0;
   font-family: sans-serif;
-  background-color: linen;
+  background-color: $background-gray;
 }
 
 .chatbox-container{
@@ -56,6 +56,67 @@ body{
   }
 }
 
+.server-dot-modal{
+  border: 1px solid black;
+  width: 90%;
+  max-width: 400px;
+  // height: 70%;
+  padding: 20px 10px;
+  background-color: white;
+  margin: 2em auto;
+  h1{
+    border-bottom: 1px solid black;
+  }
+  label{
+    display: block;
+    input{
+      border: 1px solid black;
+    }
+  }
+  button{
+    border: 1px solid black;
+  }
+  .server-dot-modal-dangerzone{
+    border: 1px solid black;
+    // background-color: #ff9980;
+    background: repeating-linear-gradient(
+    45deg,
+    #ff9980,
+    #ff9980 10px,
+    #ff5c33 10px,
+    #ff5c33 20px
+    );
+    color: white;
+    text-shadow:
+      -1px -1px 0 #000,
+      1px -1px 0 #000,
+      -1px 1px 0 #000,
+      1px 1px 0 #000;
+
+    span{
+      margin: 10px 5px;
+      font-family: 'Aldrich', sans-serif;
+      display: inline-block;
+    }
+    .del-server-button{
+      cursor: pointer;
+      color: white;
+      letter-spacing: 2px;
+      margin: 10px 5px;
+      background-color: red;
+    }
+    .cancel-button{
+      font-size: 24px;
+      text-shadow:
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;
+      background-color: lightgreen;
+    }
+  }
+}
+
 .hidden{
   display: none;
 }
@@ -99,11 +160,15 @@ body{
 .chatbox-header{
   max-height: 2.5em;
   overflow: hidden;
-  background-color: linen;
+  color: $indie-black;
+  background-color: white;
+
   display: flex;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid $border-light;
   flex-direction: row;
   h1{
+    line-height: 2em;
+    font-size: 18px;
     margin: 0;
     flex-grow: 1;
     text-align: center;
@@ -112,6 +177,14 @@ body{
     margin: 0 10px;
     align-self: center;
     flex-grow: 0;
+    // color: $slack-green;
+    color: $indie-purple;
+    text-align: none;
+  //   text-shadow:
+  //     -1.5px -1.5px 0.5px $slack-gray,
+  //     1.5px -1.5px 0.5px $slack-gray,
+  //     -1.5px 1.5px 0.5px $slack-gray,
+  //     1.5px 1.5px 0.5px $slack-gray;
   }
 }
 
@@ -183,26 +256,46 @@ body{
 }
 
 .chatbox-input{
-  border-top: 1px solid black;
+  border-top: 1px solid $border-light;
   display: flex;
   height: 2.5em;
-  background-color: lightgray;
+  background-color: $background-gray;
   width: 100%;
   flex-direction: row;
   form{
     flex-grow: 1;
     height: 100%;
     display: flex;
+    // padding: 5px;
     // background-color: green;
     input{
       font-size: 14px;
       display: inline-block;
       flex-grow: 1;
-      height: 100%;
+      // height: calc(100%-10px);
       border: 0;
-      margin: 0;
-      padding: 0;
+      margin: 5px;
+      padding: 0 5px;
+      border: 1px solid $border-dark;
+      border-radius: 5px;
     }
+
+    input::placeholder{
+      color: $placeholder-gray;
+    }
+    input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+      color: $placeholder-gray;
+    }
+    input::-moz-placeholder { /* Firefox 19+ */
+      color: $placeholder-gray;
+    }
+    input:-ms-input-placeholder { /* IE 10+ */
+      color: $placeholder-gray;
+    }
+    input:-moz-placeholder { /* Firefox 18- */
+      color: $placeholder-gray;
+    }
+
     button{
       background-color: lightgreen;
       font-size: 16px;

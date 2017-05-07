@@ -57,6 +57,8 @@ class ChannelInput extends React.Component{
       document.activeElement.blur();
     }
 
+    if(this.state.input === "") return;
+
     //return if no channel is active
     if(this.props.selectedRoom === null){
       this.setState({input:""});
@@ -88,13 +90,14 @@ class ChannelInput extends React.Component{
     this.setState({input:""});
   }
 
+  // <button onClick={this.handleSend.bind(this)}>Send</button>
   render(){
     return(
       <div className="chatbox-input">
         <form onSubmit={this.handleSend.bind(this)}>
           <input value={this.state.input}
+                placeholder="Message..."
                 onChange={this.update("input").bind(this)}/>
-          <button onClick={this.handleSend.bind(this)}>Send</button>
         </form>
       </div>
     );

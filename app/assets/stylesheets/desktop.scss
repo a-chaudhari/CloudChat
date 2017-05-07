@@ -25,19 +25,34 @@
     }
   }
 
+
   .chatbox-header{
-    padding: 0 10px;
-    overflow: auto;
+    padding: 5px 10px;
+    // height: 2.5em;
+    border: 1px solid $border-dark;
+    box-shadow: 0 2px 5px #888888;
+    max-height: 4em;
+    overflow: hidden;
+    background-color: $header-blue;
+    color: white;
+
     h1{
+      // line-height: 100%;
+      overflow-y: auto;
+      height: 100%;
+      font-size: 12px;
+      line-height: normal;
       font-weight: normal;
-      span{
-        color: darkgray;
-      }
-      font-size: 16px;
       text-align: left;
+      // span{
+      //   text-shadow: 2px 0 5px #888888;
+      //   color: white;
+      // }
     }
 
   }
+
+
   .chatbox-userlist{
     position: static;
     display: inline-block;

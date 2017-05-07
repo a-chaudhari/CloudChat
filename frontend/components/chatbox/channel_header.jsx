@@ -1,4 +1,5 @@
 import React from 'react';
+import Linkify from 'linkifyjs/react';
 
 class ChannelHeader extends React.Component{
   constructor(props){
@@ -18,9 +19,9 @@ class ChannelHeader extends React.Component{
 
 
   render(){
-    let server = "(none)";
-    let channel = "(none)";
-    let topic = "(none)";
+    let server = "(none selected)";
+    let channel = "(none selected)";
+    let topic = "(no channel topic)";
     let header = null;
     if(this.props.selectedRoom !== null){
       const room = this.props.selectedRoom;
@@ -28,28 +29,25 @@ class ChannelHeader extends React.Component{
       server = chunks[0];
       channel = chunks[1];
       topic = this.props.servers[server].channels[channel].topic;
-      if(topic === "") topic = "(none)";
+      if(topic === "") topic = "(no channel topic)";
     }
 
-
-
     if(this.props.mobile){
-      header = (
+      return (
         <div className="chatbox-header">
-          <i onClick={this.handleLeft.bind(this)} className="fa fa-bars fa-2x header-button" aria-hidden="true"></i>
+          <i onClick={this.handleLeft.bind(this)}
+             className="fa fa-bars fa-2x header-button" aria-hidden="true"></i>
           <h1>{channel}</h1>
-          <i onClick={this.handleRight.bind(this)} className="fa fa-user fa-2x header-button" aria-hidden="true"></i>
+          <i onClick={this.handleRight.bind(this)}
+             className="fa fa-user fa-2x header-button" aria-hidden="true"></i>
         </div>);
     }else{
-      header = (
+       return (
         <div className="chatbox-header">
-          <h1><span>Topic:</span> {topic}</h1>
+          <h1>{topic}</h1>
         </div>
       );
     }
-
-
-    return header;
   }
 }
 

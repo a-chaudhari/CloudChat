@@ -11,7 +11,8 @@ class ServerList extends React.Component{
       hidden_servers: {},
       joinChanModalOpen: false,
       joinChanModalServer: "",
-      joinChanModalChannel: ""
+      joinChanModalChannel: "",
+      deleteConfirm: false
     };
   }
 
@@ -71,17 +72,25 @@ class ServerList extends React.Component{
   }
 
   delServer(){
+    if(!this.state.deleteConfirm){
+      this.setState({deleteConfirm: true});
+      return;
+    }
     const command = {
       command: 'disconnect',
       server: this.state.selected_server
     };
     this.props.socket.send(JSON.stringify(command));
-    this.setState({joinChanModalOpen: false});
+    this.setState({joinChanModalOpen: false, deleteConfirm: false});
+  }
+
+  cancelDel(){
+    this.setState({deleteConfirm: false});
   }
 
   closeModal(e){
     e.preventDefault();
-    this.setState({joinChanModalOpen: false});
+    this.setState({joinChanModalOpen: false, deleteConfirm: false});
   }
 
   chanMinus(chan){
@@ -196,34 +205,48 @@ class ServerList extends React.Component{
   }
 
   renderServerDotModal(){
-    const modalStyle={
-      content: {
-        maxWidth: '200px',
-        maxHeight: '100px',
-        backgroundColor: 'LemonChiffon'
-      }
-    };
+    let type = "Join Channel";
+    const re = /^\w.*$/;  //tests if the string is NOT a channel
+    const text = this.state.joinChanModalChannel;
+    const isQuery = re.test(text);
 
+    if(text !== "" && isQuery){
+      type = "Start Private Msg";
+    }
+    const confirm = this.state.deleteConfirm;
     return (
       <Modal
         isOpen={this.state.joinChanModalOpen}
         contentLabel="join channel modal"
         onRequestClose={this.closeModal.bind(this)}
-        style={modalStyle}
+        className="server-dot-modal"
       >
         <div>
+          <div className="server-dot-modal-dangerzone">
+            <span>Danger Zone!</span>
+            <button className="del-server-button"
+              disabled={confirm}
+              onClick={this.delServer.bind(this)}>DELETE SERVER</button>
+            <div className={"delete-confirm" + (confirm? "" : " hidden")}>
+              <span>Are you sure? </span>
+              <button className="del-server-button cancel-button"
+                onClick={this.cancelDel.bind(this)}>Cancel</button>
+              <button className="del-server-button"
+                onClick={this.delServer.bind(this)}>Delete</button>
+            </div>
+          </div>
+
+          <h1>Join Channel or Start Private Message</h1>
           <form onSubmit={this.joinChan.bind(this)}>
             <label>
-              Channel Name:
+              Channel Name Or User Name:
               <input onChange={this.update('joinChanModalChannel').bind(this)}
                       value={this.state.joinChanModalChannel}/>
             </label>
-            <button onClick={this.joinChan.bind(this)}>Join</button>
+            <button onClick={this.joinChan.bind(this)}>{type}</button>
             <button onClick={this.closeModal.bind(this)}>Cancel</button>
             <br/>
           </form>
-          <button className="del-server-button"
-            onClick={this.delServer.bind(this)}>DELETE SERVER</button>
         </div>
       </Modal>
     );
