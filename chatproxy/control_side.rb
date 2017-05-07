@@ -100,6 +100,16 @@ def create_irc_connection(settings, user)
   # debugger
 
   connection.on(:registered) do
+
+    #inform the clients of the connected server
+    command = {
+      command: 'add_server',
+      server: connection.server,
+      channels: connection.channels.keys,
+      nickname: connction.nickname
+    }
+    user.send_all(command.to_json)
+
     unless settings['channels'].nil?
       settings["channels"].each do |name|
         # debugger

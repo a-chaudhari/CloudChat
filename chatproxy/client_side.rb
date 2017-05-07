@@ -183,14 +183,7 @@ def connect(hash)
   user.connections[server_url] = connection
   connection.connect
 
-  #now inform the client
-  command = {
-    command: 'add_server',
-    server: server_url,
-    channels: connection.channels.keys,
-    nickname: hash['nickname']
-  }
-  user.send_all(command.to_json)
+
 end
 
 def disconnect(hash)
