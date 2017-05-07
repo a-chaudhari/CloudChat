@@ -90,13 +90,7 @@ class App extends React.Component{
         break;
 
       case 'chan_self_join':
-        this.props.userSelfJoin({
-          server: obj['server'],
-          channel: obj['channel'],
-          buffer: obj['buffer'],
-          users: obj['users'],
-          topic: obj['topic']
-        });
+        this.props.userSelfJoin(obj);
         break;
 
       case 'new_topic':

@@ -8,6 +8,7 @@ require_relative 'client_side'
 require 'byebug'
 require_relative 'user'
 require 'base64'
+require 'hammertime19'
 Thread.abort_on_exception = true
 
 #inserts queries support into the ircconnection object

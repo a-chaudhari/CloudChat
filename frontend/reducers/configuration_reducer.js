@@ -1,6 +1,6 @@
 import {RECEIVED_WELCOME_PACKAGE, RECEIVE_SOCKET,
-        CHANGE_ROOM, CHANGE_UI, NEW_TOPIC,
-        DEL_SERVER, ADD_SERVER} from '../actions/configuration_actions';
+        CHANGE_ROOM, NEW_SETTINGS, NEW_TOPIC,
+        DEL_SERVER, ADD_SERVER, CHANGE_UI} from '../actions/configuration_actions';
 import {USER_SELF_JOIN, USER_SELF_PART} from '../actions/channel_actions';
 import merge from 'lodash/merge';
 
@@ -12,19 +12,24 @@ const defaultState = {
   socket: null,
   servers: {},
   selectedRoom: null,
+  channel: null,
+  server: null,
   mobile: true
 };
 
 const findFirstAvailableChannel = (servers) => {
-  var newSelectedRoom = null;
+
   var server_keys = Object.keys(servers);
   if(server_keys.length > 0){
     var chan_keys = Object.keys(servers[server_keys[0]].channels);
     if(chan_keys.length > 0){
-      newSelectedRoom=server_keys[0] + " " + chan_keys[0];
+      var newSelectedRoom=server_keys[0] + " " + chan_keys[0];
+      return {selectedRoom: newSelectedRoom,
+              server: server_keys[0],
+              channel: chan_keys[0]};
     }
   }
-  return newSelectedRoom;
+  return {selectedRoom: null, channel: null, server: null};
 };
 
 const ConfigurationReducer = (state=defaultState, action) =>{
@@ -36,18 +41,23 @@ const ConfigurationReducer = (state=defaultState, action) =>{
 
       //remove the buffer and chan list.  also set the active chan to first available
       Object.keys(newState.servers).forEach((key)=>{
-        let server = newState.servers[key]
+        let server = newState.servers[key];
         Object.keys(server.channels).forEach((chan_key)=>{
-          let channel = server.channels[chan_key]
+          let channel = server.channels[chan_key];
           if(newSelectedRoom===null){
             newSelectedRoom=key + " " + chan_key;
+            newState.channel = chan_key;
+            newState.server = key;
           }
-          delete channel["buffer"]
-          delete channel["users"]
+          delete channel["buffer"];
+          delete channel["users"];
         });
       });
       newState.selectedRoom = newSelectedRoom;
       return newState;
+
+    case NEW_SETTINGS:
+      return merge({}, state, {settings: action.settings});
 
     case ADD_SERVER:
       var newState = merge({},state);
@@ -62,11 +72,17 @@ const ConfigurationReducer = (state=defaultState, action) =>{
     case DEL_SERVER:
       var newState = merge({}, state);
       delete newState.servers[action.data.server];
-      newState.selectedRoom = findFirstAvailableChannel(newState.servers);
+      Object.assign(newState, findFirstAvailableChannel(newState.servers));
       return newState;
 
     case CHANGE_ROOM:
-      return merge({},state,{selectedRoom:action.room});
+      var chunks = action.room.split(' ');
+      var obj = {
+        selectedRoom:action.room,
+        server: chunks[0],
+        channel: chunks[1]
+      };
+      return merge({}, state, obj);
 
     case CHANGE_UI:
       return merge({},state,{mobile: action.mobile});
@@ -82,8 +98,11 @@ const ConfigurationReducer = (state=defaultState, action) =>{
       var server = newState.servers[action.data.server];
       server.channels[action.data.channel]={
         name: action.data.channel,
-        topic: action.data.topic
-      }
+        topic: action.data.topic,
+        query: action.data.query
+      };
+      newState.server = action.data.server;
+      newState.channel = action.data.channel;
       newState.selectedRoom = action.data.server + " " + action.data.channel;
       return newState;
 
@@ -92,7 +111,8 @@ const ConfigurationReducer = (state=defaultState, action) =>{
       delete newState.servers[action.data.server].channels[action.data.channel];
 
       //need to update the currently selected room if we left the currently selected room
-      newState.selectedRoom = findFirstAvailableChannel(newState.servers);
+      Object.assign(newState, findFirstAvailableChannel(newState.servers));
+      // newState.selectedRoom = findFirstAvailableChannel(newState.servers);
 
       return newState;
 

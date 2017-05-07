@@ -151,8 +151,17 @@ class ServerList extends React.Component{
 
   renderChannelList(server){
     const that = this;
-    return Object.keys(server.channels).map((chan)=>{
+    const channelIcon = (
+      <div className="entry-icon channel-icon">#</div>
+    );
+    const userIcon = (
+      <div className="entry-icon user-icon">
+        <i className="fa fa-user" aria-hidden="true"/>
+      </div>
+    );
+    return Object.keys(server.channels).sort().map((chan)=>{
       const serverKey = server.server;
+      const channel = server.channels[chan];
 
       //whether or not the channel should be highlighted
       const selected = (that.state.selected_chan === chan &&
@@ -163,11 +172,13 @@ class ServerList extends React.Component{
 
       const className = (selected ? " sl-entry-selected" : "");
 
+      const icon = channel.query ? userIcon : channelIcon;
+
       return(
         <div key={`${serverKey}${chan}`}
              className={"serverlist-entry" + className}
              onClick={that.changeSelected(serverKey,chan).bind(that)}>
-          {chan}{minusButton}
+          {icon}{chan}{minusButton}
         </div>
       );
     });

@@ -5,6 +5,12 @@ export const CHANGE_UI = 'CHANGE_UI';
 export const NEW_TOPIC = 'NEW_TOPIC';
 export const ADD_SERVER = 'ADD_SERVER';
 export const DEL_SERVER = 'DEL_SERVER';
+export const NEW_SETTINGS = 'NEW_SETTINGS';
+
+export const newSettings = (settings) =>({
+  type: NEW_SETTINGS,
+  settings
+});
 
 export const delServer = (data) =>({
   type: DEL_SERVER,

@@ -31,8 +31,9 @@
     // height: 2.5em;
     border: 1px solid $border-dark;
     box-shadow: 0 2px 5px #888888;
-    max-height: 4em;
-    overflow: hidden;
+    max-height: 2.5em;
+    overflow-y: auto;
+    overflow-x: hidden;
     background-color: $header-blue;
     color: white;
 

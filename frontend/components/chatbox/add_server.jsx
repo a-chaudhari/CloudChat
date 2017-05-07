@@ -64,6 +64,7 @@ class AddServer extends React.Component{
     return(
       <div onClick={this.handleClick.bind(this)}
           className="add-server-button">
+          <i className="fa fa-plus-square-o" aria-hidden="true"/>
         <span>Add Server</span>
         <Modal
           isOpen={this.state.modalOpen}
