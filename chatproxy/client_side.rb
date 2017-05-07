@@ -77,7 +77,7 @@ def prepare_queries(user, server)
       users: [],
       query: true,
       buffer: user.buffers[str],
-      topic: ""
+      topic: Base64.encode64("")
     }
     output[name] = temp
   end
@@ -91,7 +91,7 @@ def prepare_channels(user, server, chans)
       name: chan.channel,
       users: chan.userlist,
       buffer: user.buffers[server + ' ' + key],
-      topic: chan.topic,
+      topic: Base64.encode64(chan.topic),
       query: false
     }
     output[key] = temp
@@ -147,7 +147,7 @@ def join(hash)
       channel: channel.channel,
       query: false,
       users: channel.userlist,
-      topic: channel.topic,
+      topic: Base64.encode64(channel.topic),
       buffer: []
     }.to_json)
   end
@@ -228,7 +228,7 @@ def query(hash)
     channel: target,
     query: true,
     users: [],
-    topic: "",
+    topic: Base64.encode64(""),
     buffer: [],
   }.to_json)
 

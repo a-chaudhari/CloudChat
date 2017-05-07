@@ -21,16 +21,18 @@ class ChannelHeader extends React.Component{
   render(){
     let server = "(none selected)";
     let channel = "(none selected)";
-    let topic = "(no channel topic)";
+    let topic = btoa("(no channel topic)");
     let header = null;
     if(this.props.selectedRoom !== null){
       const room = this.props.selectedRoom;
       const chunks = room.split(' ');
       server = chunks[0];
       channel = chunks[1];
-      topic = this.props.servers[server].channels[channel].topic;
-      if(topic === "") topic = "(no channel topic)";
+      const chanTopic = this.props.servers[server].channels[channel].topic;
+      if(chanTopic !== "") topic = chanTopic;
     }
+
+    topic = (<Linkify tagName="h1">{atob(topic)}</Linkify>)
 
     if(this.props.mobile){
       return (
@@ -44,7 +46,7 @@ class ChannelHeader extends React.Component{
     }else{
        return (
         <div className="chatbox-header">
-          <h1>{topic}</h1>
+          {topic}
         </div>
       );
     }

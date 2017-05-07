@@ -56,6 +56,7 @@ def bind_events_to_channel(user, server_url, chan)
   chan.on(:new_topic) do |data|
     data[:server] = server_url
     data[:command] = 'new_topic'
+    data[:topic] = Base64.encode64(data[:topic])
     user.send_all(data.to_json)
   end
 end
