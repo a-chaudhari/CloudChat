@@ -43,13 +43,18 @@ def bind_events_to_channel(user, server_url, chan)
 
   chan.on(:chan_join) do |data|
     data[:server] = server_url
+    # data[:system] = true;
     data[:command] = "chan_join"
+    # user.appendBuffer(data)
     user.send_all(data.to_json)
   end
 
   chan.on(:chan_part) do |data|
     data[:server] = server_url
     data[:command] = "chan_part"
+    # data[:system] = true;
+    data[:quit_msg] = Base64.encode64(data[:quit_msg])
+    # user.appendBuffer(data)
     user.send_all(data.to_json)
   end
 
@@ -126,7 +131,7 @@ def create_irc_connection(settings, user)
             channel: chan.channel,
             users: chan.userlist,
             query: false,
-            topic: chan.topic,
+            topic: Base64.encode64(chan.topic),
             buffer: [],
           }.to_json)
         end

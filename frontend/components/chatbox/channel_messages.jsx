@@ -31,21 +31,28 @@ class ChannelMessages extends React.Component{
           );
         }
 
+        var finalLine = null;
+
         if(line.system === true){
-          return(
+          finalLine = (
             <div className="chatbox-msg-line chatbox-system"
-                 key={`chatmsg${idx}`}>{`${line.msg}`}</div>
+                 key={`chatmsg${idx}`}>-- {`${line.msg}`} --</div>
+          );
+        }else{
+          const fmtLine = (<Linkify tagName="p">{atob(line.msg)}</Linkify>);
+          
+          finalLine = (
+            <div className="chatbox-msg-line">
+              <span className="chatmsg-name">{line.user}:</span> {fmtLine}
+            </div>
           );
         }
 
-        const fmtLine = (<Linkify tagName="p">{atob(line.msg)}</Linkify>);
 
         return(
           <div className="chatbox-msg-group" key={`chatmsg${idx}`}>
             {timestamp}
-            <div className="chatbox-msg-line">
-              <span className="chatmsg-name">{line.user}:</span> {fmtLine}
-            </div>
+            {finalLine}
           </div>
         );
       });

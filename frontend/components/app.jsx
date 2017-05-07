@@ -62,7 +62,7 @@ class App extends React.Component{
           msg = `${obj['user']} left the channel`;
         }
         else{
-          msg = `${obj['user']} has disconnected. Quit Msg: ${obj['quit_msg']}`;
+          msg = `${obj['user']} has disconnected. Quit Msg: ${atob(obj['quit_msg'])}`;
         }
         this.props.newChannelMsg({
           server: obj['server'],

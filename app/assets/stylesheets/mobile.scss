@@ -156,6 +156,7 @@ body{
   height: calc(100% - 2.5em);
   // border: 1px solid black;
   overflow-y: auto;
+  overflow-x: hidden;
   .userlist-count{
     padding: 0 5px;
     margin: 5px 0;
@@ -166,6 +167,7 @@ body{
   .chatbox-user-entry{
     margin: 5px 0;
     padding: 0 5px;
+    width: 100%;
     // border: 1px solid black;
     cursor: pointer;
   }
@@ -284,9 +286,13 @@ body{
         color: darkgreen;
       }
     }
+
   }
 
-
+  .chatbox-system{
+    text-align: center;
+    color: $time-gray;
+  }
 
 
 }
