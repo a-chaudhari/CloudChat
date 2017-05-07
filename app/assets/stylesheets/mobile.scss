@@ -162,6 +162,7 @@ body{
   overflow: hidden;
   color: $indie-black;
   background-color: white;
+  flex-shrink: 0;
 
   display: flex;
   border-bottom: 1px solid $border-light;
@@ -240,19 +241,37 @@ body{
 .chatbox-messages{
   flex-grow: 1;
   overflow-y: scroll;
+  // flex-direction: column-reverse;
   overflow-x: auto;
-  .chatbox-msg-line{
+  font-size: 14px;
+  padding: 2px 5px;
+  .chatbox-msg-group{
     margin-bottom: 2px;
+    display: flex;
     p{
       margin: 0;
       display: inline;
     }
+    .chatmsg-time-container{
+      // background-color: orange;
+      margin-right: 5px;
+      .chatmsg-time{
+        color: $time-gray;
+      }
+    }
+    .chatbox-msg-line{
+      // background-color: purple;
+      flex-grow: 1;
+      .chatmsg-name{
+        font-weight: bold;
+        color: darkgreen;
+      }
+    }
+  }
 
-  }
-  .chatmsg-name{
-    font-weight: bold;
-    color: darkgreen;
-  }
+
+
+
 }
 
 .chatbox-input{
@@ -261,6 +280,7 @@ body{
   height: 2.5em;
   background-color: $background-gray;
   width: 100%;
+  flex-shrink: 0;
   flex-direction: row;
   form{
     flex-grow: 1;

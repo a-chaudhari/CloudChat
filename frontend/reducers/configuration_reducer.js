@@ -5,6 +5,10 @@ import {USER_SELF_JOIN, USER_SELF_PART} from '../actions/channel_actions';
 import merge from 'lodash/merge';
 
 const defaultState = {
+  settings:{
+    timestamps: true,
+    closeKB: false
+  },
   socket: null,
   servers: {},
   selectedRoom: null,
@@ -15,19 +19,19 @@ const findFirstAvailableChannel = (servers) => {
   var newSelectedRoom = null;
   var server_keys = Object.keys(servers);
   if(server_keys.length > 0){
-    var chan_keys = Object.keys(servers[server_keys[0]].channels)
+    var chan_keys = Object.keys(servers[server_keys[0]].channels);
     if(chan_keys.length > 0){
       newSelectedRoom=server_keys[0] + " " + chan_keys[0];
     }
   }
   return newSelectedRoom;
-}
+};
 
 const ConfigurationReducer = (state=defaultState, action) =>{
   switch(action.type){
 
     case RECEIVED_WELCOME_PACKAGE:
-      var newState = merge({},state,{servers:action.data.servers})
+      var newState = merge({},state,{servers:action.data.servers});
       var newSelectedRoom = null;
 
       //remove the buffer and chan list.  also set the active chan to first available

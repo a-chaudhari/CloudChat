@@ -52,7 +52,7 @@ class ChannelInput extends React.Component{
 
   handleSend(e){
     e.preventDefault();
-    if(this.props.mobile){
+    if(this.props.mobile && this.props.closeKB){
       // only unfocus keyboard on mobile
       document.activeElement.blur();
     }
@@ -121,7 +121,8 @@ const mapStateToProps = (state, ownProps) =>{
       server:target[0],
       servers: state.config.servers,
       selectedRoom: state.config.selectedRoom,
-      mobile: state.config.mobile
+      mobile: state.config.mobile,
+      closeKB: state.config.settings.closeKB
     }
   );
 };

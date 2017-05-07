@@ -32,7 +32,7 @@ class ChannelHeader extends React.Component{
       if(chanTopic !== "") topic = chanTopic;
     }
 
-    topic = (<Linkify tagName="h1">{atob(topic)}</Linkify>)
+    topic = (<Linkify tagName="h1">{atob(topic)}</Linkify>);
 
     if(this.props.mobile){
       return (

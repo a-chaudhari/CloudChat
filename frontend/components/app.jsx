@@ -50,7 +50,8 @@ class App extends React.Component{
           server: obj['server'],
           channel: obj['channel'],
           system: true,
-          msg: `${obj['user']} joined the channel`
+          msg: `${obj['user']} joined the channel`,
+          timestamp: obj['timestamp']
         });
         this.props.userJoin(obj);
         break;
@@ -63,11 +64,10 @@ class App extends React.Component{
         else{
           msg = `${obj['user']} has disconnected. Quit Msg: ${obj['quit_msg']}`;
         }
-
-
         this.props.newChannelMsg({
           server: obj['server'],
           channel: obj['channel'],
+          timestamp: obj['timestamp'],
           system: true,
           msg: msg
         });
