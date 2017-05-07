@@ -206,9 +206,9 @@ class ServerList extends React.Component{
 
   renderServerDotModal(){
     let type = "Join Channel";
-    const re = /^\w.*$/;  //tests if the string is NOT a channel
+    const re = /^[#!+~&].*$/;  //tests if the string is a channel
     const text = this.state.joinChanModalChannel;
-    const isQuery = re.test(text);
+    const isQuery = !re.test(text);
 
     if(text !== "" && isQuery){
       type = "Start Private Msg";

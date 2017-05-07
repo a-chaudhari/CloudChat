@@ -40,7 +40,8 @@ class Server
   end
 
   def is_query?(str)
-    str[0] =~ /\w/
+    # str[0] =~ /\w/
+    !(str[0] =~ /[#!+~&]/)
   end
 
 end

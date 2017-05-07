@@ -150,11 +150,28 @@ body{
   background-color: white;
   top: 2.5em;
   box-sizing: border-box;
+  border-left: 1px solid $border-dark;
   right: 0;
   width: 90%;
   height: calc(100% - 2.5em);
-  border: 1px solid black;
+  // border: 1px solid black;
   overflow-y: auto;
+  .userlist-count{
+    padding: 0 5px;
+    margin: 5px 0;
+    text-align: center;
+    border-bottom: 1px solid $border-light;
+    background-color: $background-gray;
+  }
+  .chatbox-user-entry{
+    margin: 5px 0;
+    padding: 0 5px;
+    // border: 1px solid black;
+    cursor: pointer;
+  }
+  .chatbox-user-entry:hover{
+    background-color: pink;
+  }
 }
 
 .chatbox-header{
