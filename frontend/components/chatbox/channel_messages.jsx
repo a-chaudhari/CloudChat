@@ -13,15 +13,16 @@ class ChannelMessages extends React.Component{
   }
 
   render(){
-    let msg_els = [];
+    let msgs = [];
     if(this.props.selectedRoom !== null){
 
-      msg_els = this.props.messages[this.props.selectedRoom].map((line,idx)=>{
+      msgs = this.props.messages[this.props.selectedRoom].map((line,idx)=>{
         const d = new Date(line.timestamp);
         const hours = leftPad(d.getHours(), 2, '0');
         const minutes = leftPad(d.getMinutes(), 2, '0');
         const time =  hours + ":" + minutes;
         let timestamp = null;
+
         if(this.props.timestamps){
           timestamp = (
             <div className="chatmsg-time-container">
@@ -32,15 +33,18 @@ class ChannelMessages extends React.Component{
 
         if(line.system === true){
           return(
-            <div className="chatbox-msg-line chatbox-system" key={`chatmsg${idx}`}>{`${line.msg}`}</div>
+            <div className="chatbox-msg-line chatbox-system"
+                 key={`chatmsg${idx}`}>{`${line.msg}`}</div>
           );
         }
-        const formatted_line = (<Linkify tagName="p">{atob(line.msg)}</Linkify>);
+
+        const fmtLine = (<Linkify tagName="p">{atob(line.msg)}</Linkify>);
+
         return(
           <div className="chatbox-msg-group" key={`chatmsg${idx}`}>
             {timestamp}
             <div className="chatbox-msg-line">
-              <span className="chatmsg-name">{line.user}:</span> {formatted_line}
+              <span className="chatmsg-name">{line.user}:</span> {fmtLine}
             </div>
           </div>
         );
@@ -50,7 +54,7 @@ class ChannelMessages extends React.Component{
 
     return(
       <div className="chatbox-messages">
-        {msg_els}
+        {msgs}
         <div id="chatbox-msg-end"></div>
       </div>
     );
