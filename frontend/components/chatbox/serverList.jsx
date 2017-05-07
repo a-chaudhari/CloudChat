@@ -128,7 +128,7 @@ class ServerList extends React.Component{
     return (
       <div onClick={this.serverPlus(serverKey).bind(this)}
            className="server-plus">
-        <i className="fa fa-plus-circle" aria-hidden="true"></i>
+        <i className="fa fa-ellipsis-h" aria-hidden="true"></i>
       </div>
     );
   }
@@ -195,12 +195,7 @@ class ServerList extends React.Component{
     });
   }
 
-
-  render(){
-
-    //builds the list of servers and respective channels
-    const content = this.renderServerList();
-
+  renderServerDotModal(){
     const modalStyle={
       content: {
         maxWidth: '200px',
@@ -209,30 +204,44 @@ class ServerList extends React.Component{
       }
     };
 
+    return (
+      <Modal
+        isOpen={this.state.joinChanModalOpen}
+        contentLabel="join channel modal"
+        onRequestClose={this.closeModal.bind(this)}
+        style={modalStyle}
+      >
+        <div>
+          <form onSubmit={this.joinChan.bind(this)}>
+            <label>
+              Channel Name:
+              <input onChange={this.update('joinChanModalChannel').bind(this)}
+                      value={this.state.joinChanModalChannel}/>
+            </label>
+            <button onClick={this.joinChan.bind(this)}>Join</button>
+            <button onClick={this.closeModal.bind(this)}>Cancel</button>
+            <br/>
+          </form>
+          <button className="del-server-button"
+            onClick={this.delServer.bind(this)}>DELETE SERVER</button>
+        </div>
+      </Modal>
+    );
+  }
+
+
+  render(){
+
+    //builds the list of servers and respective channels
+    const content = this.renderServerList();
+
+    //the modal when the '...' is pressed
+    const modal = this.renderServerDotModal();
+
     return(
       <div className="chatbox-serverlist">
         {content}
-        <Modal
-          isOpen={this.state.joinChanModalOpen}
-          contentLabel="join channel modal"
-          onRequestClose={this.closeModal.bind(this)}
-          style={modalStyle}
-          >
-          <div>
-            <form onSubmit={this.joinChan.bind(this)}>
-              <label>
-                Channel Name:
-                <input onChange={this.update('joinChanModalChannel').bind(this)}
-                        value={this.state.joinChanModalChannel}/>
-              </label>
-              <button onClick={this.joinChan.bind(this)}>Join</button>
-              <button onClick={this.closeModal.bind(this)}>Cancel</button>
-              <br/>
-            </form>
-            <button className="del-server-button"
-              onClick={this.delServer.bind(this)}>DELETE SERVER</button>
-            </div>
-          </Modal>
+        {modal}
       </div>
     );
   }

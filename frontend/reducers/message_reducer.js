@@ -8,17 +8,16 @@ const MessageReducer = (state={messages:{},users:{}},action) => {
   switch (action.type) {
     case NEW_CHANNEL_MSG:
       var newState = merge({},state);
-      // debugger
-      newState.messages[`${action.msg.server} ${action.msg.channel}`].push(action.msg)
+      newState.messages[`${action.msg.server} ${action.msg.channel}`].push(action.msg);
       // return merge({},{messages: state.messages.concat([action.msg.data])});
       return newState;
 
     case NEW_CHANNEL_MSG_LOCAL:
-      var newState2 = merge({},state);
+      var newState = merge({},state);
       // debugger
-      newState2.messages[action.msg.target].push(action.msg)
+      newState.messages[action.msg.target].push(action.msg);
       // return merge({},{messages: state.messages.concat([action.msg.data])});
-      return newState2;
+      return newState;
 
     case DEL_SERVER:
       var newState = merge({}, state);
@@ -48,7 +47,7 @@ const MessageReducer = (state={messages:{},users:{}},action) => {
       var new_state = merge({},state);
       var chan_string = action.data.server + " " + action.data.channel;
       // debugger
-      var users = new_state.users[chan_string]
+      var users = new_state.users[chan_string];
       for(var i = 0;i< users.length;i++){
         if(users[i]===action.data.user){
           users.splice(i,1);
@@ -66,7 +65,7 @@ const MessageReducer = (state={messages:{},users:{}},action) => {
 
     case RECEIVED_WELCOME_PACKAGE:
       let messages = {};
-      let users = {};
+      var users = {};
       Object.keys(action.data.servers).forEach(server_key=>{
         const server = action.data.servers[server_key];
         Object.keys(server.channels).forEach(chan_key=>{
@@ -81,6 +80,6 @@ const MessageReducer = (state={messages:{},users:{}},action) => {
     default:
       return state;
   }
-}
+};
 
 export default MessageReducer;

@@ -31,8 +31,8 @@ class App extends React.Component{
     this.ws.send(msg);
   }
 
-  ws_recv(msg){
-    const obj = JSON.parse(msg.data);
+  ws_recv(input){
+    const obj = JSON.parse(input.data);
     console.log(obj);
     if(obj["command"]===undefined) return;
 
@@ -56,11 +56,20 @@ class App extends React.Component{
         break;
 
       case "chan_part":
+        var msg = "";
+        if(obj['quit_msg'] === ""){
+          msg = `${obj['user']} left the channel`;
+        }
+        else{
+          msg = `${obj['user']} has disconnected. Quit Msg: ${obj['quit_msg']}`;
+        }
+
+
         this.props.newChannelMsg({
           server: obj['server'],
           channel: obj['channel'],
           system: true,
-          msg: `${obj['user']} left the channel`
+          msg: msg
         });
         this.props.userPart(obj);
         break;
