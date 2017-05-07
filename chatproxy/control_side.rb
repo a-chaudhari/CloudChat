@@ -106,7 +106,7 @@ def create_irc_connection(settings, user)
       command: 'add_server',
       server: connection.server,
       channels: connection.channels.keys,
-      nickname: connction.nickname
+      nickname: connection.nickname
     }
     user.send_all(command.to_json)
 
