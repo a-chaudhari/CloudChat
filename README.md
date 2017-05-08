@@ -2,10 +2,16 @@
 
 ![](./docs/images/desktop.png "Desktop Mode")
 
+* [End User Features](#enduser)
+* [Technical Highights](#tech)
+* [Technical Specifications](#specs)
+* [Future Direction](#future)
+
 CloudChat is a web-based IRC ([Internet Relay Chat](https://en.wikipedia.org/wiki/Internet_Relay_Chat)) client.  It's built using React.JS, CSS3, and HTML5 on the front-end and Ruby, Ruby on Rails, and PostgreSQL on the back-end.
 
 CloudChat is not only an IRC webclient, but it also functions as an [IRC bouncer](https://en.wikipedia.org/wiki/Internet_Relay_Chat#Bouncer).  Meaning, it will act as a proxy for the user and maintain an IRC connection indefinitely, store messages on a server-side buffer which will be replayed when the user reconnects, and can allow multiple client devices access to a single connection.
 
+<a name="enduser"></a>
 # End-User Features
 
 ### Mobile Mode
@@ -25,13 +31,13 @@ Connect to one IRC server or twenty.  CloudChat has you covered.
 ### Other Features
 * Private Messages are treated like their own channel.  It's super easy to get started.
 * All urls are automagically turned into clickable links in chat and in topic
-*
 
+<a name="tech"></a>
 # Technical Highlights
 
 ### Separate proxy process
 
-The heart of CloudChat is the ChatProxy server.  As an IRC connection isn't a stateless request, like a HTTP request, using the web server to hold the IRC connection didn't make sense.  So a separate daemon process was created, called ChatProxy.  It is written in pure Ruby and it juggles many critical tasks.  It has to talk to: 1) the IRC server (through Ruby1459) via a TCPSocket, 2) to Rails through a UNIX Domain Socket, and 3) to the client browser through a WebSocket connection.
+The heart of CloudChat is the ChatProxy server.  As an IRC connection isn't a stateless request, like a HTTP request, so using the web server to hold the IRC connection didn't make sense.  So a separate daemon process was created, called ChatProxy.  It is written in pure Ruby and it juggles many critical tasks.  It has to talk to: 1) the IRC server (through Ruby1459) via a TCPSocket, 2) to Rails through a UNIX Domain Socket, and 3) to the client browser through a WebSocket connection.
 
 ChatProxy creates and maintains all IRC Connections.  It's responsible for maintaining channel buffers and holding the connection state.  And for keeping all connected clients in sync.
 
@@ -39,7 +45,7 @@ This also allows for easy scaling, as multiple ChatProxy instances can be run on
 
 ### Web Sockets
 
-CloudChat uses Web Sockets to link the browser to the CloudChat proxy server. Web Sockets is the perfect technology for this role, as it's natively supported by modern browsers, cross-platform, and there's minimal latency.  Also, web sockets supports encryption which will be implemented in a future version of CloudChat.
+CloudChat uses Web Sockets to link the browser to the CloudChat proxy server. Web Sockets is the perfect technology for this role, as it's natively supported by modern browsers, cross-platform, and there's minimal latency.  Also, web sockets supports encryption which will be implemented in a future update to CloudChat.
 
 ### Built using Ruby1459
 
@@ -59,6 +65,7 @@ A number of actions dispatched affect multiple reducers.  Such as joining a chan
 
 CloudChat makes heavy use of CSS3 to create a comfortable user experience for mobile and desktop users.  Flex boxes, clipping paths, CSS3 selectors, and media queries are all used for this end.
 
+<a name="specs"></a>
 # Technical Specifications
 
 ### Connection Flow and Diagram
@@ -99,7 +106,7 @@ The ChatProxy responds to several commands over the Control Socket.
 
 |command|description|
 |---|---|
-|welcome_package|the initial state of all connections, channels, and buffers when a client freshly connections
+|welcome_package|the dump of the full state of all connections, channels, and buffers.  Sent when a client initially connects to the ChatProxy
 |chanmsg|a new channel message or a new private message
 |chan_join|when another user joins a channel
 |chan_part|when another user leaves a channel
@@ -110,7 +117,7 @@ The ChatProxy responds to several commands over the Control Socket.
 |new_topic|the topic for a room has changed
 
 
-
+<a name="future"></a>
 # Future Direction
 
 There's still a tremendous amount of work to be done.  Some major items I plan on adding soon are:
