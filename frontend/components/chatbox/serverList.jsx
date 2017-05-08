@@ -21,7 +21,8 @@ class ServerList extends React.Component{
     if(newRoom === null) return;
 
     const chunks = newRoom.split(' ');
-    if(this.state.selected_server !== chunks[0] || this.state.selected_chan !== chunks[1]){
+    if(this.state.selected_server !== chunks[0] ||
+        this.state.selected_chan !== chunks[1]){
 
       //uncolapse the server if collapsed
       let newHidden = this.state.hidden_servers;
@@ -36,15 +37,13 @@ class ServerList extends React.Component{
   changeSelected(server,chan){
     return (e)=>{
       this.setState({selected_server:server, selected_chan: chan});
-      // this.props.roomCallback(`${server} ${chan}`);
-      console.log(`${server} ${chan}`);
       this.props.changeRoom(`${server} ${chan}`);
     };
   }
 
   toggleHidden(server){
     return (e)=>{
-      const hidden = (!!this.state.hidden_servers[server]);
+      const hidden = (Boolean(this.state.hidden_servers[server]));
       const state = this.state.hidden_servers;
       if(hidden){
         delete state[server];
@@ -66,7 +65,6 @@ class ServerList extends React.Component{
     return (e)=>{
       e.preventDefault();
       e.stopPropagation();
-      console.log("adding to: " + server);
       this.setState({joinChanModalOpen: true, joinChanModalServer: server});
     };
   }
@@ -111,7 +109,6 @@ class ServerList extends React.Component{
 
   joinChan(e){
     e.preventDefault();
-    // this.closeModal();
     const chan = this.state.joinChanModalChannel;
     this.setState({joinChanModalOpen: false, joinChanModalChannel: ""});
 
@@ -251,7 +248,9 @@ class ServerList extends React.Component{
             </div>
           </div>
 
-          <div className="server-dot-divider">Join Channel or Start Private Message</div>
+          <div className="server-dot-divider">
+            Join Channel or Start Private Message
+          </div>
           <form onSubmit={this.joinChan.bind(this)}>
             <label>
               Channel Name Or User Name:
