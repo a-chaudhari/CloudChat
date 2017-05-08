@@ -81,7 +81,7 @@ class Session extends React.Component{
           <button onClick={this.handleSignup.bind(this)}>Sign Up</button>
           <button onClick={this.handleLogin.bind(this)}>Log In</button>
           <button className="guest-button"
-            onClick={this.handleSignup.bind(this)}>
+            onClick={this.guestLogin.bind(this)}>
             Guest Account Sign In
           </button>
         </div>
