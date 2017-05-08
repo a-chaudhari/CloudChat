@@ -233,7 +233,10 @@ class ServerList extends React.Component{
         onRequestClose={this.closeModal.bind(this)}
         className="server-dot-modal"
       >
-        <div>
+        <div className="server-dot-header modal-header">
+          <h1>{this.state.joinChanModalServer}</h1>
+        </div>
+        <div className="server-dot-content">
           <div className={"server-dot-modal-dangerzone" + className}>
             <span>Danger Zone!</span>
             <button className="del-server-button"
@@ -248,7 +251,7 @@ class ServerList extends React.Component{
             </div>
           </div>
 
-          <h1>Join Channel or Start Private Message</h1>
+          <div className="server-dot-divider">Join Channel or Start Private Message</div>
           <form onSubmit={this.joinChan.bind(this)}>
             <label>
               Channel Name Or User Name:
