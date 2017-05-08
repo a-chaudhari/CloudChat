@@ -137,7 +137,7 @@ class ServerList extends React.Component{
     return (
       <div onClick={this.serverPlus(serverKey).bind(this)}
            className="server-plus">
-        <i className="fa fa-ellipsis-h" aria-hidden="true"></i>
+        <i className="fa fa-plus-circle" aria-hidden="true"></i>
       </div>
     );
   }
