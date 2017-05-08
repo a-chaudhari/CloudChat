@@ -6,25 +6,26 @@ class Session extends React.Component{
     this.state={
       username:"",
       password:"",
-      new_user:"",
-      new_pass:""
-    }
+      errors:{}
+    };
   }
 
   update(field){
-    return (e)=> this.setState({[field]:e.target.value})
+    return (e)=> this.setState({[field]:e.target.value});
   }
 
   handleSignup(e){
     e.preventDefault();
-    console.log("sign up!")
-    this.props.signUp({username: this.state.new_user,password:this.state.new_pass});
+    if(!this.validate()) return;
+    this.props.signUp({username: this.state.username,
+                       password:this.state.password});
   }
 
   handleLogin(e){
     e.preventDefault();
-    console.log("log in!")
-    this.props.logIn({username: this.state.username, password: this.state.password})
+    if(!this.validate()) return;
+    this.props.logIn({username: this.state.username,
+                      password: this.state.password});
   }
 
   guestLogin(e){
@@ -32,33 +33,57 @@ class Session extends React.Component{
     this.props.logIn({username: "guest", password:"password"});
   }
 
+  validate(){
+    let errors = {};
+    if(this.state.username === ""){
+      errors['username'] = "Username cannot be empty";
+    }else if (this.state.username.length < 3) {
+      errors['username'] = "Username must be at least 3 characters";
+    }
+    if(this.state.password === ""){
+      errors['password'] = "Password cannot be empty";
+    }
+    const passed = Object.keys(errors).length === 0;
+    if(!passed){
+      this.setState({errors: errors});
+    }
+    return passed;
+  }
+
   render(){
-    return(
+    return (
       <div className="session-container">
-        <div className="session-login">
-          <h2>session sign IN form</h2>
-          <form onSubmit={this.handleLogin.bind(this)}>
-            <label>Username:
-              <input value={this.state.username} onChange={this.update("username").bind(this)}/>
-            </label>
-            <label>Password:
-              <input type="password" value={this.state.password} onChange={this.update("password").bind(this)}/>
-            </label>
-            <button onClick={this.handleLogin.bind(this)}>Log In</button>
-          </form>
-          <button onClick={this.guestLogin.bind(this)}>Demo Auto Log In</button>
+        <div className="session-header">
+          <i className="cloudchat-logo fa fa-cloud" aria-hidden="true"/>
+          <span className="cloudchat-script">CloudChat</span>
         </div>
-        <div className="session-signup">
-          <h2>session sign UP form</h2>
-          <form onSubmit={this.handleSignup.bind(this)}>
-            <label>Username:
-              <input value={this.state.new_user} onChange={this.update("new_user").bind(this)}/>
+        <form onSubmit={this.handleLogin.bind(this)}>
+          <div className="session-input">
+            <label>
+              <span>Username</span>
             </label>
-            <label>Password:
-              <input type="password" value={this.state.new_pass} onChange={this.update("new_pass").bind(this)}/>
+            <input value={this.state.username}
+              onChange={this.update('username').bind(this)}/>
+            <div className="session-error">{this.state.errors.username}</div>
+          </div>
+          <div className="session-input">
+            <label>
+              <span>Password </span>
             </label>
-            <button onClick={this.handleSignup.bind(this)}>Sign UP</button>
-          </form>
+            <input value={this.state.password}
+              type="password"
+              onChange={this.update('password').bind(this)}/>
+            <div className="session-error">
+              {this.state.errors.password}</div>
+          </div>
+        </form>
+        <div className="session-buttons">
+          <button onClick={this.handleSignup.bind(this)}>Sign Up</button>
+          <button onClick={this.handleLogin.bind(this)}>Log In</button>
+          <button className="guest-button"
+            onClick={this.handleSignup.bind(this)}>
+            Guest Account Sign In
+          </button>
         </div>
       </div>
     );

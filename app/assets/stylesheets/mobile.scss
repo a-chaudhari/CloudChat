@@ -4,6 +4,60 @@ body{
   background-color: $background-gray;
 }
 
+.session-container{
+  background-color: $background-gray;
+  .session-header{
+    background-color: $slack-purple;
+    color: white;
+    font-family: 'Courgette', cursive;
+    font-size: 3.8em;
+    padding: 5px;
+    text-align: center;
+    i{
+      margin-right: 5px;
+    }
+  }
+
+  .session-error{
+    color: red;
+    font-size: 16px;
+    flex-basis: 100%;
+    text-align: right;
+  }
+  form{
+    padding: 5px;
+    font-size: 1.5em;
+    .session-input{
+      display: flex;
+      flex-wrap: wrap;
+      margin: 10px 0;
+      label{
+        display: block;
+        margin-right: 5px;
+      }
+      input{
+        flex-grow: 1;
+        border: 1px solid $border-dark;
+      }
+    }
+  }
+  .session-buttons{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    button{
+      border: 1px solid $border-dark;
+      font-size: 24px;
+      padding: 0.5em 1em;
+      margin: 5px;
+    }
+
+    .guest-button{
+      flex-basis: 100%;
+    }
+  }
+}
+
 .chatbox-container{
   height: calc(100vh - 68px);
   // height: 100vh;
