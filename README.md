@@ -1,15 +1,17 @@
 # CloudChat
 
-![](./docs/images/desktop.png "Desktop Mode")
+[Live Site](www.cloudchat.life)
 
 * [End User Features](#enduser)
-* [Technical Highights](#tech)
-* [Technical Specifications](#specs)
+* [Technical Highlights](#tech)
+* [Technical Details](#specs)
 * [Future Direction](#future)
+
+![](./docs/images/desktop.png "Desktop Mode")
 
 CloudChat is a web-based IRC ([Internet Relay Chat](https://en.wikipedia.org/wiki/Internet_Relay_Chat)) client.  It's built using React.JS, CSS3, and HTML5 on the front-end and Ruby, Ruby on Rails, and PostgreSQL on the back-end.
 
-CloudChat is not only an IRC webclient, but it also functions as an [IRC bouncer](https://en.wikipedia.org/wiki/Internet_Relay_Chat#Bouncer).  Meaning, it will act as a proxy for the user and maintain an IRC connection indefinitely, store messages on a server-side buffer which will be replayed when the user reconnects, and can allow multiple client devices access to a single connection.
+CloudChat is not only an IRC web client, but it also functions as an [IRC bouncer](https://en.wikipedia.org/wiki/Internet_Relay_Chat#Bouncer).  Meaning, it will act as a proxy for the user and maintain an IRC connection indefinitely, store messages on a server-side buffer which will be replayed when the user reconnects, and can allow multiple client devices access to a single connection.
 
 <a name="enduser"></a>
 # End-User Features
@@ -66,7 +68,7 @@ A number of actions dispatched affect multiple reducers.  Such as joining a chan
 CloudChat makes heavy use of CSS3 to create a comfortable user experience for mobile and desktop users.  Flex boxes, clipping paths, CSS3 selectors, and media queries are all used for this end.
 
 <a name="specs"></a>
-# Technical Specifications
+# Technical Details
 
 ### Connection Flow and Diagram
 ![](./docs/images/connections.png "Connections and processes")
