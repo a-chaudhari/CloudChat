@@ -225,6 +225,7 @@ class ServerList extends React.Component{
       type = "Start Private Msg";
     }
     const confirm = this.state.deleteConfirm;
+    const className = this.state.deleteConfirm ? " dangerzone-armed" : "";
     return (
       <Modal
         isOpen={this.state.joinChanModalOpen}
@@ -233,7 +234,7 @@ class ServerList extends React.Component{
         className="server-dot-modal"
       >
         <div>
-          <div className="server-dot-modal-dangerzone">
+          <div className={"server-dot-modal-dangerzone" + className}>
             <span>Danger Zone!</span>
             <button className="del-server-button"
               disabled={confirm}
@@ -252,6 +253,7 @@ class ServerList extends React.Component{
             <label>
               Channel Name Or User Name:
               <input onChange={this.update('joinChanModalChannel').bind(this)}
+                      placeholder="Room Name..."
                       value={this.state.joinChanModalChannel}/>
             </label>
             <button onClick={this.joinChan.bind(this)}>{type}</button>

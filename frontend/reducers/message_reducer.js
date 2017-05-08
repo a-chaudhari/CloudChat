@@ -4,7 +4,7 @@ import {RECEIVED_WELCOME_PACKAGE, DEL_SERVER} from '../actions/configuration_act
 import merge from 'lodash/merge';
 window.merge = merge;
 
-const MessageReducer = (state={messages:{},users:{}},action) => {
+const MessageReducer = (state={messages:{},users:{}, counters:{}},action) => {
   switch (action.type) {
     case NEW_CHANNEL_MSG:
       var newState = merge({},state);
@@ -25,6 +25,7 @@ const MessageReducer = (state={messages:{},users:{}},action) => {
         if(key.startsWith(action.data.server)){
           delete newState.messages[key];
           delete newState.users[key];
+          delete newState.counters[key];
         }
       });
       return newState;
@@ -34,6 +35,7 @@ const MessageReducer = (state={messages:{},users:{}},action) => {
       var str = action.data.server + " " + action.data.channel;
       newState.messages[str] = action.data.buffer;
       newState.users[str] = action.data.users;
+      newState.counters[str] = 0;
       return newState;
 
     case USER_SELF_PART:
@@ -41,6 +43,7 @@ const MessageReducer = (state={messages:{},users:{}},action) => {
       var str = action.data.server + " " + action.data.channel;
       delete newState.messages[str];
       delete newState.users[str];
+      delete newState.counters[str];
       return newState;
 
     case USER_PART:
@@ -66,16 +69,19 @@ const MessageReducer = (state={messages:{},users:{}},action) => {
     case RECEIVED_WELCOME_PACKAGE:
       let messages = {};
       var users = {};
+      var counters = {};
       Object.keys(action.data.servers).forEach(server_key=>{
         const server = action.data.servers[server_key];
         Object.keys(server.channels).forEach(chan_key=>{
           const channel = server.channels[chan_key];
-          messages[`${server_key} ${chan_key}`]=channel.buffer;
-          users[`${server_key} ${chan_key}`]=channel.users;
+          const str = server_key + " " + chan_key;
+          messages[str]=channel.buffer;
+          users[str]=channel.users;
+          counters[str]=0;
         });
       });
-      console.log({messages,users});
-      return {messages,users};
+      // console.log({messages,users});
+      return {messages,users,counters};
 
     default:
       return state;

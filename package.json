@@ -28,6 +28,7 @@
     "redux": "^3.6.0",
     "redux-logger": "^3.0.1",
     "redux-thunk": "^2.2.0",
+    "valid-url": "^1.0.9",
     "webpack": "^2.3.3"
   },
   "engines": {

@@ -51,6 +51,9 @@ class UserBox extends React.Component{
         onRequestClose={this.closeModal.bind(this)}
         className="userbox-settings-modal"
       >
+        <div className="modal-header">
+          <h1>Settings</h1>
+        </div>
         <div>
           <form onSubmit={this.submitSettings.bind(this)}>
             <label>
