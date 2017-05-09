@@ -1,9 +1,7 @@
 def createControlChannel
   server = UNIXServer.new('/tmp/chatproxy.sock')
-  # server = TCPServer.new 2000
-  # client = sock.accept
 
-  p 'started chat proxy'
+  puts 'started chat proxy'
 
   loop do
     Thread.fork(server.accept) do |client|
@@ -43,18 +41,14 @@ def bind_events_to_channel(user, server_url, chan)
 
   chan.on(:chan_join) do |data|
     data[:server] = server_url
-    # data[:system] = true;
     data[:command] = "chan_join"
-    # user.appendBuffer(data)
     user.send_all(data.to_json)
   end
 
   chan.on(:chan_part) do |data|
     data[:server] = server_url
     data[:command] = "chan_part"
-    # data[:system] = true;
     data[:quit_msg] = Base64.encode64(data[:quit_msg])
-    # user.appendBuffer(data)
     user.send_all(data.to_json)
   end
 
@@ -81,14 +75,12 @@ def start(obj)
     #server already exists under this user.  cannot add twice
     return
   end
-  # debugger
 
   user.connections[server_url] = create_irc_connection(settings, user)
   user.connections[server_url].connect
 end
 
 def create_irc_connection(settings, user)
-  # debugger
 
   connection = IrcConn.new(
   {
@@ -100,10 +92,6 @@ def create_irc_connection(settings, user)
     realname: settings["realname"]
   })
   server_url = connection.server
-
-  # connection.instance_variable_set(:@queries, {})
-  # connection.attr_accessor :queries
-  # debugger
 
   connection.on(:registered) do
 
@@ -118,12 +106,9 @@ def create_irc_connection(settings, user)
 
     unless settings['channels'].nil?
       settings["channels"].each do |name|
-        # debugger
         chan = connection.createChannel(name)
         bind_events_to_channel(user, server_url, chan)
-        # debugger
         user.addBuffer(server_url + " " + name)
-        # debugger
         if chan.join == :active
           user.send_all({
             command: 'chan_self_join',
@@ -157,9 +142,6 @@ def create_irc_connection(settings, user)
   end
 
   connection.on(:query) do |data|
-    # data[:user] = user
-    # data[:server] = connection
-
     #first open the view if it doesn't exist yet
     unless connection.queries.include?(data[:user])
       user.send_all({
@@ -181,14 +163,12 @@ def create_irc_connection(settings, user)
     data[:server] = connection.server
     data[:command] = "chanmsg"
     data[:channel] = data[:user]
-    # debugger
     user.appendBuffer(data)
     user.send_all(data.to_json)
   end
 
   connection.on(:ERR_NOSUCHNICK) do |raw|
     #tried to query a username that isn't online
-    # ":kornbluth.freenode.net 401 zelos82 tet823302 :No such nick/channel"
     chunks = raw.split(' ')
     target = chunks[3]
     server_url = connection.server

@@ -19,5 +19,4 @@ class ChatContent extends React.Component{
   }
 }
 
-
 export default ChatContent;

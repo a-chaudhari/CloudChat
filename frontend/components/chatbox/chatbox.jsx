@@ -11,7 +11,7 @@ class ChatBox extends React.Component{
     this.state={
       showLeft: !this.props.mobile,
       showRight: !this.props.mobile
-    }
+    };
   }
 
   componentDidMount(){
@@ -27,7 +27,7 @@ class ChatBox extends React.Component{
 
     //handle clicking on a channel
     if(this.props.selectedRoom !== newProps.selectedRoom && this.props.mobile){
-      this.setState({showLeft: false, showRight: false})
+      this.setState({showLeft: false, showRight: false});
     }
   }
 
@@ -45,12 +45,14 @@ class ChatBox extends React.Component{
   render(){
     return(
       <div className="chatbox-container">
-        <div className={"chatbox-left" + (this.state.showLeft ? "" : " hidden")}>
+        <div className={"chatbox-left" +
+                          (this.state.showLeft ? "" : " hidden")}>
           <UserBox logOut={this.props.logOut}/>
           <ServerList/>
           <AddServer socket={this.props.socket}/>
         </div>
-        <ChatContent toggleDrawers={this.toggleDrawers.bind(this)} selectedRoom={this.props.selectedRoom}/>
+        <ChatContent toggleDrawers={this.toggleDrawers.bind(this)}
+                     selectedRoom={this.props.selectedRoom}/>
         <ChannelMemberList show={this.state.showRight}/>
       </div>
     );

@@ -285,8 +285,6 @@ class ServerList extends React.Component{
   }
 }
 
-
-
 import { connect  } from 'react-redux';
 import {changeRoom} from '../../actions/configuration_actions';
 

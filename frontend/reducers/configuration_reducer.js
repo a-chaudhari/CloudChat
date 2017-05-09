@@ -19,14 +19,14 @@ const defaultState = {
 
 const findFirstAvailableChannel = (servers) => {
 
-  var server_keys = Object.keys(servers);
-  if(server_keys.length > 0){
-    var chan_keys = Object.keys(servers[server_keys[0]].channels);
-    if(chan_keys.length > 0){
-      var newSelectedRoom=server_keys[0] + " " + chan_keys[0];
+  var serverKeys = Object.keys(servers);
+  if(serverKeys.length > 0){
+    var chanKeys = Object.keys(servers[serverKeys[0]].channels);
+    if(chanKeys.length > 0){
+      var newSelectedRoom=serverKeys[0] + " " + chanKeys[0];
       return {selectedRoom: newSelectedRoom,
-              server: server_keys[0],
-              channel: chan_keys[0]};
+              server: serverKeys[0],
+              channel: chanKeys[0]};
     }
   }
   return {selectedRoom: null, channel: null, server: null};
@@ -42,11 +42,11 @@ const ConfigurationReducer = (state=defaultState, action) =>{
       //remove the buffer and chan list.  also set the active chan to first available
       Object.keys(newState.servers).forEach((key)=>{
         let server = newState.servers[key];
-        Object.keys(server.channels).forEach((chan_key)=>{
-          let channel = server.channels[chan_key];
+        Object.keys(server.channels).forEach((chanKey)=>{
+          let channel = server.channels[chanKey];
           if(newSelectedRoom===null){
-            newSelectedRoom=key + " " + chan_key;
-            newState.channel = chan_key;
+            newSelectedRoom=key + " " + chanKey;
+            newState.channel = chanKey;
             newState.server = key;
           }
           delete channel["buffer"];
@@ -112,7 +112,6 @@ const ConfigurationReducer = (state=defaultState, action) =>{
 
       //need to update the currently selected room if we left the currently selected room
       Object.assign(newState, findFirstAvailableChannel(newState.servers));
-      // newState.selectedRoom = findFirstAvailableChannel(newState.servers);
 
       return newState;
 

@@ -26,22 +26,17 @@ class Server
     @ws = nil
     @active_clients = {}
     @active_tokens = {}
+
     system('rm /tmp/chatproxy.sock')
-
-
 
     Thread.new do
       createClientChannel
     end
     @control_socket = createControlChannel
-    # loop do
-    #   sleep(1000)
-    # end
   end
 
   def is_query?(str)
-    # str[0] =~ /\w/
-    !(str[0] =~ /[#!+~&]/)
+    str[0] !~ /[#!+~&]/
   end
 
 end

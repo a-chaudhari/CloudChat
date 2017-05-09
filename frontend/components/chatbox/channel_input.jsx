@@ -41,7 +41,6 @@ class ChannelInput extends React.Component{
   }
 
   partChannel(){
-    console.log("leaving chan");
     const command = {
       command: 'part',
       channel: this.props.channel,
@@ -51,7 +50,6 @@ class ChannelInput extends React.Component{
   }
 
   joinChannel(chan){
-    console.log("joining: " + chan);
     const command = {
       command: 'join',
       channel: chan,
@@ -63,7 +61,7 @@ class ChannelInput extends React.Component{
   handleSend(e){
     e.preventDefault();
     if(this.props.mobile && this.props.closeKB){
-      // only unfocus keyboard on mobile
+      // only unfocus keyboard on mobile and when activated
       document.activeElement.blur();
     }
 
@@ -100,7 +98,6 @@ class ChannelInput extends React.Component{
     this.setState({input:""});
   }
 
-  // <button onClick={this.handleSend.bind(this)}>Send</button>
   render(){
     return(
       <div className="chatbox-input">
@@ -114,8 +111,6 @@ class ChannelInput extends React.Component{
   }
 }
 
-
-
 import { connect  } from 'react-redux';
 import {newChannelMsgLocal} from '../../actions/channel_actions';
 
@@ -123,7 +118,6 @@ const mapStateToProps = (state, ownProps) =>{
 
   const target = (state.config.selectedRoom===null? "" :
                     state.config.selectedRoom.split(' '));
-  // debugger
   return(
     {
       socket: state.config.socket,

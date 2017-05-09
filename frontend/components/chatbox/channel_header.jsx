@@ -6,23 +6,20 @@ class ChannelHeader extends React.Component{
     super(props);
   }
 
-
   handleLeft(){
-    // console.log("handle left")
     this.props.toggleDrawers(0);
   }
 
   handleRight(){
-    // console.log("handle right")
     this.props.toggleDrawers(1);
   }
-
 
   render(){
     let server = "(none selected)";
     let channel = "(none selected)";
     let topic = btoa("(no channel topic)");
     let header = null;
+
     if(this.props.selectedRoom !== null){
       const room = this.props.selectedRoom;
       const chunks = room.split(' ');
@@ -52,10 +49,7 @@ class ChannelHeader extends React.Component{
   }
 }
 
-
-
 import { connect  } from 'react-redux';
-
 
 const mapStateToProps = (state, ownProps) =>{
   return(

@@ -32,13 +32,11 @@ class ChannelMessages extends React.Component{
           );
         }
 
-
-
         var finalLine = null;
 
         const emoteClass = line.emote ? " chatbox-emote" : "";
         const pre = line.emote ? '● ' : '';
-        const post = line.emote ? '' : ':';
+        const post = line.emote ? '' : ': ';
 
         if(line.system === true){
           finalLine = (

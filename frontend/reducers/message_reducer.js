@@ -1,22 +1,19 @@
-import {NEW_CHANNEL_MSG, NEW_CHANNEL_MSG_LOCAL, USER_JOIN,
-        USER_PART, USER_SELF_JOIN, USER_SELF_PART} from '../actions/channel_actions';
-import {RECEIVED_WELCOME_PACKAGE, DEL_SERVER} from '../actions/configuration_actions';
+import {NEW_CHANNEL_MSG, NEW_CHANNEL_MSG_LOCAL, USER_SELF_PART,
+        USER_PART, USER_SELF_JOIN, USER_JOIN} from '../actions/channel_actions';
+import {RECEIVED_WELCOME_PACKAGE,
+        DEL_SERVER} from '../actions/configuration_actions';
 import merge from 'lodash/merge';
-window.merge = merge;
 
 const MessageReducer = (state={messages:{},users:{}, counters:{}},action) => {
   switch (action.type) {
     case NEW_CHANNEL_MSG:
       var newState = merge({},state);
       newState.messages[`${action.msg.server} ${action.msg.channel}`].push(action.msg);
-      // return merge({},{messages: state.messages.concat([action.msg.data])});
       return newState;
 
     case NEW_CHANNEL_MSG_LOCAL:
       var newState = merge({},state);
-      // debugger
       newState.messages[action.msg.target].push(action.msg);
-      // return merge({},{messages: state.messages.concat([action.msg.data])});
       return newState;
 
     case DEL_SERVER:
@@ -47,40 +44,38 @@ const MessageReducer = (state={messages:{},users:{}, counters:{}},action) => {
       return newState;
 
     case USER_PART:
-      var new_state = merge({},state);
-      var chan_string = action.data.server + " " + action.data.channel;
-      // debugger
-      var users = new_state.users[chan_string];
+      var newState = merge({},state);
+      var chanString = action.data.server + " " + action.data.channel;
+      var users = newState.users[chanString];
       for(var i = 0;i< users.length;i++){
         if(users[i]===action.data.user){
           users.splice(i,1);
           break;
         }
       }
-      new_state.users[chan_string]=users;
-      return new_state;
+      newState.users[chanString]=users;
+      return newState;
 
     case USER_JOIN:
-      var new_state = merge({},state);
-      var chan_string = action.data.server + " " + action.data.channel;
-      new_state.users[chan_string].push(action.data.user);
-      return new_state;
+      var newState = merge({},state);
+      var chanString = action.data.server + " " + action.data.channel;
+      newState.users[chanString].push(action.data.user);
+      return newState;
 
     case RECEIVED_WELCOME_PACKAGE:
       let messages = {};
       var users = {};
       var counters = {};
-      Object.keys(action.data.servers).forEach(server_key=>{
-        const server = action.data.servers[server_key];
-        Object.keys(server.channels).forEach(chan_key=>{
-          const channel = server.channels[chan_key];
-          const str = server_key + " " + chan_key;
-          messages[str]=channel.buffer;
-          users[str]=channel.users;
-          counters[str]=0;
+      Object.keys(action.data.servers).forEach(serverKey=>{
+        const server = action.data.servers[serverKey];
+        Object.keys(server.channels).forEach(chanKey=>{
+          const channel = server.channels[chanKey];
+          const chanStr = serverKey + " " + chanKey;
+          messages[chanStr]=channel.buffer;
+          users[chanStr]=channel.users;
+          counters[chanStr]=0;
         });
       });
-      // console.log({messages,users});
       return {messages,users,counters};
 
     default:

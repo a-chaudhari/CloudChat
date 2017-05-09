@@ -13,6 +13,6 @@ const Root = (props) =>{
       </Router>
     </Provider>
   );
-}
+};
 
 export default Root;

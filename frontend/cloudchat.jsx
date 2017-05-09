@@ -9,10 +9,10 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(window.currentUser){
     preload={
       session:{errors:[], session:window.currentUser}
-    }
-  };
+    };
+  }
   const store = configureStore(preload);
-  window.store = store;
+  // window.store = store;
 
   ReactDOM.render(<Root store={store}/>, root);
-})
+});

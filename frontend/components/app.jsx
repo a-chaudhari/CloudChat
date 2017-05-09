@@ -33,7 +33,6 @@ class App extends React.Component{
 
   ws_recv(input){
     const obj = JSON.parse(input.data);
-    console.log(obj);
     if(obj["command"]===undefined) return;
 
     switch(obj["command"]){
@@ -112,13 +111,15 @@ class App extends React.Component{
   }
 
   render(){
-    const logged_in = this.props.session.session === null ? false : true
+    const logged_in = this.props.session.session === null ? false : true;
     var container = null;
     if(logged_in){
-      container = <ChatBoxContainer token={this.props.session.session.token} connect={this.ws_connect.bind(this)}/>
+      container = <ChatBoxContainer
+                    token={this.props.session.session.token}
+                    connect={this.ws_connect.bind(this)}/>;
     }
     else {
-      container = <Session/>
+      container = <Session/>;
     }
     return container;
   }

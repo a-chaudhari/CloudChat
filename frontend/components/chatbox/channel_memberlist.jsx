@@ -15,7 +15,7 @@ class ChannelMemberList extends React.Component{
     }
 
     users = users.sort();
-    
+
     const userEls = users.map((el,idx)=>{
       return(
         <div className="chatbox-user-entry" key={`usrentry${idx}`}>{el}</div>
@@ -29,9 +29,6 @@ class ChannelMemberList extends React.Component{
     );
   }
 }
-
-
-
 
 import { connect  } from 'react-redux';
 

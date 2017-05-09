@@ -28,9 +28,6 @@ def createClientChannel
           @active_tokens.delete(token)
         end
       end
-
-
-
     end
   end
 end
@@ -42,7 +39,6 @@ end
 
 def send_welcome_package(user)
   #sends the full current state to a newly connected client
-  # debugger
   package = {
     command: 'welcome_package',
     servers: prepare_servers(user, user.connections)
@@ -192,7 +188,6 @@ def connect(hash)
   user.connections[server_url] = connection
   connection.connect
 
-
 end
 
 def disconnect(hash)
@@ -216,8 +211,6 @@ def disconnect(hash)
   }
 
   user.send_all(command.to_json)
-  # debugger
-
 end
 
 def debug(hash)

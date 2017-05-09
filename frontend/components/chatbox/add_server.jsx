@@ -23,7 +23,6 @@ class AddServer extends React.Component{
 
   handleClick(e){
     e.preventDefault();
-    console.log("clicked!");
     this.setState({modalOpen: true});
   }
 
@@ -117,6 +116,7 @@ class AddServer extends React.Component{
   newServer(e){
     e.preventDefault();
     if(!this.validate()) return;
+
     const command = {
       command: 'connect',
       server: this.state.server,
@@ -127,12 +127,14 @@ class AddServer extends React.Component{
       serverpass: this.state.serverpass,
       channels: []
     };
+
     newServer(this.props.socket, command);
     this.setState(this.defaultState);
   }
 
   newPresetServer(server){
     if(!this.validate()) return;
+
     const command = {
       command: 'connect',
       server: server,
@@ -143,6 +145,7 @@ class AddServer extends React.Component{
       serverpass: "",
       channels: []
     };
+
     newServer(this.props.socket, command);
     this.setState(this.defaultState);
   }

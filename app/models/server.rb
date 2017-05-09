@@ -5,10 +5,7 @@ class Server < ActiveRecord::Base
   belongs_to :user
 
   def channel_list
-    self.channels.map do |channel|
-      channel.channel_name
-    end
+    self.channels.map(&:channel_name)
   end
-
 
 end
