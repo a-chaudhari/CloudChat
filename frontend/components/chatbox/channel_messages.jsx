@@ -33,6 +33,10 @@ class ChannelMessages extends React.Component{
 
         var finalLine = null;
 
+        const emoteClass = line.emote ? " chatbox-emote" : "";
+        const pre = line.emote ? '● ' : '';
+        const post = line.emote ? '' : ':';
+
         if(line.system === true){
           finalLine = (
             <div className="chatbox-msg-line chatbox-system"
@@ -40,10 +44,10 @@ class ChannelMessages extends React.Component{
           );
         }else{
           const fmtLine = (<Linkify tagName="p">{atob(line.msg)}</Linkify>);
-          
+
           finalLine = (
-            <div className="chatbox-msg-line">
-              <span className="chatmsg-name">{line.user}:</span> {fmtLine}
+            <div className={"chatbox-msg-line" + emoteClass}>
+              {pre}<span className="chatmsg-name">{line.user}{post}</span> {fmtLine}
             </div>
           );
         }

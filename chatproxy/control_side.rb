@@ -139,6 +139,23 @@ def create_irc_connection(settings, user)
     end
   end
 
+  connection.on(:forced_chan_join) do |name|
+    chan = connection.channels[name]
+    server_url = connection.server
+    bind_events_to_channel(user, server_url, chan)
+    user.addBuffer(server_url + " " + name)
+
+    user.send_all({
+      command: 'chan_self_join',
+      server: connection.server,
+      channel: chan.channel,
+      users: chan.userlist,
+      query: false,
+      topic: Base64.encode64(chan.topic),
+      buffer: [],
+    }.to_json)
+  end
+
   connection.on(:query) do |data|
     # data[:user] = user
     # data[:server] = connection

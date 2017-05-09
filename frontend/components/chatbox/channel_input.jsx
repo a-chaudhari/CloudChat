@@ -23,11 +23,21 @@ class ChannelInput extends React.Component{
       case 'part':
       case 'leave':
         this.partChannel();
-      break;
+        break;
+
+      case 'me':
+      case 'emote':
+        this.emote(chunks);
+        break;
 
       default:
         console.log("unknown command: " + command);
     }
+  }
+
+  emote(chunks){
+    const msg = chunks.join(' ');
+    this.sendMsg(msg, true);
   }
 
   partChannel(){
@@ -73,20 +83,20 @@ class ChannelInput extends React.Component{
     }
 
     //anything past here will send a msg to the channel
+    this.sendMsg(this.state.input, false);
+  }
+
+  sendMsg(msg, emote){
     const packet = {
       command: "speak",
       server: this.props.server,
       channel: this.props.channel,
-      msg: btoa(this.state.input)
+      emote: emote,
+      msg: btoa(msg)
     };
 
     this.props.socket.send(JSON.stringify(packet));
 
-    // this.props.newMsg({
-    //   user: this.props.servers[this.props.server].nickname,
-    //   msg: btoa(this.state.input),
-    //   target: this.props.selectedRoom
-    // });
     this.setState({input:""});
   }
 

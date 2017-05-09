@@ -485,6 +485,9 @@ body{
         color: $time-gray;
       }
     }
+    .chatbox-emote{
+      font-style: italic;
+    }
     .chatbox-msg-line{
       // background-color: purple;
       flex-grow: 1;

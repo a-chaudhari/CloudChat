@@ -31,7 +31,6 @@ class ChannelHeader extends React.Component{
       const chanTopic = this.props.servers[server].channels[channel].topic;
       if(chanTopic !== "") topic = chanTopic;
     }
-    console.log(topic);
     topic = (<Linkify tagName="h1">{atob(topic)}</Linkify>);
 
     if(this.props.mobile){

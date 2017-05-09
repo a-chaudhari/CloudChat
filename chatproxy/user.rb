@@ -49,6 +49,7 @@ class User
       #this is from the  browser, so it's the user sending a message
       channel = hash['channel']
       server = hash['server']
+      emote = hash['emote']
       timestamp = Time.now
       msg = hash['msg']
       user = @connections[server].nickname
@@ -59,6 +60,7 @@ class User
       timestamp = hash[:timestamp]
       msg = hash[:msg]
       user = hash[:user]
+      emote = hash[:emote]
     end
     str = server + " " + channel
 
@@ -70,6 +72,7 @@ class User
                 timestamp: timestamp,
                 msg: msg,
                 user: user,
+                emote: emote,
                 system: system)
   end
 

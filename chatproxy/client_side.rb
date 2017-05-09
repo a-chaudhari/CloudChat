@@ -103,10 +103,18 @@ def speak(hash)
   user = hash[:user]
   server = user.connections[hash["server"]]
   if is_query?(hash['channel'])
-    server.query(hash['channel'], Base64.decode64(hash["msg"]))
+    if hash['emote']
+      server.query_emote(hash['channel'], Base64.decode64(hash["msg"]))
+    else
+      server.query(hash['channel'], Base64.decode64(hash["msg"]))
+    end
   else
     channel = server.channels[hash["channel"]]
-    channel.speak(Base64.decode64(hash["msg"]))
+    if hash['emote']
+      channel.emote(Base64.decode64(hash["msg"]))
+    else
+      channel.speak(Base64.decode64(hash["msg"]))
+    end
   end
 
   user.appendBuffer(hash)
@@ -117,6 +125,7 @@ def speak(hash)
     channel: hash['channel'],
     msg: hash["msg"],
     timestamp: Time.now,
+    emote: hash['emote'],
     user: server.nickname
   }
   user.send_all(command.to_json)
@@ -209,6 +218,10 @@ def disconnect(hash)
   user.send_all(command.to_json)
   # debugger
 
+end
+
+def debug(hash)
+  debugger
 end
 
 def query(hash)
