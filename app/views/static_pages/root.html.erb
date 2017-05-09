@@ -1,19 +1,6 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <link href="https://fonts.googleapis.com/css?family=Aldrich|Courgette" rel="stylesheet">
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-    <title>CloudChat</title>
-  </head>
-  <body>
-    <script type="text/javascript">
-      <% if logged_in? %>
-        window.currentUser =  <%= render("api/session/user_session.json.jbuilder", user: current_user).html_safe %>
-      <% end %>
-    </script>
-    <main id="root"></main>
-  </body>
-</html>
+<script type="text/javascript">
+  <% if logged_in? %>
+    window.currentUser =  <%= render("api/session/user_session.json.jbuilder", user: current_user).html_safe %>
+  <% end %>
+</script>
+<main id="root"></main>
