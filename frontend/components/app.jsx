@@ -1,5 +1,4 @@
 import React from 'react';
-import Channel from './chatbox/channel';
 import Session from './session';
 import ChatBoxContainer from './chatbox/chatbox_container';
 
