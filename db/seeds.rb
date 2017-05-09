@@ -12,8 +12,9 @@ u1= User.create!({
   username: "guest",
   password: "password"
   })
+
 u2 = User.create!({
-  username: "test",
+  username: "guest2",
   password: "password"
   })
 
@@ -42,33 +43,71 @@ when "development"
     nickname: "delos1942"
     })
 
+    c1 = Channel.create!({
+    server_id: s1.id,
+    channel_name: '#test1115'
+    })
+
     c2 = Channel.create!({
       server_id: s2.id,
       channel_name: '#test11152'
     })
+
+    c3 = Channel.create!({
+      server_id: s1.id,
+      channel_name: '#test11152'
+      })
+
     c4 = Channel.create!({
       server_id: s3.id,
       channel_name: '#test1115'
     })
+
+
 
 when "production"
   s1= Server.create!({
     user_id: u1.id,
     server_url: "irc.freenode.net",
     username: "user",
-    nickname: "cc_demo_user"
+    nickname: "cc_user"
     })
+
+  s1= Server.create!({
+    user_id: u1.id,
+    server_url: "irc.freenode.net",
+    username: "user",
+    nickname: "cc_user_2"
+    })
+
+  c1 = Channel.create!({
+  server_id: s1.id,
+  channel_name: '##cc_demo_1'
+  })
+
+  c2 = Channel.create!({
+    server_id: s1.id,
+    channel_name: '##cc_demo_2'
+  })
+
+  c3 = Channel.create!({
+    server_id: s1.id,
+    channel_name: '#freenode'
+  })
+
+  c4 = Channel.create!({
+    server_id: s1.id,
+    channel_name: '#ubuntu'
+  })
+
+  c5 = Channel.create!({
+  server_id: s2.id,
+  channel_name: '##cc_demo_1'
+  })
+
+  c6 = Channel.create!({
+    server_id: s2.id,
+    channel_name: '##cc_demo_2'
+  })
+
 end
-
-
-
-
-c1 = Channel.create!({
-  server_id: s1.id,
-  channel_name: '#test1115'
-  })
-
-c3 = Channel.create!({
-  server_id: s1.id,
-  channel_name: '#test11152'
-  })
