@@ -18,32 +18,45 @@ u2 = User.create!({
   })
 
 Server.destroy_all
-
-s1= Server.create!({
-  user_id: u1.id,
-  server_url: "irc.freenode.net",
-  username: "user",
-  nickname: "delos1843"
-  })
-
-s2 = Server.create!({
-  user_id: u2.id,
-  server_url: "irc.freenode.net",
-  username: "user",
-  nickname: "rocky89412"
-  })
-
 Channel.destroy_all
+
+case Rails.env
+when "development"
+  s1= Server.create!({
+    user_id: u1.id,
+    server_url: "irc.freenode.net",
+    username: "user",
+    nickname: "delos1843"
+    })
+
+  s2 = Server.create!({
+    user_id: u2.id,
+    server_url: "irc.freenode.net",
+    username: "user",
+    nickname: "rocky89412"
+    })
+
+    c2 = Channel.create!({
+      server_id: s2.id,
+      channel_name: '#test11152'
+    })
+
+when "production"
+  s1= Server.create!({
+    user_id: u1.id,
+    server_url: "irc.freenode.net",
+    username: "user",
+    nickname: "cc_demo_user"
+    })
+end
+
+
+
 
 c1 = Channel.create!({
   server_id: s1.id,
   channel_name: '#test1115'
   })
-
-c2 = Channel.create!({
-  server_id: s2.id,
-  channel_name: '#test11152'
-})
 
 c3 = Channel.create!({
   server_id: s1.id,

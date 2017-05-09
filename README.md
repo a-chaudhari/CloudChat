@@ -118,6 +118,22 @@ The ChatProxy responds to several commands over the Control Socket.
 |del_server|a server has been disconnected and no longer should be displayed
 |new_topic|the topic for a room has changed
 
+## Environment Variables
+
+CloudChat recognizes two environment variables:
+1. `CC_SKIP` -- Rail will not automatically start ChatProxy at launch and will not automatically start connections
+1. `CC_NO_LAUNCH` -- Rails will not automatically start ChatProxy but will still try to automatically start connections
+
+`CC_SKIP` is useful for debug purposes or required when using any rake commands. such as:
+```sh
+CC_SKIP='1' rake db:create
+CC_SKIP='1' rails console
+#etc
+```
+
+`CC_NO_LAUNCH` is useful when debugging the ChatProxy service. as this will allow you access to stdin/out for byebug and other debuggers
+
+
 
 <a name="future"></a>
 # Future Direction
