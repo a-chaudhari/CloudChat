@@ -199,6 +199,7 @@ def disconnect(hash)
       user.delBuffer(k)
     end
   end
+  user.connections.delete(server_url)
 
   command = {
     command: 'del_server',

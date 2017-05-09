@@ -35,10 +35,20 @@ when "development"
     username: "user",
     nickname: "rocky89412"
     })
+  s3 = Server.create!({
+    user_id: u1.id,
+    server_url: "card.freenode.net",
+    username: "user",
+    nickname: "delos1942"
+    })
 
     c2 = Channel.create!({
       server_id: s2.id,
       channel_name: '#test11152'
+    })
+    c4 = Channel.create!({
+      server_id: s3.id,
+      channel_name: '#test1115'
     })
 
 when "production"

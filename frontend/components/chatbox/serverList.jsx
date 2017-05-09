@@ -76,7 +76,7 @@ class ServerList extends React.Component{
     }
     const command = {
       command: 'disconnect',
-      server: this.state.selected_server
+      server: this.state.joinChanModalServer
     };
     this.props.socket.send(JSON.stringify(command));
     this.setState({joinChanModalOpen: false, deleteConfirm: false});

@@ -54,6 +54,14 @@ class AddServer extends React.Component{
       errors['nickname'] = "Nickname must be at least 3 characters";
     }
 
+    const port = parseInt(this.state.port)
+
+    if(!Number.isInteger(port)
+        || port <= 0
+        || port > 65535 ){
+      errors['port'] = "Port invalid";
+    }
+
     const re = /.*\..*/;  //really simplistic
     if(!re.test(this.state.server)){
       errors['server'] = "Server URL is not a valid URL";
