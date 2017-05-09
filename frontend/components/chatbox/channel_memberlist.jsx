@@ -9,18 +9,22 @@ class ChannelMemberList extends React.Component{
     let users = [];
 
     if(this.props.userlist !== undefined){
-      users = this.props.userlist
+      users = Object.keys(this.props.userlist).map(key=>(
+        this.props.userlist[key]+key
+      ));
     }
-    users=users.sort()
-    const user_els = users.map((el,idx)=>{
+
+    users = users.sort();
+    
+    const userEls = users.map((el,idx)=>{
       return(
         <div className="chatbox-user-entry" key={`usrentry${idx}`}>{el}</div>
       );
-    })
+    });
     return(
       <div className={"chatbox-userlist" + (this.props.show ? "": " hidden")}>
-        <div className="userlist-count">{user_els.length} Users</div>
-        {user_els}
+        <div className="userlist-count">{userEls.length} Users</div>
+        {userEls}
       </div>
     );
   }

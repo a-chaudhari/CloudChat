@@ -74,7 +74,7 @@ def prepare_queries(user, server)
     str = server.server + " " + name
     temp = {
       name: name,
-      users: [],
+      users: {},
       query: true,
       buffer: user.buffers[str],
       topic: Base64.encode64("")
@@ -89,7 +89,7 @@ def prepare_channels(user, server, chans)
   chans.each do |key, chan|
     temp = {
       name: chan.channel,
-      users: chan.userlist,
+      users: chan.users,
       buffer: user.buffers[server + ' ' + key],
       topic: Base64.encode64(chan.topic),
       query: false
@@ -155,7 +155,7 @@ def join(hash)
       server: server.server,
       channel: channel.channel,
       query: false,
-      users: channel.userlist,
+      users: channel.users,
       topic: Base64.encode64(channel.topic),
       buffer: []
     }.to_json)
