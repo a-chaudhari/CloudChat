@@ -1,6 +1,7 @@
 import React from 'react';
 import Linkify from 'linkifyjs/react';
 import leftPad from 'left-pad';
+import {parse} from 'date-fns';
 
 class ChannelMessages extends React.Component{
   constructor(props){
@@ -17,7 +18,7 @@ class ChannelMessages extends React.Component{
     if(this.props.selectedRoom !== null){
 
       msgs = this.props.messages[this.props.selectedRoom].map((line,idx)=>{
-        const d = new Date(line.timestamp);
+        const d = parse(line.timestamp);
         const hours = leftPad(d.getHours(), 2, '0');
         const minutes = leftPad(d.getMinutes(), 2, '0');
         const time =  hours + ":" + minutes;
