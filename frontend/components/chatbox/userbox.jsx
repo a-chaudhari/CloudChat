@@ -31,7 +31,8 @@ class UserBox extends React.Component{
     this.setState({modalOpen: false});
   }
 
-  closeModal(){
+  closeModal(e){
+    e.preventDefault();
     this.setState({
       timestamps: this.props.settings.timestamps,
       closeKB: this.props.settings.closeKB,

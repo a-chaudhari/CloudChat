@@ -27,7 +27,8 @@ class AddServer extends React.Component{
     this.setState({modalOpen: true});
   }
 
-  closeModal(){
+  closeModal(e){
+    e.preventDefault();
     this.setState(this.defaultState);
   }
 
@@ -177,6 +178,8 @@ class AddServer extends React.Component{
           {this.presetGen('undernet', 'Undernet')}
           {this.presetGen('rizon', 'Rizon')}
         </div>
+        <div className="add-server-divider"></div>
+        <button onClick={this.closeModal.bind(this)}>Cancel</button>
       </div>
     );
   }
