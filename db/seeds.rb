@@ -73,8 +73,8 @@ when "production"
     nickname: "cc_user"
     })
 
-  s1= Server.create!({
-    user_id: u1.id,
+  s2= Server.create!({
+    user_id: u2.id,
     server_url: "irc.freenode.net",
     username: "user",
     nickname: "cc_user_2"

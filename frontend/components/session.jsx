@@ -32,6 +32,10 @@ class Session extends React.Component{
     e.preventDefault();
     this.props.logIn({username: "guest", password:"password"});
   }
+  guestLoginTwo(e){
+    e.preventDefault();
+    this.props.logIn({username: "guest2", password:"password"});
+  }
 
   validate(){
     let errors = {};
@@ -80,9 +84,14 @@ class Session extends React.Component{
         <div className="session-buttons">
           <button onClick={this.handleSignup.bind(this)}>Sign Up</button>
           <button onClick={this.handleLogin.bind(this)}>Log In</button>
+          <div className="divider"></div>
           <button className="guest-button"
             onClick={this.guestLogin.bind(this)}>
-            Guest Account Sign In
+            Guest Account #1 Sign In
+          </button>
+          <button className="guest-button"
+            onClick={this.guestLoginTwo.bind(this)}>
+            Guest Account #2 Sign In
           </button>
         </div>
       </div>

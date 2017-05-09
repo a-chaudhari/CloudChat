@@ -6,6 +6,12 @@ body{
 
 .session-container{
   background-color: $background-gray;
+
+  .divider{
+    border-bottom: 1px solid $border-dark;
+    width: 100%;
+    margin: 10px 5px;
+  }
   .session-header{
     background-color: $slack-purple;
     color: white;
@@ -176,7 +182,7 @@ body{
       margin-top: 20px;
       display: flex;
       flex-wrap: wrap;
-      justify-content: space-around;
+      justify-content: space-between;
     }
   }
 
