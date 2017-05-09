@@ -509,13 +509,15 @@ body{
 .chatbox-messages{
   flex-grow: 1;
   overflow-y: scroll;
-  // flex-direction: column-reverse;
+  flex-direction: column-reverse;
+  display: flex;
   overflow-x: auto;
   font-size: 14px;
   padding: 2px 5px;
   .chatbox-msg-group{
     margin-bottom: 2px;
     display: flex;
+    flex-shrink: 0;
     p{
       margin: 0;
       display: inline;
@@ -531,6 +533,7 @@ body{
       font-style: italic;
     }
     .chatbox-msg-line{
+      word-break: break-word;
       // background-color: purple;
       flex-grow: 1;
       .chatmsg-name{

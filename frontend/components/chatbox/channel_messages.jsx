@@ -9,8 +9,8 @@ class ChannelMessages extends React.Component{
   }
 
   componentDidUpdate(){
-    const objDiv = document.getElementById("chatbox-msg-end");
-    objDiv.scrollIntoView();
+    const cbox = document.getElementById("chatbox");
+    cbox.scrollTop = cbox.scrollHeight - cbox.clientHeight;
   }
 
   render(){
@@ -32,6 +32,8 @@ class ChannelMessages extends React.Component{
           );
         }
 
+
+
         var finalLine = null;
 
         const emoteClass = line.emote ? " chatbox-emote" : "";
@@ -48,7 +50,11 @@ class ChannelMessages extends React.Component{
 
           finalLine = (
             <div className={"chatbox-msg-line" + emoteClass}>
-              {pre}<span className="chatmsg-name">{line.user}{post}</span> {fmtLine}
+              {pre}
+              <span className="chatmsg-name">
+                {line.user}{post}
+              </span>
+              {fmtLine}
             </div>
           );
         }
@@ -63,9 +69,10 @@ class ChannelMessages extends React.Component{
       });
     }
 
+    msgs = msgs.reverse();
 
     return(
-      <div className="chatbox-messages">
+      <div id="chatbox" className="chatbox-messages">
         {msgs}
         <div id="chatbox-msg-end"></div>
       </div>
