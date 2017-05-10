@@ -10,19 +10,39 @@ class ChatBox extends React.Component{
     super(props);
     this.state={
       showLeft: !this.props.mobile,
-      showRight: !this.props.mobile
+      showRight: !this.props.mobile,
+      viewHeight: window.innerHeight
     };
+    this.vWidth = window.innerWidth;
+    this.vHeight = window.innerHeight;
+    this.portrait = this.vHeight > this.vWidth;
+  }
+
+  updateWindowSize(){
+    const vWidth = window.innerWidth;
+    const vHeight = window.innerHeight;
+    const portrait = vHeight > vWidth;
+
+    if(portrait !== this.portrait){
+      //orientation changed.  updated the viewHeight
+      this.vWidth=vWidth;
+      this.vHeight=vHeight;
+      this.portrait=portrait;
+      this.setState({viewHeight: window.innerHeight});
+    }
   }
 
   componentDidMount(){
     this.props.connect_websocket();
+    window.addEventListener('resize', this.updateWindowSize.bind(this));
   }
 
   componentWillReceiveProps(newProps){
 
     //handle resizing window
     if(this.props.mobile !== newProps.mobile){
-      this.setState({showLeft: !newProps.mobile, showRight: !newProps.mobile});
+      this.setState({showLeft: !newProps.mobile,
+                     showRight: !newProps.mobile});
     }
 
     //handle clicking on a channel
@@ -43,8 +63,9 @@ class ChatBox extends React.Component{
   }
 
   render(){
+
     return(
-      <div className="chatbox-container">
+      <div style={{height: this.state.viewHeight}} className="chatbox-container">
         <div className={"chatbox-left" +
                           (this.state.showLeft ? "" : " hidden")}>
           <UserBox logOut={this.props.logOut}/>
