@@ -13,23 +13,10 @@ class ChatBox extends React.Component{
       showRight: !this.props.mobile,
       viewHeight: window.innerHeight
     };
-    this.vWidth = window.innerWidth;
-    this.vHeight = window.innerHeight;
-    this.portrait = this.vHeight > this.vWidth;
   }
 
   updateWindowSize(){
-    const vWidth = window.innerWidth;
-    const vHeight = window.innerHeight;
-    const portrait = vHeight > vWidth;
-
-    if(portrait !== this.portrait){
-      //orientation changed.  updated the viewHeight
-      this.vWidth=vWidth;
-      this.vHeight=vHeight;
-      this.portrait=portrait;
-      this.setState({viewHeight: window.innerHeight});
-    }
+    this.setState({viewHeight: window.innerHeight});
   }
 
   componentDidMount(){

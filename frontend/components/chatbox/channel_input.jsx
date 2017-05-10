@@ -102,7 +102,8 @@ class ChannelInput extends React.Component{
     return(
       <div className="chatbox-input">
         <form onSubmit={this.handleSend.bind(this)}>
-          <input value={this.state.input}
+          <input id="chanInput"
+                value={this.state.input}
                 placeholder="Message..."
                 onChange={this.update("input").bind(this)}/>
         </form>
