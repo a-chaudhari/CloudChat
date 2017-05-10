@@ -16,7 +16,9 @@ class ChatBox extends React.Component{
   }
 
   updateWindowSize(){
-    this.setState({viewHeight: window.innerHeight});
+    if(document.activeElement.id !== "chanInput"){
+      this.setState({viewHeight: window.innerHeight});
+    }
   }
 
   componentDidMount(){
