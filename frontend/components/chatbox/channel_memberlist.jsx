@@ -5,6 +5,19 @@ class ChannelMemberList extends React.Component{
     super(props);
   }
 
+  handleDoubleClick(nick){
+    return (e)=>{
+      e.preventDefault();
+        const command = {
+          command: 'join',
+          channel: nick,
+          server: this.props.server
+        };
+        this.props.socket.send(JSON.stringify(command));
+    };
+
+  }
+
   render(){
     let users = [];
 
@@ -18,7 +31,9 @@ class ChannelMemberList extends React.Component{
 
     const userEls = users.map((el,idx)=>{
       return(
-        <div className="chatbox-user-entry" key={`usrentry${idx}`}>{el}</div>
+        <div onDoubleClick={this.handleDoubleClick(el).bind(this)}
+             className="chatbox-user-entry"
+             key={`usrentry${idx}`}>{el}</div>
       );
     });
     return(
@@ -37,7 +52,9 @@ const mapStateToProps = (state, ownProps) =>{
   return(
     {
       userlist: state.messages.users[state.config.selectedRoom],
-      selectedRoom: state.config.selectedRoom
+      selectedRoom: state.config.selectedRoom,
+      server: state.config.server,
+      socket: state.config.socket
     }
   );
 };

@@ -57,9 +57,10 @@ const MessageReducer = (state={messages:{},users:{}, counters:{}},action) => {
       return newState;
 
     case USER_JOIN:
-      var newState = merge({},state);
       var chanString = action.data.server + " " + action.data.channel;
-      newState.users[chanString].push(action.data.user);
+      // debugger
+      var newState = merge({},state);
+      Object.assign(newState.users[chanString], {[action.data.user]:''});
       return newState;
 
     case RECEIVED_WELCOME_PACKAGE:

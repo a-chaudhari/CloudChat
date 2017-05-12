@@ -90,7 +90,6 @@ const ConfigurationReducer = (state=defaultState, action) =>{
     case NEW_TOPIC:
       var newState = merge({},state);
       newState.servers[action.data.server].channels[action.data.channel].topic = action.data.topic;
-
       return newState;
 
     case USER_SELF_JOIN:
