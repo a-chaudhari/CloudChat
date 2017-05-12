@@ -310,9 +310,7 @@ body{
   }
 }
 
-.hidden{
-  display: none;
-}
+
 
 .chatbox-userbox{
   border-bottom: 1px solid $border-dark;
@@ -603,4 +601,8 @@ body{
       width: 75px;
     }
   }
+}
+
+.hidden{
+  display: none;
 }

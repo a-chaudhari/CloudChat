@@ -2,9 +2,17 @@ import {NEW_CHANNEL_MSG, NEW_CHANNEL_MSG_LOCAL, USER_SELF_PART,
         USER_PART, USER_SELF_JOIN, USER_JOIN} from '../actions/channel_actions';
 import {RECEIVED_WELCOME_PACKAGE,
         DEL_SERVER} from '../actions/configuration_actions';
+import {CLEAR_SESSION} from '../actions/session_actions';
+
 import merge from 'lodash/merge';
 
-const MessageReducer = (state={messages:{},users:{}, counters:{}},action) => {
+const defaultState = {
+  messages:{},
+  users:{},
+  counters:{}
+};
+
+const MessageReducer = (state=defaultState, action) => {
   switch (action.type) {
     case NEW_CHANNEL_MSG:
       var newState = merge({},state);
@@ -15,6 +23,9 @@ const MessageReducer = (state={messages:{},users:{}, counters:{}},action) => {
       var newState = merge({},state);
       newState.messages[action.msg.target].push(action.msg);
       return newState;
+
+    case CLEAR_SESSION:
+      return merge({}, defaultState);
 
     case DEL_SERVER:
       var newState = merge({}, state);

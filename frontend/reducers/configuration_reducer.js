@@ -2,6 +2,8 @@ import {RECEIVED_WELCOME_PACKAGE, RECEIVE_SOCKET,
         CHANGE_ROOM, NEW_SETTINGS, NEW_TOPIC,
         DEL_SERVER, ADD_SERVER, CHANGE_UI} from '../actions/configuration_actions';
 import {USER_SELF_JOIN, USER_SELF_PART} from '../actions/channel_actions';
+import {CLEAR_SESSION} from '../actions/session_actions';
+
 import merge from 'lodash/merge';
 
 const defaultState = {
@@ -34,6 +36,11 @@ const findFirstAvailableChannel = (servers) => {
 
 const ConfigurationReducer = (state=defaultState, action) =>{
   switch(action.type){
+
+    case CLEAR_SESSION:
+      var newState = merge({}, defaultState);
+      newState.mobile = state.mobile;
+      return newState;
 
     case RECEIVED_WELCOME_PACKAGE:
       var newState = merge({},state,{servers:action.data.servers});
