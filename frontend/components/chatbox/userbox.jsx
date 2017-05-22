@@ -13,6 +13,7 @@ class UserBox extends React.Component{
 
   logOut(e){
     e.preventDefault();
+    this.socket.close();
     this.props.logOut();
   }
 
@@ -105,7 +106,8 @@ const mapStateToProps = (state, ownProps) =>{
   return(
     {
       settings: state.config.settings,
-      session: state.session.session
+      session: state.session.session,
+      socket: state.config.socket
     }
   );
 };
