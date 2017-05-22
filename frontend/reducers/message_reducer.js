@@ -1,7 +1,7 @@
 import {NEW_CHANNEL_MSG, NEW_CHANNEL_MSG_LOCAL, USER_SELF_PART,
         USER_PART, USER_SELF_JOIN, USER_JOIN} from '../actions/channel_actions';
 import {RECEIVED_WELCOME_PACKAGE,
-        DEL_SERVER} from '../actions/configuration_actions';
+        DEL_SERVER, CHANGE_ROOM} from '../actions/configuration_actions';
 import {CLEAR_SESSION} from '../actions/session_actions';
 
 import merge from 'lodash/merge';
@@ -16,7 +16,16 @@ const MessageReducer = (state=defaultState, action) => {
   switch (action.type) {
     case NEW_CHANNEL_MSG:
       var newState = merge({},state);
-      newState.messages[`${action.msg.server} ${action.msg.channel}`].push(action.msg);
+      var str = action.msg.server + " " + action.msg.channel;
+      newState.messages[str].push(action.msg);
+      if(action.selectedRoom !== null && action.selectedRoom !== str){
+        newState.counters[str]= newState.counters[str] + 1;
+      }
+      return newState;
+
+    case CHANGE_ROOM:
+      var newState = merge({}, state);
+      newState.counters[action.room] = 0;
       return newState;
 
     case NEW_CHANNEL_MSG_LOCAL:

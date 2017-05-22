@@ -25,9 +25,10 @@ export const userPart = (data) =>({
   data
 });
 
-export const newChannelMsg = (msg) => ({
+export const newChannelMsg = (msg, selectedRoom=null) => ({
   type: NEW_CHANNEL_MSG,
-  msg
+  msg,
+  selectedRoom
 });
 
 export const newChannelMsgLocal = (msg) => ({

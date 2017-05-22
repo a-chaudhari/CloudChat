@@ -121,6 +121,16 @@ class ServerList extends React.Component{
 
   }
 
+  renderCounterBubble(str){
+    const count = this.props.counters[str];
+    if(count === 0) return null;
+    return(
+      <div className="room-counter-bubble">
+        {count}
+      </div>
+    )
+  }
+
   renderCloseChannelButton(chan){
     return(
       <div onClick={this.chanMinus(chan).bind(this)}
@@ -159,6 +169,7 @@ class ServerList extends React.Component{
     return Object.keys(server.channels).sort().map((chan)=>{
       const serverKey = server.server;
       const channel = server.channels[chan];
+      const str = serverKey + " " + chan;
 
       //whether or not the channel should be highlighted
       const selected = (that.state.selected_chan === chan &&
@@ -171,11 +182,13 @@ class ServerList extends React.Component{
 
       const icon = channel.query ? userIcon : channelIcon;
 
+      const counterBubble = this.renderCounterBubble(str);
+
       return(
         <div key={`${serverKey}${chan}`}
              className={"serverlist-entry" + className}
              onClick={that.changeSelected(serverKey,chan).bind(that)}>
-          {icon}{chan}{minusButton}
+          {icon}{chan}{minusButton}{counterBubble}
         </div>
       );
     });
@@ -293,7 +306,8 @@ const mapStateToProps = (state, ownProps) =>{
   return(
     {
       config: state.config,
-      socket: state.config.socket
+      socket: state.config.socket,
+      counters: state.messages.counters
     }
   );
 };

@@ -40,7 +40,7 @@ class App extends React.Component{
         break;
 
       case "chanmsg":
-        this.props.newChannelMsg(obj);
+        this.props.newChannelMsg(obj, this.props.selectedRoom);
         break;
 
       case "chan_join":
@@ -133,7 +133,8 @@ import {receiveWelcomePackage, receiveSocket, changeUI, newTopic, addServer, del
 const mapStateToProps = (state, ownProps) =>{
   return(
     {
-      session: state.session
+      session: state.session,
+      selectedRoom: state.config.selectedRoom
     }
   );
 };
@@ -147,7 +148,7 @@ const mapDispatchToProps = (dispatch, ownProps) =>{
       userSelfJoin: (obj)=>dispatch(userSelfJoin(obj)),
       userSelfPart: (obj)=>dispatch(userSelfPart(obj)),
       receiveWelcomePackage: (obj)=>dispatch(receiveWelcomePackage(obj)),
-      newChannelMsg: (obj)=>dispatch(newChannelMsg(obj)),
+      newChannelMsg: (obj, room)=>dispatch(newChannelMsg(obj, room)),
       receiveSocket: (obj)=>dispatch(receiveSocket(obj)),
       newTopic: (obj)=>dispatch(newTopic(obj)),
       addServer: (obj)=>dispatch(addServer(obj)),
