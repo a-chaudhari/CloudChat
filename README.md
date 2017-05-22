@@ -33,6 +33,7 @@ Connect to one IRC server or twenty.  CloudChat has you covered.
 ### Other Features
 * Private Messages are treated like their own channel.  It's super easy to get started.
 * All urls are automagically turned into clickable links in chat and in topic
+* A counter displays unread message count next to channel names.
 
 <a name="tech"></a>
 # Technical Highlights
