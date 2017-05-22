@@ -99,12 +99,18 @@ class ChannelInput extends React.Component{
   }
 
   render(){
+    let placeholder = "Message...";
+    if(this.props.selectedRoom !== null){
+      const nickname = this.props.servers[this.props.server].nickname;
+      placeholder = `Speaking as ${nickname}`;
+    }
+
     return(
       <div className="chatbox-input">
         <form onSubmit={this.handleSend.bind(this)}>
           <input id="chanInput"
                 value={this.state.input}
-                placeholder="Message..."
+                placeholder={placeholder}
                 onChange={this.update("input").bind(this)}/>
         </form>
       </div>
