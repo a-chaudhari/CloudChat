@@ -37,6 +37,8 @@ class ChannelMessages extends React.Component{
         const emoteClass = line.emote ? " chatbox-emote" : "";
         const pre = line.emote ? '● ' : '';
         const post = line.emote ? '' : ': ';
+        const ourNick = this.props.servers[this.props.server].nickname;
+        const selfMsg = ourNick === line.user;
 
         if(line.system === true){
           finalLine = (
@@ -49,7 +51,7 @@ class ChannelMessages extends React.Component{
           finalLine = (
             <div className={"chatbox-msg-line" + emoteClass}>
               {pre}
-              <span className="chatmsg-name">
+              <span className={"chatmsg-name" + (selfMsg ? " chat-self" : "")}>
                 {line.user}{post}
               </span>
               {fmtLine}
@@ -82,11 +84,14 @@ class ChannelMessages extends React.Component{
 import { connect  } from 'react-redux';
 
 const mapStateToProps = (state, ownProps) =>{
+  // debugger
   return(
     {
       messages: state.messages.messages,
       selectedRoom: state.config.selectedRoom,
-      timestamps: state.config.settings.timestamps
+      timestamps: state.config.settings.timestamps,
+      servers: state.config.servers,
+      server: state.config.server
     }
   );
 };
