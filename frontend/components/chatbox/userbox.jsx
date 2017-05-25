@@ -13,7 +13,7 @@ class UserBox extends React.Component{
 
   logOut(e){
     e.preventDefault();
-    this.socket.close();
+    this.props.socket.close();
     this.props.logOut();
   }
 
